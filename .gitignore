@@ -1,0 +1,11 @@
+ALGXS/__pycache__
+apps/FandQ/__pycache__
+apps/helps/__pycache__
+apps/market/__pycache__
+apps/PTJ/__pycache__
+apps/PTJ/migrations
+apps/__pycache__
+apps/account/__pycache__
+apps/account/migrations
+apps/market/migrations
+.idea
