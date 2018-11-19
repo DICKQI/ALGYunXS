@@ -9,3 +9,4 @@ apps/account/__pycache__
 apps/account/migrations
 apps/market/migrations
 .idea
+apps/helps/migrations

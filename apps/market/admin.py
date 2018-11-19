@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Commodity, Comment, Classification
+from .models import Commodity, CComment, Classification
 from django_summernote.admin import SummernoteModelAdmin
 
 # Register your models here.
@@ -11,5 +11,5 @@ class CommentAdmin(SummernoteModelAdmin):
     summernote_fields = ('content', )
 
 admin.site.register(Commodity, CommodityAdmin)
-admin.site.register(Comment, CommentAdmin)
+admin.site.register(CComment, CommentAdmin)
 admin.site.register(Classification)

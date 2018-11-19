@@ -14,7 +14,7 @@ class Classification(models.Model):
     class Meta:
         ordering = ['name']
         verbose_name = '商品分类'
-        verbose_name_plural = '商品分类标签列表'
+        verbose_name_plural = verbose_name
         db_table = 'Classification'
 
     def __str__(self):
@@ -25,7 +25,7 @@ class CImage(models.Model):
     '''商品图片'''
     img = models.ImageField(verbose_name='商品图片', upload_to='commodityImage', blank=True)
 
-class Comment(models.Model):
+class CComment(models.Model):
     '''商品评论表'''
     fromUser = models.ForeignKey(User_Info, verbose_name='来源人', on_delete=models.CASCADE)
 
@@ -41,14 +41,14 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-update_time']
         verbose_name = '评论'
-        verbose_name_plural = '评论列表'
-        db_table = 'comment'
+        verbose_name_plural = '商品评论列表'
+        db_table = 'CComment'
         get_latest_by = 'update_time'
 
 
-class StarRecord(models.Model):
+class CStarRecord(models.Model):
     '''点赞记录，用于防止多次点赞'''
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    comment = models.ForeignKey(CComment, on_delete=models.CASCADE)
 
     star_man = models.ForeignKey(User_Info, on_delete=models.CASCADE)
 
@@ -78,6 +78,13 @@ class Commodity(models.Model):
 
     picture = models.ManyToManyField(CImage, verbose_name='商品图片', blank=True)
 
+    comment = models.ManyToManyField(CComment, verbose_name='评论', blank=False)
+
+    class Meta:
+        verbose_name = '商品'
+        verbose_name_plural = '商品列表'
+        db_table = 'Commodity'
+        ordering = ['-create_time']
 
     def __str__(self):
         return self.seller.nickname, self.name

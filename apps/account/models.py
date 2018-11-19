@@ -44,7 +44,8 @@ class User_Info(models.Model):
     class Meta:
         verbose_name = '用户'
         verbose_name_plural = '用户列表'
-        db_table = 'user_info'
+        ordering = ['-joined_date']
+        db_table = 'User_info'
 
 class EmailVerifyRecord(models.Model):
     '''邮箱验证码'''
