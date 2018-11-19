@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.timezone import now
 from apps.account.models import User_Info
+
+
 # Create your models here.
 class Category(models.Model):
     '''分类数据库模型'''
@@ -19,6 +21,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Tag(models.Model):
     '''标签数据库模型'''
     name = models.CharField(verbose_name='标签名', max_length=10, default='', blank=False)
@@ -33,6 +36,7 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class AComment(models.Model):
     '''评论数据库模型'''
@@ -53,11 +57,13 @@ class AComment(models.Model):
     def __str__(self):
         return self.from_author
 
+
 class AStarRecord(models.Model):
     '''防止重复点赞'''
     comment = models.ForeignKey(AComment, verbose_name='被点赞的评论', on_delete=models.CASCADE)
 
     star_man = models.ForeignKey(User_Info, verbose_name='点赞人', on_delete=models.CASCADE)
+
 
 class Article(models.Model):
     '''文章数据库模型'''

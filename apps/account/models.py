@@ -1,12 +1,15 @@
 from django.db import models
 from django.utils.timezone import now
 
+
 # Create your models here.
 class User_Info(models.Model):
     '''用户信息数据库模型'''
     roles = {
         ('515400', '总管理员'),
-        ('12', '板块管理员'),
+        ('12', 'market管理员'),
+        ('123', 'helps管理员'),
+        ('1234', 'PTJ管理员'),
         ('99', 'VIP用户'),
         ('4', '普通用户(已验证邮箱)'),
         ('5', '普通用户(未验证邮箱)'),
@@ -37,7 +40,6 @@ class User_Info(models.Model):
 
     credit_score = models.IntegerField(verbose_name='信用分', default=500)
 
-
     def __str__(self):
         return self.username
 
@@ -46,6 +48,7 @@ class User_Info(models.Model):
         verbose_name_plural = '用户列表'
         ordering = ['-joined_date']
         db_table = 'User_info'
+
 
 class EmailVerifyRecord(models.Model):
     '''邮箱验证码'''
@@ -70,4 +73,3 @@ class EmailVerifyRecord(models.Model):
 
     def __str__(self):
         return self.email + " " + self.code_status
-
