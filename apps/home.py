@@ -11,10 +11,8 @@ class HomeIndex(APIView):
         try:
             data = json.loads(params)
             html = '欢迎' + data['postman'] + '来到ALGYun'
-            password = data['password']
             return JsonResponse({
-                'html':html,
-                'password':password
+                'html':html
             })
         except:
             return JsonResponse({'err':'输入错误'})
