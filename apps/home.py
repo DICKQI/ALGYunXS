@@ -1,21 +1,14 @@
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from django.shortcuts import Http404
-import json
+
 class HomeIndex(APIView):
     def get(self, request):
         html = '欢迎来到ALGYun'
         return JsonResponse({'html':html})
     def post(self, request):
-        params = request.body
+        params = request.POST
         try:
-            data = json.loads(params)
+            html = '欢迎' + params.get('postman') + '来到ALGYun'
+            return JsonResponse({'result':html})
         except:
-            return JsonResponse({'err':'输入错误1'})
-        try:
-            html = '欢迎' + data['postman'] + '来到ALGYun'
-            return JsonResponse({
-                'html': html
-            })
-        except:
-            return JsonResponse({'err':"输入错误2"})
+            return JsonResponse({'err': '输入错误'})
