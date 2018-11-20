@@ -7,12 +7,17 @@ class HomeIndex(APIView):
         html = '欢迎来到ALGYun'
         return JsonResponse({'html':html})
     def post(self, requests):
-        params = requests.body
-        try:
-            data = json.loads(params)
-            html = '欢迎' + data['postman'] + '来到ALGYun'
-            return JsonResponse({
-                'html':html
-            })
-        except:
-            return JsonResponse({'err':'输入错误'})
+        # params = requests.body
+#         # try:
+#         #     data = json.loads(params)
+#         #     html = '欢迎' + data['postman'] + '来到ALGYun'
+#         #     return JsonResponse({
+#         #         'html':html
+#         #     })
+#         # except:
+#         #     return JsonResponse({'err':'输入错误'})
+        params = requests.POST.get(
+            'postman'
+        )
+        html = '欢迎' + str(params) + '来到ALGYun'
+        return JsonResponse({'html':html})
