@@ -15,11 +15,11 @@ code XS
 '''
 import os
 import pymysql
+
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -31,7 +31,6 @@ SECRET_KEY = 'e@0+j9l3*z_h5t3!^iu1_0!d#6oxys9wx**mni9cq^+yzf9*yq'
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -55,14 +54,13 @@ INSTALLED_APPS = [
     'apps.helps',
     'apps.FandQ',
 
-
 ]
 # 主题
 JET_THEMES = [
     {
-        'theme': 'default', # theme folder name
-        'color': '#47bac1', # color of the theme's button in user menu
-        'title': 'Default' # theme title
+        'theme': 'default',  # theme folder name
+        'color': '#47bac1',  # color of the theme's button in user menu
+        'title': 'Default'  # theme title
     },
     {
         'theme': 'green',
@@ -108,7 +106,6 @@ SUMMERNOTE_CONFIG = {
     # Use proper language setting automatically (default)
     'lang': 'zh-CN',
 
-
 }
 # 是否展开所有菜单
 JET_SIDE_MENU_COMPACT = True  # 菜单不是很多时建议为TRUE
@@ -138,55 +135,54 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
 
-'*',
+    '*',
 
 )
 CORS_ALLOW_METHODS = (
 
-'DELETE',
+    'DELETE',
 
-'GET',
+    'GET',
 
-'OPTIONS',
+    'OPTIONS',
 
-'PATCH',
+    'PATCH',
 
-'POST',
+    'POST',
 
-'PUT',
+    'PUT',
 
-'VIEW',
+    'VIEW',
 
 )
 
-
 CORS_ALLOW_HEADERS = (
 
-'accept',
+    'accept',
 
-'XMLHttpRequest',
+    'XMLHttpRequest',
 
-'X_FILENAME',
+    'X_FILENAME',
 
-'accept-encoding',
+    'accept-encoding',
 
-'authorization',
+    'authorization',
 
-'content-type',
+    'content-type',
 
-'dnt',
+    'dnt',
 
-'origin',
+    'origin',
 
-'user-agent',
+    'user-agent',
 
-'x-csrftoken',
+    'x-csrftoken',
 
-'x-requested-with',
+    'x-requested-with',
 
-'Pragma',
+    'Pragma',
 
-'X-Custom-Header',
+    'X-Custom-Header',
 
 )
 
@@ -211,7 +207,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ALGXS.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -219,13 +214,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ALGYunXS',
-        'USER':'root',
-        'PASSWORD':'macbook123456',
-        'HOST':'localhost',
-        'PORT':3306
+        'USER': 'root',
+        'PASSWORD': 'macbook123456',
+        'HOST': 'localhost',
+        'PORT': 3306
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -245,7 +239,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -259,7 +252,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -267,7 +259,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # 配置静态文件目录
 STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'common_static'),
+    os.path.join(BASE_DIR, 'common_static'),
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
