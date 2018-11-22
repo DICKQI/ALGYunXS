@@ -58,7 +58,7 @@ class UserDashBoardView(APIView):
                 return JsonResponse({'err': '此账户已被封禁，请联系管理员'})
             params = request.POST
             if params.get('password') == None:
-                return JsonResponse({'err': '请输入密码'})
+                return JsonResponse({'err': '请输入密码好不好'})
             if check_password(params.get('password'), user.password):
                 has_change = {}
                 if params.get('nickname') != None:
