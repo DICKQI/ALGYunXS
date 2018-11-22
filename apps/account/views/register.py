@@ -6,6 +6,7 @@ from django.http import JsonResponse
 
 class RegisterView(APIView):
     def post(self, request):
+        '''注册账户'''
         params = request.POST
         try:
             User_Info.objects.get(username__exact=params['username'])

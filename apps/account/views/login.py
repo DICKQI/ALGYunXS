@@ -5,6 +5,11 @@ from django.contrib.auth.hashers import check_password
 
 class LoginViews(APIView):
     def post(self, request):
+        '''
+        登录账户
+        :param request:
+        :return:
+        '''
         params = request.POST
         try:
             try:

@@ -53,7 +53,7 @@ class User_Info(models.Model):
 class EmailVerifyRecord(models.Model):
     '''邮箱验证码'''
     type = {
-        ('register', '注册'),
+        ('active', '激活'),
         ('forget', '找回密码')
     }
     status = {
