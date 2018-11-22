@@ -11,3 +11,4 @@ apps/market/migrations
 .idea
 apps/helps/migrations
 apps/FandQ/migrations
+media

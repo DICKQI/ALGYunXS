@@ -13,7 +13,7 @@ class SendView(APIView):
         for i in range(randomInt):
             ran_str += chars[random.randint(0, length)]
         return ran_str
-    def post(self, request):
+    def get(self, request, send_type):
         '''
         发送激活邮件
         :param request:
@@ -21,7 +21,6 @@ class SendView(APIView):
         :return:
         '''
         try:
-            send_type = request.POST.get('send_type')
             if request.session.get('login') != None:
                 email_record = EmailVerifyRecord()
                 email = User_Info.objects.get(username__exact=request.session.get('login')).email
