@@ -15,7 +15,6 @@ class UserDashBoardView(APIView):
         'comment', 'create_time'
     ]
 
-
     def get(self, request):
         '''
         用户控制台
