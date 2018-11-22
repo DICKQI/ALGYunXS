@@ -20,11 +20,6 @@ class Classification(models.Model):
     def __str__(self):
         return self.name
 
-
-class CImage(models.Model):
-    '''商品图片'''
-    img = models.ImageField(verbose_name='商品图片', upload_to='commodityImage', blank=True)
-
 class CComment(models.Model):
     '''商品评论表'''
     fromUser = models.ForeignKey(User_Info, verbose_name='来源人', on_delete=models.CASCADE)
@@ -56,8 +51,8 @@ class CStarRecord(models.Model):
 class Commodity(models.Model):
     '''商品数据库模型'''
     STATUS_CHOICES = (
-        ('d', '草稿'),
-        ('p', '发表'),
+        ('草稿', '草稿'),
+        ('发表', '发表'),
     )
 
     seller = models.ForeignKey(User_Info, verbose_name='卖家', on_delete=models.CASCADE)
@@ -68,7 +63,7 @@ class Commodity(models.Model):
 
     c_detail = models.TextField(verbose_name='商品描述详情', blank=False)
 
-    status = models.CharField(verbose_name='商品状态', max_length=10)
+    status = models.CharField(verbose_name='商品状态', max_length=10, choices=STATUS_CHOICES, default='草稿')
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 
@@ -76,9 +71,7 @@ class Commodity(models.Model):
 
     classification = models.ForeignKey(Classification, verbose_name='商品分类', blank=True, null=True, on_delete=models.CASCADE)
 
-    picture = models.ManyToManyField(CImage, verbose_name='商品图片', blank=True)
-
-    comment = models.ManyToManyField(CComment, verbose_name='评论', blank=False)
+    comment = models.ManyToManyField(CComment, verbose_name='商品评论', blank=True)
 
     class Meta:
         verbose_name = '商品'
@@ -87,5 +80,5 @@ class Commodity(models.Model):
         ordering = ['-create_time']
 
     def __str__(self):
-        return self.seller.nickname, self.name
+        return self.seller.nickname + ' ' +  self.name
 

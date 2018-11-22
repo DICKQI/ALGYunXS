@@ -55,7 +55,7 @@ class AComment(models.Model):
         ordering = ['-create_time']
 
     def __str__(self):
-        return self.from_author
+        return self.from_author.nickname
 
 
 class AStarRecord(models.Model):
@@ -68,8 +68,8 @@ class AStarRecord(models.Model):
 class Article(models.Model):
     '''文章数据库模型'''
     STATUS_CHOICES = (
-        ('d', '草稿'),
-        ('p', '发表'),
+        ('草稿', '草稿'),
+        ('发表', '发表'),
     )
 
     author = models.ForeignKey(User_Info, verbose_name='作者', on_delete=models.CASCADE, blank=False)
@@ -78,7 +78,7 @@ class Article(models.Model):
 
     content = models.TextField(verbose_name='内容', blank=False, default='')
 
-    status = models.CharField(verbose_name='文章状态', choices=STATUS_CHOICES, max_length=1, default='d')
+    status = models.CharField(verbose_name='文章状态', choices=STATUS_CHOICES, max_length=2, default='草稿')
 
     views = models.IntegerField(verbose_name='浏览量', default=0)
 
@@ -90,10 +90,12 @@ class Article(models.Model):
 
     category = models.ForeignKey(Category, verbose_name='分类', blank=False, on_delete=models.CASCADE)
 
-    comment = models.ManyToManyField(AComment, verbose_name='评论', blank=True)
+    comment = models.ManyToManyField(AComment, verbose_name='文章评论', blank=True)
 
     class Meta:
         verbose_name = '互帮互助文章'
         verbose_name_plural = '文章列表'
         db_table = 'Article'
         ordering = ['-create_time']
+    def __str__(self):
+        return self.author.nickname + " " + self.title
