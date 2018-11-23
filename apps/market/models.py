@@ -51,8 +51,8 @@ class CStarRecord(models.Model):
 class Commodity(models.Model):
     '''商品数据库模型'''
     STATUS_CHOICES = (
-        ('草稿', '草稿'),
-        ('发表', '发表'),
+        ('s', '草稿'),
+        ('p', '发表'),
     )
 
     seller = models.ForeignKey(User_Info, verbose_name='卖家', on_delete=models.CASCADE)

@@ -68,8 +68,8 @@ class AStarRecord(models.Model):
 class Article(models.Model):
     '''文章数据库模型'''
     STATUS_CHOICES = (
-        ('草稿', '草稿'),
-        ('发表', '发表'),
+        ('s', '草稿'),
+        ('p', '发表'),
     )
 
     author = models.ForeignKey(User_Info, verbose_name='作者', on_delete=models.CASCADE, blank=False)
