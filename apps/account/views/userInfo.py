@@ -24,13 +24,16 @@ class UserDashBoardView(APIView):
         if request.session.get('login') != None:
             user = User_Info.objects.get(username__exact=request.session.get('login'))
             if user.user_role == '6':
-                return JsonResponse({'err': '此账户已被封禁，请联系管理员'})
+                return JsonResponse({'err': '此账户已被封禁，请联系管理员'}, status=401)
             nickname = user.nickname
             age = user.age
             studentID = user.student_id
             score = user.credit_score
             role = user.user_role
-            head = '/media/' + str(user.head_portrait)
+            if user.head_portrait:
+                head = '/media/' + str(user.head_portrait)
+            else:
+                head = None
             articles = Article.objects.filter(author=user)
             commodity = Commodity.objects.filter(seller=user)
             return JsonResponse({'result': {
@@ -44,7 +47,7 @@ class UserDashBoardView(APIView):
                 'commodity': [model_to_dict(crt, exclude=self.COMMODITY_EXCLUDE_FIELDS) for crt in commodity]
             }})
         else:
-            return JsonResponse({'err': '你还未登录呢'})
+            return JsonResponse({'err': '你还未登录呢'}, status=401)
 
     def put(self, request):
         '''
@@ -79,7 +82,7 @@ class UserDashBoardView(APIView):
                 if params.get('email') != None:
                     try:
                         User_Info.objects.get(email=params.get('email'))
-                        return JsonResponse({'err': '邮箱已存在'})
+                        return JsonResponse({'err': '邮箱已存在'}, status=401)
                     except:
                         user.email = params.get('email')
                         has_change['email'] = params.get('email')
@@ -90,6 +93,6 @@ class UserDashBoardView(APIView):
                     'changed': has_change
                 }})
             else:
-                return JsonResponse({'err': '密码错误'})
+                return JsonResponse({'err': '密码错误'}, status=401)
         else:
-            return JsonResponse({'err': '你还未登录呢'})
+            return JsonResponse({'err': '你还未登录呢'}, status=401)

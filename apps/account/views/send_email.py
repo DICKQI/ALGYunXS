@@ -31,12 +31,21 @@ class SendView(APIView):
                 email_record.save()
                 if send_type == 'active':
                     email_title = '注册激活链接'
-                    email_body = '请点击下面的链接激活您的邮箱localhost:8000/users/active/{0}'.format(code)
+                    email_body = '请点击下面的链接激活您的邮箱algyun.cn:81/users/active/{0}'.format(code)
                     send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
                     if send_status:
                         return JsonResponse({'result':{
                             'status':'success',
                             'eid':email_record.id
+                        }})
+                elif send_type == 'forget':
+                    email_title = '注册重置密码链接'
+                    email_body = '请点击下面的链接重置你的密码algyun.cn:81/users/reset/{0}'.format(code)
+                    send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+                    if send_status:
+                        return JsonResponse({'result': {
+                            'status': 'success',
+                            'eid': email_record.id
                         }})
             else:
                 return JsonResponse({'err':'你还未登录'})

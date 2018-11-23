@@ -10,7 +10,7 @@ class RegisterView(APIView):
         params = request.POST
         try:
             User_Info.objects.get(username__exact=params['username'])
-            return JsonResponse({'err':'用户名已存在'})
+            return JsonResponse({'err':'用户名已存在'}, status=401)
         except:
             try:
                 hash_password = make_password(params.get('password'))
@@ -28,4 +28,4 @@ class RegisterView(APIView):
                     'nickname':newUser.nickname,
                 })
             except:
-                return JsonResponse({'err':'出现了预期之外的错误'})
+                return JsonResponse({'err':'出现了预期之外的错误'}, status=403)
