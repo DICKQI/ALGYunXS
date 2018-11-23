@@ -96,6 +96,6 @@ class Article(models.Model):
         verbose_name = '互帮互助文章'
         verbose_name_plural = '文章列表'
         db_table = 'Article'
-        ordering = ['-create_time']
+        ordering = ['-last_mod_time']
     def __str__(self):
         return self.author.nickname + " " + self.title

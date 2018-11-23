@@ -39,7 +39,7 @@ class PTJInfo(models.Model):
         verbose_name = '兼职信息'
         verbose_name_plural = '兼职信息列表'
         db_table = 'PTJInfo'
-        ordering = ['-create_time']
+        ordering = ['-last_mod_time']
 
     def __str__(self):
         return self.title

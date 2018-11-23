@@ -77,7 +77,7 @@ class Commodity(models.Model):
         verbose_name = '商品'
         verbose_name_plural = '商品列表'
         db_table = 'Commodity'
-        ordering = ['-create_time']
+        ordering = ['-last_mod_time']
 
     def __str__(self):
         return self.seller.nickname + ' ' +  self.name

@@ -44,5 +44,7 @@ def model_to_dict(instance, fields=None, exclude=None):
                 value = User_Info.objects.get(id=value).nickname
             elif f.verbose_name == '来源人':
                 value = User_Info.objects.get(id=value).nickname
+            elif f.verbose_name == '管理员':
+                value = User_Info.objects.get(id=value).nickname
         data[f.name] = value
     return data
