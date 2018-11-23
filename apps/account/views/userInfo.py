@@ -36,6 +36,7 @@ class UserDashBoardView(APIView):
                 head = None
             articles = Article.objects.filter(author=user)
             commodity = Commodity.objects.filter(seller=user)
+
             return JsonResponse({'result': {
                 'nickname': nickname,
                 'age': age,

@@ -27,26 +27,35 @@ class HomeIndex(APIView):
             noticeResult = model_to_dict(notice.first(), exclude='id')
         except:
             noticeResult = {}
-        page = request.GET.get('page')
+        apage = request.GET.get('apage')
+        mpage = request.GET.get('mpage')
+        ppage = request.GET.get('ppage')
         articles = Article.objects.all()
-        artPage = Paginator(articles, settings.PAGE_NUM)
+        artPage = Paginator(articles, 5)
         markets = Commodity.objects.all()
-        marPage = Paginator(markets, settings.PAGE_NUM)
+        marPage = Paginator(markets, 5)
         ptjInfo = PTJInfo.objects.all()
-        ptjPage = Paginator(ptjInfo, settings.PAGE_NUM)
+        ptjPage = Paginator(ptjInfo, 5)
 
         try:
-            artList = artPage.page(page)
-            marList = marPage.page(page)
-            ptjList = ptjPage.page(page)
+            artList = artPage.page(apage)
         except PageNotAnInteger:
             artList = artPage.page(1)
-            marList = marPage.page(1)
-            ptjList = ptjPage.page(1)
         except EmptyPage:
             artList = artPage.page(artPage.num_pages)
+        try:
+            marList = marPage.page(mpage)
+        except PageNotAnInteger:
+            marList = marPage.page(1)
+        except EmptyPage:
             marList = marPage.page(marPage.num_pages)
+        try:
+            ptjList = ptjPage.page(ppage)
+        except PageNotAnInteger:
+            ptjList = ptjPage.page(1)
+        except EmptyPage:
             ptjList = ptjPage.page(ptjPage.num_pages)
+
         artResult = [model_to_dict(art) for art in artList]
         marResult = [model_to_dict(mar) for mar in marList]
         ptjResult = [model_to_dict(ptj) for ptj in ptjList]
@@ -55,6 +64,6 @@ class HomeIndex(APIView):
             'helps': artResult,
             'markets': marResult,
             'part_time_job': ptjResult,
-            'notice':noticeResult,
+            'notice': noticeResult,
             'id': id
         }})
