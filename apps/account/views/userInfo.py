@@ -5,6 +5,7 @@ from ALGPackage.dictInfo import model_to_dict
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 class UserDashBoardView(APIView):
@@ -35,8 +36,26 @@ class UserDashBoardView(APIView):
             else:
                 head = None
             articles = Article.objects.filter(author=user)
-            commodity = Commodity.objects.filter(seller=user)
+            markets = Commodity.objects.filter(seller=user)
+            artPage = Paginator(articles, 5)
+            marPage = Paginator(markets, 5)
 
+            apage = request.GET.get('apage')
+            mpage = request.GET.get('mpage')
+            try:
+                artList = artPage.page(apage)
+            except PageNotAnInteger:
+                artList = artPage.page(1)
+            except EmptyPage:
+                artList = artPage.page(artPage.num_pages)
+            try:
+                marList = marPage.page(mpage)
+            except PageNotAnInteger:
+                marList = marPage.page(1)
+            except EmptyPage:
+                marList = marPage.page(marPage.num_pages)
+            artResult = [model_to_dict(art) for art in artList]
+            marResult = [model_to_dict(mar) for mar in marList]
             return JsonResponse({'result': {
                 'nickname': nickname,
                 'age': age,
@@ -44,8 +63,8 @@ class UserDashBoardView(APIView):
                 'score': score,
                 'role': role,
                 'head_portrait': head,
-                'article': [model_to_dict(art, exclude=self.ARTICLE_EXCLUDE_FIELDS) for art in articles],
-                'commodity': [model_to_dict(crt, exclude=self.COMMODITY_EXCLUDE_FIELDS) for crt in commodity]
+                'article': artResult,
+                'commodity': marResult,
             }})
         else:
             return JsonResponse({'err': '你还未登录呢'}, status=401)
