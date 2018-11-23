@@ -54,8 +54,8 @@ class UserDashBoardView(APIView):
                 marList = marPage.page(1)
             except EmptyPage:
                 marList = marPage.page(marPage.num_pages)
-            artResult = [model_to_dict(art) for art in artList]
-            marResult = [model_to_dict(mar) for mar in marList]
+            artResult = [model_to_dict(art, exclude='comment') for art in artList]
+            marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
             return JsonResponse({'result': {
                 'nickname': nickname,
                 'age': age,
