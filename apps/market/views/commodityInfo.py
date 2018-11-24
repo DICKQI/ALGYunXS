@@ -43,9 +43,15 @@ class CommodityView(APIView):
         if request.session.get('login'):
             params = request.POST
             if params.get('c_detail') == None:
-                return JsonResponse({'err':'input error'}, status=403)
+                return JsonResponse({'err':'商品详情不能为空'}, status=403)
             try:
                 commodity = Commodity.objects.get(id=cid)
+                user = User_Info.objects.get(username__exact=request.session.get('login'))
+                if commodity.seller != user:
+                    if user.user_role != '12' or user.user_role != '525400':
+                        return JsonResponse({'err':'你没有权限'})
+                    else:
+                        pass
                 commodity.c_detail = params.get('c_detail')
                 if params.get('classification') != None:
                     try:
@@ -54,10 +60,13 @@ class CommodityView(APIView):
                         return JsonResponse({'err':'不存在此分类名'}, status=403)
                 if params.get('status') != None:
                     commodity.status = params.get('status')
+                if params.get('name') != None:
+                    commodity.name = params.get('name')
                 commodity.last_mod_time = datetime.datetime.now()
                 commodity.save()
                 return JsonResponse({
                     'id':commodity.id,
+                    'name':commodity.name,
                     'after detail':commodity.c_detail,
                     'status':commodity.status,
                     'classification':commodity.classification.name
@@ -78,7 +87,10 @@ class CommodityView(APIView):
                 commodity = Commodity.objects.get(id=cid)
                 user = User_Info.objects.get(username__exact=request.session.get('login'))
                 if commodity.seller != user:
-                    return JsonResponse({'err':'你没有权限'})
+                    if user.user_role != '12' or user.user_role != '525400':
+                        return JsonResponse({'err':'你没有权限'})
+                    else:
+                        pass
                 commodity.delete()
                 return JsonResponse({
                     'status':'success',
