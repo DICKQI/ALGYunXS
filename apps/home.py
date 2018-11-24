@@ -7,10 +7,12 @@ from apps.market.models import Commodity
 from apps.helps.models import Article
 from apps.PTJ.models import PTJInfo
 from apps.FandQ.models import Notice
-from django.conf import settings
 
 
 class HomeIndex(APIView):
+    EXCLUDE_FIELDS = [
+        'comment', 'create_time', 'last_mod_time'
+    ]
     def get(self, request):
         '''
         首页
@@ -56,9 +58,9 @@ class HomeIndex(APIView):
         except EmptyPage:
             ptjList = ptjPage.page(ptjPage.num_pages)
 
-        artResult = [model_to_dict(art, exclude='comment') for art in artList]
-        marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
-        ptjResult = [model_to_dict(ptj) for ptj in ptjList]
+        artResult = [model_to_dict(art, exclude=self.EXCLUDE_FIELDS) for art in artList]
+        marResult = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in marList]
+        ptjResult = [model_to_dict(ptj, exclude=self.EXCLUDE_FIELDS) for ptj in ptjList]
 
         return JsonResponse({'result': {
             'helps': artResult,

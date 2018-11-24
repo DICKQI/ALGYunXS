@@ -38,9 +38,9 @@ class LoginViews(APIView):
         if request.session.get('login'):
             user = User_Info.objects.get(username__exact=request.session.get('login'))
             request.session['login'] = None
-            return JsonResponse({'result':{
+            return JsonResponse({
                 'status':'success',
                 'id':user.id
-            }})
+            })
         else:
             return JsonResponse({'err':'你还未登录呢'}, status=401)

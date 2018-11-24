@@ -56,7 +56,7 @@ class UserDashBoardView(APIView):
                 marList = marPage.page(marPage.num_pages)
             artResult = [model_to_dict(art, exclude='comment') for art in artList]
             marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
-            return JsonResponse({'result': {
+            return JsonResponse({
                 'nickname': nickname,
                 'age': age,
                 'studentID': studentID,
@@ -65,7 +65,7 @@ class UserDashBoardView(APIView):
                 'head_portrait': head,
                 'article': artResult,
                 'commodity': marResult,
-            }})
+            })
         else:
             return JsonResponse({'err': '你还未登录呢'}, status=401)
 
@@ -107,11 +107,11 @@ class UserDashBoardView(APIView):
                         user.email = params.get('email')
                         has_change['email'] = params.get('email')
                 user.save()
-                return JsonResponse({'result': {
+                return JsonResponse({
                     'status': 'success',
                     'id': user.id,
                     'changed': has_change
-                }})
+                })
             else:
                 return JsonResponse({'err': '密码错误'}, status=401)
         else:

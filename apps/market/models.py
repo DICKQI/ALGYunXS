@@ -53,6 +53,7 @@ class Commodity(models.Model):
     STATUS_CHOICES = (
         ('s', '草稿'),
         ('p', '发表'),
+        ('o', '已卖出')
     )
 
     seller = models.ForeignKey(User_Info, verbose_name='卖家', on_delete=models.CASCADE)
@@ -63,7 +64,7 @@ class Commodity(models.Model):
 
     c_detail = models.TextField(verbose_name='商品描述详情', blank=False)
 
-    status = models.CharField(verbose_name='商品状态', max_length=10, choices=STATUS_CHOICES, default='草稿')
+    status = models.CharField(verbose_name='商品状态', max_length=10, choices=STATUS_CHOICES, default='s')
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 
