@@ -15,7 +15,10 @@ class UserDashBoardView(APIView):
     COMMODITY_EXCLUDE_FIELDS = [
         'comment', 'create_time'
     ]
-
+    USER_INCLUDE_FIELDS = [
+        'nickname', 'phone_number', 'student_id', 'age',
+        'credit_score', 'last_login_time'
+    ]
     def get(self, request):
         '''
         用户控制台
@@ -26,15 +29,11 @@ class UserDashBoardView(APIView):
             user = User_Info.objects.get(username__exact=request.session.get('login'))
             if user.user_role == '6':
                 return JsonResponse({'err': '此账户已被封禁，请联系管理员'}, status=401)
-            nickname = user.nickname
-            age = user.age
-            studentID = user.student_id
-            score = user.credit_score
-            role = user.user_role
+            userResult = model_to_dict(user, fields=self.USER_INCLUDE_FIELDS)
             if user.head_portrait:
-                head = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + str(user.head_portrait) + '?x-oss-process=style/head_portrait'
+                userResult['head'] = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + str(user.head_portrait) + '?x-oss-process=style/head_portrait'
             else:
-                head = None
+                userResult['head'] = None
             articles = Article.objects.filter(author=user)
             markets = Commodity.objects.filter(seller=user)
             artPage = Paginator(articles, 5)
@@ -57,12 +56,7 @@ class UserDashBoardView(APIView):
             artResult = [model_to_dict(art, exclude='comment') for art in artList]
             marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
             return JsonResponse({
-                'nickname': nickname,
-                'age': age,
-                'studentID': studentID,
-                'score': score,
-                'role': role,
-                'head_portrait': head,
+                'myself':userResult,
                 'article': artResult,
                 'commodity': marResult,
                 'A_has_previous': artList.has_previous(),
@@ -112,7 +106,6 @@ class UserDashBoardView(APIView):
                         has_change['email'] = params.get('email')
                 user.save()
                 return JsonResponse({
-                    'status': 'success',
                     'id': user.id,
                     'changed': has_change
                 })

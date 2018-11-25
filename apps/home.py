@@ -22,7 +22,7 @@ class HomeIndex(APIView):
         '''
         try:
             user = User_Info.objects.get(username=request.session.get('login'))
-            id = {'id': user.id, 'nickname': user.nickname}
+            id = {'id': user.id, 'nickname': user.nickname, 'head_portrait':'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + str(user.head_portrait) + '?x-oss-process=style/head_portrait'}
         except:
             id = {'err': '未登录'}
         try:

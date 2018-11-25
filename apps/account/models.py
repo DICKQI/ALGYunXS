@@ -40,6 +40,9 @@ class User_Info(models.Model):
 
     credit_score = models.IntegerField(verbose_name='信用分', default=500)
 
+    '''记录信息'''
+    last_login_time = models.DateTimeField(verbose_name='最后登录时间', default=now)
+
     def __str__(self):
         return self.username
 

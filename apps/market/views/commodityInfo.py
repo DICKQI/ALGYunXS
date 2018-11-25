@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from apps.account.models import User_Info
 from apps.market.models import Commodity, Classification
 from ALGPackage.dictInfo import model_to_dict
-import datetime
+from django.utils.timezone import now
 from django.http import JsonResponse
 
 class CommodityView(APIView):
@@ -62,7 +62,7 @@ class CommodityView(APIView):
                     commodity.status = params.get('status')
                 if params.get('name') != None:
                     commodity.name = params.get('name')
-                commodity.last_mod_time = datetime.datetime.now()
+                commodity.last_mod_time = now()
                 commodity.save()
                 return JsonResponse({
                     'id':commodity.id,
