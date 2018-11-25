@@ -32,7 +32,7 @@ class UserDashBoardView(APIView):
             score = user.credit_score
             role = user.user_role
             if user.head_portrait:
-                head = '/media/' + str(user.head_portrait)
+                head = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + str(user.head_portrait) + '?x-oss-process=style/head_portrait'
             else:
                 head = None
             articles = Article.objects.filter(author=user)
@@ -65,6 +65,10 @@ class UserDashBoardView(APIView):
                 'head_portrait': head,
                 'article': artResult,
                 'commodity': marResult,
+                'A_has_previous': artList.has_previous(),
+                'A_has_next': artList.has_next(),
+                'M_has_previous': marList.has_previous(),
+                'M_has_next': marList.has_next()
             })
         else:
             return JsonResponse({'err': '你还未登录呢'}, status=401)

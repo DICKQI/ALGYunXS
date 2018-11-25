@@ -249,7 +249,7 @@ EMAIL_FROM = 'algyun@163.com'
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-PAGE_NUM = 8    #每页显示的文章数
+PAGE_NUM = 5    #每页显示的文章数
 
 LANGUAGE_CODE = 'zh-hans'
 
@@ -270,5 +270,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'common_static'),
 ]
+
+ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
+ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
+END_POINT = 'oss-cn-shenzhen.aliyuncs.com'
+BUCKET_NAME = 'algyunxs'
+BUCKET_ACL_TYPE = 'public-read-write'
+DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')

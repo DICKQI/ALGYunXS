@@ -13,6 +13,7 @@ class HomeIndex(APIView):
     EXCLUDE_FIELDS = [
         'comment', 'create_time', 'last_mod_time'
     ]
+
     def get(self, request):
         '''
         首页
@@ -67,5 +68,11 @@ class HomeIndex(APIView):
             'markets': marResult,
             'part_time_job': ptjResult,
             'notice': noticeResult,
-            'id': id
+            'id': id,
+            'A_has_previous': artList.has_previous(),
+            'M_has_previous': marList.has_previous(),
+            'P_has_previous': ptjList.has_previous(),
+            'A_has_next': artList.has_next(),
+            'M_has_next': marList.has_next(),
+            'P_has_next': ptjList.has_next()
         }})
