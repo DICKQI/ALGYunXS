@@ -12,7 +12,7 @@ class NewCommodityView(APIView):
         '''
         if request.session.get('login'):
             params = request.POST
-            if params.get('name') == None and params.get('c_detail') == None and params.get('classification') == None:
+            if params.get('name') == None or params.get('c_detail') == None or params.get('classification') == None:
                 return JsonResponse({'err': 'input error'}, status=403)
             try:
                 seller = User_Info.objects.get(username__exact=request.session.get('login'))
