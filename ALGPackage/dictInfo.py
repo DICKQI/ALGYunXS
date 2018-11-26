@@ -37,7 +37,7 @@ def model_to_dict(instance, fields=None, exclude=None):
                 value = [{'id': i.id, 'fromUser': i.from_author.nickname, 'content': i.content, 'time': i.create_time}
                          for i in value] if instance.pk else None
             elif f.verbose_name == '商品图片':
-                value = {'img':[i.img.path for i in value]}
+                value = {'img':['https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + i.img.name + '?x-oss-process=style/head_portrait' for i in value]}
         if isinstance(f, ForeignKey):
             if f.verbose_name == '分类':
                 value = Category.objects.get(cid__exact=value).name

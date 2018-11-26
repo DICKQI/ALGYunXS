@@ -55,7 +55,7 @@ class CommodityImage(models.Model):
         verbose_name_plural = verbose_name + "列表"
 
     def __str__(self):
-        return str(self.img.path)
+        return str(self.img.name)
 class Commodity(models.Model):
     '''商品数据库模型'''
     STATUS_CHOICES = (
