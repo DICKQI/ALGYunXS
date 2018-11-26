@@ -21,14 +21,14 @@ from django.conf.urls.static import static
 from apps.home import HomeIndex
 urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
-    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
-    path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
-
+    # path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+    # path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    path('admin/', admin.site.urls),
     path('', HomeIndex.as_view()),
     path('users/', include('apps.account.urls', namespace='users')),
     path('market/', include('apps.market.urls', namespace='market')),
 
-    path('admin/', admin.site.urls),
-]
+
+] + static(settings.STATIC_URL,document_root = settings.STATIC_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

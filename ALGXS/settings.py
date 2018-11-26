@@ -35,8 +35,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'jet.dashboard',
-    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -271,11 +269,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'common_static'),
 ]
 '''服务器端专用oss存储'''
-ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
-ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
-END_POINT = 'oss-cn-shenzhen-internal.aliyuncs.com'
-BUCKET_NAME = 'algyunxs'
-BUCKET_ACL_TYPE = 'public-read-write'
-DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
+# ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
+# ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
+# END_POINT = 'oss-cn-shenzhen-internal.aliyuncs.com'
+# BUCKET_NAME = 'algyunxs'
+# BUCKET_ACL_TYPE = 'public-read-write'
+# DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
