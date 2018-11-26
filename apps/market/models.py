@@ -47,7 +47,15 @@ class CStarRecord(models.Model):
 
     star_man = models.ForeignKey(User_Info, on_delete=models.CASCADE)
 
-# Create your models here.
+class CommodityImage(models.Model):
+    img = models.ImageField(verbose_name='商品图片', blank=False, default='', upload_to='commodity')
+
+    class Meta:
+        verbose_name = '图片'
+        verbose_name_plural = verbose_name + "列表"
+
+    def __str__(self):
+        return str(self.img.path)
 class Commodity(models.Model):
     '''商品数据库模型'''
     STATUS_CHOICES = (
@@ -74,6 +82,7 @@ class Commodity(models.Model):
 
     comment = models.ManyToManyField(CComment, verbose_name='商品评论', blank=True)
 
+    commodity_img = models.ManyToManyField(CommodityImage, verbose_name='商品图片', default='', blank=True)
     class Meta:
         verbose_name = '商品'
         verbose_name_plural = '商品列表'

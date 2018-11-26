@@ -4,6 +4,7 @@ from apps.market.models import Commodity, Classification
 from ALGPackage.dictInfo import model_to_dict
 from django.utils.timezone import now
 from django.http import JsonResponse
+from django.db.models import F
 
 class CommodityView(APIView):
     def get(self, request, cid):
@@ -16,21 +17,21 @@ class CommodityView(APIView):
         if request.session.get('login'):
             try:
                 commodity = Commodity.objects.get(id=cid)
-                user = User_Info.objects.get(username__exact=request.session.get('login'))
-                if commodity.seller == user:
-                    editable = True
-                else:
-                    editable = False
-                commodity.views += 1
-                commodity.save()
-                cmdResult = model_to_dict(commodity)
-                return JsonResponse({
-                    'status':'success',
-                    'editable':editable,
-                    'commodity':cmdResult
-                })
             except:
-                return JsonResponse({'err':'找不到该内容'}, status=403)
+                return JsonResponse({'err': '找不到该内容'}, status=403)
+            user = User_Info.objects.get(username__exact=request.session.get('login'))
+            if commodity.seller == user:
+                editable = True
+            else:
+                editable = False
+            commodity.views += 1
+            commodity.save()
+            cmdResult = model_to_dict(commodity)
+            return JsonResponse({
+                'status':'success',
+                'editable':editable,
+                'commodity':cmdResult
+            })
         else:
             return JsonResponse({'err':'你还未登录'}, status=401)
     def put(self, request, cid):

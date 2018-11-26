@@ -36,6 +36,8 @@ def model_to_dict(instance, fields=None, exclude=None):
             elif f.verbose_name == '文章评论':
                 value = [{'id': i.id, 'fromUser': i.from_author.nickname, 'content': i.content, 'time': i.create_time}
                          for i in value] if instance.pk else None
+            elif f.verbose_name == '商品图片':
+                value = {'img':[i.img.path for i in value]}
         if isinstance(f, ForeignKey):
             if f.verbose_name == '分类':
                 value = Category.objects.get(cid__exact=value).name
