@@ -1,4 +1,3 @@
-import time
 from itertools import chain
 from django.db.models.fields.related import ManyToManyField, ForeignKey
 from django.db.models.fields import DateTimeField

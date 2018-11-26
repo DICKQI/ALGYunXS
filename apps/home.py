@@ -59,8 +59,8 @@ class HomeIndex(APIView):
         except EmptyPage:
             ptjList = ptjPage.page(ptjPage.num_pages)
 
-        artResult = [model_to_dict(art, exclude=self.EXCLUDE_FIELDS) for art in artList]
-        marResult = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in marList]
+        artResult = [model_to_dict(art, exclude=self.EXCLUDE_FIELDS) for art in artList if art.status == 'p']
+        marResult = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in marList if mar.status == 'p'  or mar.status == 'o']
         ptjResult = [model_to_dict(ptj, exclude=self.EXCLUDE_FIELDS) for ptj in ptjList]
 
         return JsonResponse({'result': {
