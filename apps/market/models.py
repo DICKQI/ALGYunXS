@@ -90,5 +90,5 @@ class Commodity(models.Model):
         ordering = ['-last_mod_time']
 
     def __str__(self):
-        return self.seller.nickname + ' ' +  self.name
+        return self.name
 

@@ -98,4 +98,4 @@ class Article(models.Model):
         db_table = 'Article'
         ordering = ['-last_mod_time']
     def __str__(self):
-        return self.author.nickname + " " + self.title
+        return self.title

@@ -73,7 +73,7 @@ class CommodityView(APIView):
                     'classification':commodity.classification.name
                 })
             except:
-                return JsonResponse({'err': '找不到该内容'}, status=403)
+                return JsonResponse({'err': '意料之外的错误'}, status=403)
         else:
             return JsonResponse({'err':'你还未登录'}, status=401)
     def delete(self, request, cid):
