@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from apps.account.models import User_Info
-from apps.market.models import Commodity, Classification
+from apps.market.models import Commodity, Classification, CommodityImage
 from ALGPackage.dictInfo import model_to_dict
 from django.utils.timezone import now
 from django.http import JsonResponse
@@ -44,7 +44,7 @@ class CommodityView(APIView):
         if request.session.get('login'):
             params = request.POST
             if params.get('c_detail') == None:
-                return JsonResponse({'err':'商品详情不能为空'}, status=403)
+                return JsonResponse({'err':'input error'}, status=403)
             try:
                 commodity = Commodity.objects.get(id=cid)
                 user = User_Info.objects.get(username__exact=request.session.get('login'))
@@ -63,6 +63,9 @@ class CommodityView(APIView):
                     commodity.status = params.get('status')
                 if params.get('name') != None:
                     commodity.name = params.get('name')
+                if request.FILES.get('commodity_img') != None:
+                    img = CommodityImage.objects.create(img=request.FILES.get('commodity_img'))
+                    commodity.commodity_img.add(img)
                 commodity.last_mod_time = now()
                 commodity.save()
                 return JsonResponse({

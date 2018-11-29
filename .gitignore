@@ -12,3 +12,6 @@ apps/market/migrations
 apps/helps/migrations
 apps/FandQ/migrations
 media
+apps/account/views/__pycache__
+apps/market/views/__pycache__
+ALGPackage/__pycache__

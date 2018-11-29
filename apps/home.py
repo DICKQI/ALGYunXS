@@ -16,15 +16,10 @@ class HomeIndex(APIView):
 
     def get(self, request):
         '''
-        首页
+        获取helps markets
         :param request:
         :return:
         '''
-        try:
-            user = User_Info.objects.get(username=request.session.get('login'))
-            id = {'id': user.id, 'nickname': user.nickname, 'head_portrait':'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + str(user.head_portrait) + '?x-oss-process=style/head_portrait'}
-        except:
-            id = {'err': '未登录'}
         try:
             notice = Notice.objects.all()
             noticeResult = model_to_dict(notice.first(), exclude='id')
@@ -60,7 +55,7 @@ class HomeIndex(APIView):
             ptjList = ptjPage.page(ptjPage.num_pages)
 
         artResult = [model_to_dict(art, exclude=self.EXCLUDE_FIELDS) for art in artList if art.status == 'p']
-        marResult = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in marList if mar.status == 'p'  or mar.status == 'o']
+        marResult = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in marList if mar.status == 'p' or mar.status == 'o']
         ptjResult = [model_to_dict(ptj, exclude=self.EXCLUDE_FIELDS) for ptj in ptjList]
 
         return JsonResponse({'result': {
@@ -68,7 +63,6 @@ class HomeIndex(APIView):
             'markets': marResult,
             'part_time_job': ptjResult,
             'notice': noticeResult,
-            'id': id,
             'A_has_previous': artList.has_previous(),
             'M_has_previous': marList.has_previous(),
             'P_has_previous': ptjList.has_previous(),

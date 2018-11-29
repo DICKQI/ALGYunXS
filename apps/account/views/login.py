@@ -3,6 +3,7 @@ from apps.account.models import User_Info
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 from django.utils.timezone import now
+from django.contrib.sessions.models import Session
 class LoginViews(APIView):
     def post(self, request):
         '''
@@ -21,6 +22,8 @@ class LoginViews(APIView):
                 return JsonResponse({'err':'此账号已被封禁，请联系管理员'}, status=403)
             if check_password(params.get('password'), user.password):
                 request.session['login'] = user.username
+                # if params.get('remember') == 'false':
+                #     request.session.set_expiry(0)
                 user.last_login_time = now()
                 user.save()
                 return JsonResponse({'result':{
