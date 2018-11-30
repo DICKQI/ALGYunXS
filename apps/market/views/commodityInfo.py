@@ -63,9 +63,6 @@ class CommodityView(APIView):
                     commodity.status = params.get('status')
                 if params.get('name') != None:
                     commodity.name = params.get('name')
-                if request.FILES.get('commodity_img') != None:
-                    img = CommodityImage.objects.create(img=request.FILES.get('commodity_img'))
-                    commodity.commodity_img.add(img)
                 commodity.last_mod_time = now()
                 commodity.save()
                 return JsonResponse({
@@ -92,15 +89,13 @@ class CommodityView(APIView):
                 user = User_Info.objects.get(username__exact=request.session.get('login'))
                 if commodity.seller != user:
                     if user.user_role != '12' or user.user_role != '525400':
-                        return JsonResponse({'err':'你没有权限'})
-                    else:
-                        pass
+                        return JsonResponse({'err':'你没有权限'}, status=401)
                 commodity.delete()
                 return JsonResponse({
                     'status':'success',
                     'id':cid
                 })
             except:
-                return JsonResponse({'err':'未知错误'})
+                return JsonResponse({'err':'未知错误'}, status=403)
         else:
-            return JsonResponse('你还未登录呢')
+            return JsonResponse({'err':'你还未登录呢'}, status=401)
