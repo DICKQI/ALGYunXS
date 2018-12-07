@@ -240,14 +240,14 @@ AUTH_PASSWORD_VALIDATORS = [
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.163.com'  # 邮箱服务器
 EMAIL_PORT = 994
-EMAIL_HOST_USER = 'algyun@163.com' # 帐号
-EMAIL_HOST_PASSWORD = 'alg666'  # 密码
+EMAIL_HOST_USER = 'algyunxs@163.com'  # 帐号
+EMAIL_HOST_PASSWORD = 'algyun666'  # 密码
 EMAIL_FROM = 'algyun@163.com'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-PAGE_NUM = 5    #每页显示的文章数
+PAGE_NUM = 5  # 每页显示的文章数
 
 LANGUAGE_CODE = 'zh-hans'
 
@@ -260,6 +260,8 @@ USE_L10N = True
 USE_TZ = False
 
 SESSION_COOKIE_HTTPONLY = False
+
+APPEND_SLASH = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

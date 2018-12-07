@@ -16,10 +16,16 @@ class LoginViews(APIView):
             try:
                 User_Info.objects.get(username__exact=params.get('username'))
             except:
-                return JsonResponse({'err':'无此用户'}, status=403)
+                return JsonResponse({
+                    'status':False,
+                    'err': '无此用户'
+                }, status=403)
             user = User_Info.objects.get(username__exact=params.get('username'))
             if user.user_role == 6:
-                return JsonResponse({'err':'此账号已被封禁，请联系管理员'}, status=403)
+                return JsonResponse({
+                    'status':False,
+                    'err': '此账号已被封禁，请联系管理员'
+                }, status=403)
             if check_password(params.get('password'), user.password):
                 request.session['login'] = user.username
                 # if params.get('remember') == 'false':
@@ -27,13 +33,19 @@ class LoginViews(APIView):
                 user.last_login_time = now()
                 user.save()
                 return JsonResponse({'result':{
-                    'status':'success',
+                    'status':True,
                     'id':user.id,
                 }})
             else:
-                return JsonResponse({'err':'密码错误'}, status=401)
+                return JsonResponse({
+                    'status':True,
+                    'err': '密码错误'
+                }, status=401)
         except:
-            return JsonResponse({'err':'出现了预期以外的错误'}, status=403)
+            return JsonResponse({
+                'status':False,
+                'err': '出现了预期以外的错误'
+            }, status=403)
     def delete(self, request):
         '''
         登出账户
@@ -44,8 +56,11 @@ class LoginViews(APIView):
             user = User_Info.objects.get(username__exact=request.session.get('login'))
             request.session['login'] = None
             return JsonResponse({
-                'status':'success',
+                'status':True,
                 'id':user.id
             })
         else:
-            return JsonResponse({'err':'你还未登录呢'}, status=401)
+            return JsonResponse({
+                'status':False,
+                'err': '你还未登录呢'
+            }, status=401)

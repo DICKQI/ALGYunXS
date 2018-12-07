@@ -15,15 +15,24 @@ class DeleteImage(APIView):
             try:
                 commodity = Commodity.objects.get(id=cid)
             except:
-                return JsonResponse({'err':'商品不存在'}, status=403)
+                return JsonResponse({
+                    'status':False,
+                    'err': '商品不存在'
+                }, status=403)
             try:
                 img = CommodityImage.objects.get(id=mid)
             except:
-                return JsonResponse({'err', '图片不存在'}, status=403)
+                return JsonResponse({
+                    'status':False,
+                    'err': '图片不存在'
+                }, status=403)
             try:
                 commodity.commodity_img.remove(img)
             except:
-                return JsonResponse({'err':'删除失败'}, status=403)
+                return JsonResponse({
+                    'status':False,
+                    'err': '删除失败'
+                }, status=403)
             commodity.save()
             try:
                 '''删除oss文件'''
@@ -33,7 +42,16 @@ class DeleteImage(APIView):
                 bucket.delete_object(object_name)
                 img.delete()
             except:
-                return JsonResponse({'err':'删除失败'}, status=403)
-            return JsonResponse({'result':'success'})
+                return JsonResponse({
+                    'status':False,
+                    'err': '删除失败'
+                }, status=403)
+            return JsonResponse({
+                'status':True,
+                'result':'删除成功'
+            })
         else:
-            return JsonResponse({'err':'你还没登录呢'}, status=401)
+            return JsonResponse({
+                'status':False,
+                'err': '你还没登录呢'
+            }, status=401)

@@ -13,13 +13,19 @@ class NewCommodityView(APIView):
         if request.session.get('login'):
             params = request.POST
             if params.get('name') == None or params.get('c_detail') == None or params.get('classification') == None:
-                return JsonResponse({'err': 'input error'}, status=403)
+                return JsonResponse({
+                    'status':False,
+                    'err': '输入错误'
+                }, status=403)
             try:
                 seller = User_Info.objects.get(username__exact=request.session.get('login'))
                 try:
                     classification = Classification.objects.get(name__exact=params.get('classification'))
                 except:
-                    return JsonResponse({'err':'找不到该分类'})
+                    return JsonResponse({
+                        'status':False,
+                        'err': '找不到该分类'
+                    })
                 if params.get('status') != None:
                     status = params.get('status')
                 else:
@@ -32,10 +38,16 @@ class NewCommodityView(APIView):
                     status=status
                 )
                 return JsonResponse({
-                    'status': 'success',
+                    'status': True,
                     'commodity': newCommodity.id
                 })
             except:
-                return JsonResponse({'err': '未知错误'}, status=403)
+                return JsonResponse({
+                    'status':False,
+                    'err': '未知错误'
+                }, status=403)
         else:
-            return JsonResponse({'err': '你还未登录'}, status=401)
+            return JsonResponse({
+                'status':False,
+                'err': '你还未登录'
+            }, status=401)

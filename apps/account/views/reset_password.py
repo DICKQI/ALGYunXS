@@ -15,7 +15,10 @@ class ResetView(APIView):
             try:
                 record = EmailVerifyRecord.objects.get(code__exact=r_code)
                 if record.code_status == 'used' or record.send_type == 'active':
-                    return JsonResponse({'err':'重置失败'}, status=404)
+                    return JsonResponse({
+                        'status':False,
+                        'err': '重置失败'
+                    }, status=404)
                 if record.email == user.email:
                     params = request.POST
                     if params.get('password') != None:
@@ -25,14 +28,26 @@ class ResetView(APIView):
                         record.code_status = 'used'
                         record.save()
                         return JsonResponse({'result':{
-                            'status':'success',
+                            'status':True,
                             'id':user.id
                         }})
                     else:
-                        return JsonResponse({'err': 'input error'}, status=404)
+                        return JsonResponse({
+                            'status':False,
+                            'err': 'input error'
+                        }, status=404)
                 else:
-                    return JsonResponse({'err': '重置失败'}, status=404)
+                    return JsonResponse({
+                        'status':False,
+                        'err': '重置失败'
+                    }, status=404)
             except:
-                return JsonResponse({'err': '重置失败'}, status=404)
+                return JsonResponse({
+                    'status':False,
+                    'err': '重置失败'
+                }, status=404)
         else:
-            return JsonResponse({'err':'你还未登录'}, status=401)
+            return JsonResponse({
+                'status':False,
+                'err': '你还未登录'
+            }, status=401)

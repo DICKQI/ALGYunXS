@@ -15,6 +15,7 @@ class UserDashBoardView(APIView):
     COMMODITY_EXCLUDE_FIELDS = [
         'comment', 'create_time'
     ]
+
     def get(self, request):
         '''
         用户控制台
@@ -47,6 +48,7 @@ class UserDashBoardView(APIView):
             artResult = [model_to_dict(art, exclude='comment') for art in artList]
             marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
             return JsonResponse({
+                'status': True,
                 'article': artResult,
                 'commodity': marResult,
                 'A_has_previous': artList.has_previous(),
@@ -55,7 +57,10 @@ class UserDashBoardView(APIView):
                 'M_has_next': marList.has_next()
             })
         else:
-            return JsonResponse({'err': '你还未登录呢'}, status=401)
+            return JsonResponse({
+                'status': False,
+                'err': '你还未登录呢'
+            }, status=401)
 
     def put(self, request):
         '''
@@ -66,10 +71,16 @@ class UserDashBoardView(APIView):
         if request.session.get('login') != None:
             user = User_Info.objects.get(username__exact=request.session.get('login'))
             if user.user_role == '6':
-                return JsonResponse({'err': '此账户已被封禁，请联系管理员'})
+                return JsonResponse({
+                    'status': False,
+                    'err': '此账户已被封禁，请联系管理员'
+                })
             params = request.POST
             if params.get('password') == None:
-                return JsonResponse({'err': '请输入密码'})
+                return JsonResponse({
+                    'status': False,
+                    'err': '请输入密码'
+                })
             if check_password(params.get('password'), user.password):
                 has_change = {}
                 if params.get('nickname') != None:
@@ -90,16 +101,26 @@ class UserDashBoardView(APIView):
                 if params.get('email') != None:
                     try:
                         User_Info.objects.get(email=params.get('email'))
-                        return JsonResponse({'err': '邮箱已存在'}, status=401)
+                        return JsonResponse({
+                            'status': False,
+                            'err': '邮箱已存在'
+                        }, status=401)
                     except:
                         user.email = params.get('email')
                         has_change['email'] = params.get('email')
                 user.save()
                 return JsonResponse({
+                    'status': True,
                     'id': user.id,
                     'changed': has_change
                 })
             else:
-                return JsonResponse({'err': '密码错误'}, status=401)
+                return JsonResponse({
+                    'status': False,
+                    'err': '密码错误'
+                }, status=401)
         else:
-            return JsonResponse({'err': '你还未登录呢'}, status=401)
+            return JsonResponse({
+                'status': False,
+                'err': '你还未登录呢'
+            }, status=401)

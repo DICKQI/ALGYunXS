@@ -35,7 +35,7 @@ class SendView(APIView):
                     send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
                     if send_status:
                         return JsonResponse({'result':{
-                            'status':'success',
+                            'status':True,
                             'eid':email_record.id
                         }})
                 elif send_type == 'forget':
@@ -44,10 +44,16 @@ class SendView(APIView):
                     send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
                     if send_status:
                         return JsonResponse({'result': {
-                            'status': 'success',
+                            'status': True,
                             'eid': email_record.id
                         }})
             else:
-                return JsonResponse({'err':'你还未登录'})
+                return JsonResponse({
+                    'status':False,
+                    'err': '你还未登录'
+                })
         except:
-            return JsonResponse({'err':'input error'})
+            return JsonResponse({
+                'status':False,
+                'err': 'input error'
+            })

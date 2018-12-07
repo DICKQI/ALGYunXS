@@ -22,8 +22,17 @@ class MeView(APIView):
                         user.head_portrait) + '?x-oss-process=style/head_portrait'
                 else:
                     userResult['head'] = None
-                return JsonResponse({'myself':userResult})
+                return JsonResponse({
+                    'status':True,
+                    'myself': userResult
+                })
             except:
-                return JsonResponse({'err':'意料之外的错误'}, status=403)
+                return JsonResponse({
+                    'status':False,
+                    'err': '意料之外的错误'
+                }, status=403)
         else:
-            return JsonResponse({'err':'还没登录'}, status=401)
+            return JsonResponse({
+                'status':False,
+                'err': '你还没登录'
+            }, status=401)
