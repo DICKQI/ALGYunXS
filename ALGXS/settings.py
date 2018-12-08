@@ -15,11 +15,11 @@ code XS
 '''
 import os
 import pymysql
+
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -28,16 +28,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'e@0+j9l3*z_h5t3!^iu1_0!d#6oxys9wx**mni9cq^+yzf9*yq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'jet.dashboard',
-    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,14 +52,13 @@ INSTALLED_APPS = [
     'apps.helps',
     'apps.FandQ',
 
-
 ]
 # 主题
 JET_THEMES = [
     {
-        'theme': 'default', # theme folder name
-        'color': '#47bac1', # color of the theme's button in user menu
-        'title': 'Default' # theme title
+        'theme': 'default',  # theme folder name
+        'color': '#47bac1',  # color of the theme's button in user menu
+        'title': 'Default'  # theme title
     },
     {
         'theme': 'green',
@@ -108,7 +104,6 @@ SUMMERNOTE_CONFIG = {
     # Use proper language setting automatically (default)
     'lang': 'zh-CN',
 
-
 }
 # 是否展开所有菜单
 JET_SIDE_MENU_COMPACT = True  # 菜单不是很多时建议为TRUE
@@ -124,7 +119,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -138,55 +133,54 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
 
-'*',
+    '*',
 
 )
 CORS_ALLOW_METHODS = (
 
-'DELETE',
+    'DELETE',
 
-'GET',
+    'GET',
 
-'OPTIONS',
+    'OPTIONS',
 
-'PATCH',
+    'PATCH',
 
-'POST',
+    'POST',
 
-'PUT',
+    'PUT',
 
-'VIEW',
+    'VIEW',
 
 )
 
-
 CORS_ALLOW_HEADERS = (
 
-'accept',
+    'accept',
 
-'XMLHttpRequest',
+    'XMLHttpRequest',
 
-'X_FILENAME',
+    'X_FILENAME',
 
-'accept-encoding',
+    'accept-encoding',
 
-'authorization',
+    'authorization',
 
-'content-type',
+    'content-type',
 
-'dnt',
+    'dnt',
 
-'origin',
+    'origin',
 
-'user-agent',
+    'user-agent',
 
-'x-csrftoken',
+    'x-csrftoken',
 
-'x-requested-with',
+    'x-requested-with',
 
-'Pragma',
+    'Pragma',
 
-'X-Custom-Header',
+    'X-Custom-Header',
 
 )
 
@@ -211,7 +205,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ALGXS.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -219,13 +212,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ALGYunXS',
-        'USER':'root',
-        'PASSWORD':'macbook123456',
-        'HOST':'localhost',
-        'PORT':3306
+        'USER': 'root',
+        'PASSWORD': 'macbook123456',
+        'HOST': 'localhost',
+        'PORT': 3306
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -245,9 +237,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.163.com'  # 邮箱服务器
+EMAIL_PORT = 994
+EMAIL_HOST_USER = 'algyunxs@163.com'  # 帐号
+EMAIL_HOST_PASSWORD = 'algyun666'  # 密码
+EMAIL_FROM = 'algyun@163.com'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
+
+PAGE_NUM = 5  # 每页显示的文章数
 
 LANGUAGE_CODE = 'zh-hans'
 
@@ -257,17 +257,27 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
+SESSION_COOKIE_HTTPONLY = False
+
+APPEND_SLASH = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+# STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # 配置静态文件目录
-STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'common_static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'common_static'),
+# ]
+'''服务器端专用oss存储'''
+ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
+ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
+END_POINT = 'oss-cn-shenzhen-internal.aliyuncs.com'
+BUCKET_NAME = 'algyunxs'
+BUCKET_ACL_TYPE = 'public-read-write'
+DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
