@@ -12,7 +12,7 @@ class RegisterView(APIView):
             User_Info.objects.get(username__exact=params['username'])
             return JsonResponse({
                 'status':False,
-                'err':'用户不存在'
+                'err':'用户名已存在'
             }, status=401)
         except:
             try:
@@ -24,6 +24,7 @@ class RegisterView(APIView):
                     nickname=params.get('nickname'),
                     phone_number=params.get('phone_number'),
                 )
+
                 return JsonResponse({
                     'status':True,
                     'id':newUser.id,

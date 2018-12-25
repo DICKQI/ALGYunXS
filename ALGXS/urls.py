@@ -18,14 +18,15 @@ from django.urls import path
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.home import HomeIndex
+from apps.Test import TestView
+
 urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
-    path('admin/', admin.site.urls),
-    path('', HomeIndex.as_view()),
+    path('admin', admin.site.urls),
+    path('test/', TestView.as_view()),
     path('users/', include('apps.account.urls', namespace='users')),
     path('market/', include('apps.market.urls', namespace='market')),
-
+    path('helps/', include('apps.helps.urls', namespace='helps')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

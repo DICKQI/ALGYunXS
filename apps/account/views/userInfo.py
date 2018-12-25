@@ -1,6 +1,7 @@
 from apps.account.models import User_Info
 from apps.market.models import Commodity
 from apps.helps.models import Article
+from apps.PTJ.models import PTJInfo
 from ALGPackage.dictInfo import model_to_dict
 from rest_framework.views import APIView
 from django.http import JsonResponse
@@ -28,11 +29,14 @@ class UserDashBoardView(APIView):
                 return JsonResponse({'err': '此账户已被封禁，请联系管理员'}, status=401)
             articles = Article.objects.filter(author=user)
             markets = Commodity.objects.filter(seller=user)
+            ptj = PTJInfo.objects.filter(publisher=user)
             artPage = Paginator(articles, 5)
             marPage = Paginator(markets, 5)
+            ptjPage = Paginator(ptj, 5)
 
             apage = request.GET.get('apage')
             mpage = request.GET.get('mpage')
+            ppge = request.GET.get('ppage')
             try:
                 artList = artPage.page(apage)
             except PageNotAnInteger:
@@ -45,16 +49,26 @@ class UserDashBoardView(APIView):
                 marList = marPage.page(1)
             except EmptyPage:
                 marList = marPage.page(marPage.num_pages)
+            try:
+                ptjList = ptjPage.page(ppge)
+            except PageNotAnInteger:
+                ptjList = ptjPage.page(1)
+            except EmptyPage:
+                ptjList = ptjPage.page(1)
             artResult = [model_to_dict(art, exclude='comment') for art in artList]
             marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
+            ptjResult = [model_to_dict(ptjs) for ptjs in ptjList]
             return JsonResponse({
                 'status': True,
                 'article': artResult,
                 'commodity': marResult,
+                'PTJ': ptjResult,
                 'A_has_previous': artList.has_previous(),
                 'A_has_next': artList.has_next(),
                 'M_has_previous': marList.has_previous(),
-                'M_has_next': marList.has_next()
+                'M_has_next': marList.has_next(),
+                'P_has_previous': ptjList.has_previous(),
+                'P_has_next': ptjList.has_next()
             })
         else:
             return JsonResponse({
