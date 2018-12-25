@@ -5,6 +5,11 @@ import json
 class TestView(APIView):
 
     def post(self, requests):
-        postBody = requests.body
-        jsonData = json.loads(postBody)
-        return JsonResponse(jsonData)
+        try:
+            postBody = requests.body
+            jsonData = json.loads(postBody)
+            return JsonResponse(jsonData)
+        except:
+            return JsonResponse({
+                'err':'错误'
+            })
