@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import json
 
 
 class UserDashBoardView(APIView):
@@ -89,39 +90,40 @@ class UserDashBoardView(APIView):
                     'status': False,
                     'err': '此账户已被封禁，请联系管理员'
                 })
-            params = request.POST
-            if params.get('password') == None:
+            params = request.body
+            jsonParams = json.loads(params)
+            if jsonParams.get('password') == None:
                 return JsonResponse({
                     'status': False,
                     'err': '请输入密码'
                 })
-            if check_password(params.get('password'), user.password):
+            if check_password(jsonParams.get('password'), user.password):
                 has_change = {}
-                if params.get('nickname') != None:
-                    user.nickname = params.get('nickname')
-                    has_change['nickname'] = params.get('nickname')
-                if params.get('age') != None:
-                    user.age = params.get('age')
-                    has_change['age'] = params.get('age')
-                if params.get('studentID') != None:
-                    user.student_id = params.get('studentID')
-                    has_change['studentID'] = params.get('studentID')
+                if jsonParams.get('nickname') != None:
+                    user.nickname = jsonParams.get('nickname')
+                    has_change['nickname'] = jsonParams.get('nickname')
+                if jsonParams.get('age') != None:
+                    user.age = jsonParams.get('age')
+                    has_change['age'] = jsonParams.get('age')
+                if jsonParams.get('studentID') != None:
+                    user.student_id = jsonParams.get('studentID')
+                    has_change['studentID'] = jsonParams.get('studentID')
                 if request.FILES.get('head_img') != None:
                     user.head_portrait = request.FILES.get('head_img')
                     has_change['head_portrait'] = 'change'
-                if params.get('phone_number') != None:
-                    user.phone_number = params.get('phone_number')
-                    has_change['phone_number'] = params.get('phone_number')
-                if params.get('email') != None:
+                if jsonParams.get('phone_number') != None:
+                    user.phone_number = jsonParams.get('phone_number')
+                    has_change['phone_number'] = jsonParams.get('phone_number')
+                if jsonParams.get('email') != None:
                     try:
-                        User_Info.objects.get(email=params.get('email'))
+                        User_Info.objects.get(email=jsonParams.get('email'))
                         return JsonResponse({
                             'status': False,
                             'err': '邮箱已存在'
                         }, status=401)
                     except:
-                        user.email = params.get('email')
-                        has_change['email'] = params.get('email')
+                        user.email = jsonParams.get('email')
+                        has_change['email'] = jsonParams.get('email')
                 user.save()
                 return JsonResponse({
                     'status': True,

@@ -4,7 +4,7 @@ from apps.market.models import Commodity, Classification, CommodityImage
 from ALGPackage.dictInfo import model_to_dict
 from django.utils.timezone import now
 from django.http import JsonResponse
-from django.db.models import F
+import json
 
 
 class CommodityView(APIView):
@@ -50,8 +50,9 @@ class CommodityView(APIView):
         :return:
         '''
         if request.session.get('login'):
-            params = request.POST
-            if params.get('c_detail') == None:
+            params = request.body
+            jsonParams = json.loads(params)
+            if jsonParams.get('c_detail') == None:
                 return JsonResponse({
                     'status': False,
                     'err': 'input error'
@@ -67,19 +68,19 @@ class CommodityView(APIView):
                         })
                     else:
                         pass
-                commodity.c_detail = params.get('c_detail')
-                if params.get('classification') != None:
+                commodity.c_detail = jsonParams.get('c_detail')
+                if jsonParams.get('classification') != None:
                     try:
-                        commodity.classification = Classification.objects.get(name__exact=params.get('classification'))
+                        commodity.classification = Classification.objects.get(name__exact=jsonParams.get('classification'))
                     except:
                         return JsonResponse({
                             'status': False,
                             'err': '不存在此分类名'
                         }, status=403)
-                if params.get('status') != None:
-                    commodity.status = params.get('status')
-                if params.get('name') != None:
-                    commodity.name = params.get('name')
+                if jsonParams.get('status') != None:
+                    commodity.status = jsonParams.get('status')
+                if jsonParams.get('name') != None:
+                    commodity.name = jsonParams.get('name')
                 commodity.last_mod_time = now()
                 commodity.save()
                 return JsonResponse({

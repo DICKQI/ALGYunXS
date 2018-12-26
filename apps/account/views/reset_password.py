@@ -3,6 +3,8 @@ from apps.account.models import User_Info, EmailVerifyRecord
 from .send_email import SendView
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
+import json
+
 class ResetView(APIView):
     def post(self, request, r_code):
         '''
@@ -20,9 +22,10 @@ class ResetView(APIView):
                         'err': '重置失败'
                     }, status=404)
                 if record.email == user.email:
-                    params = request.POST
+                    params = request.body
+                    jsonParams = json.loads(params)
                     if params.get('password') != None:
-                        key = make_password(params.get('password'))
+                        key = make_password(jsonParams.get('password'))
                         user.password = key
                         user.save()
                         record.code_status = 'used'
