@@ -7,8 +7,8 @@ class TestView(APIView):
     def post(self, requests):
         try:
             postBody = requests.body
-
-            return HttpResponse(postBody)
+            jsonData = json.loads(postBody)
+            return JsonResponse(jsonData)
         except:
             return JsonResponse({
                 'err':'错误'

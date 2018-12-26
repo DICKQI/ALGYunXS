@@ -16,3 +16,4 @@ apps/account/views/__pycache__
 apps/market/views/__pycache__
 ALGPackage/__pycache__
 static
+__pycache__
