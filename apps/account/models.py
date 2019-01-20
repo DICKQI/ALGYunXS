@@ -2,7 +2,22 @@ from django.db import models
 from django.utils.timezone import now
 
 
-# Create your models here.
+class School(models.Model):
+    '''学校信息数据库模型'''
+    name = models.CharField(verbose_name='学校名', blank=False, default='', unique=True, max_length=100)
+
+    abbreviation = models.CharField(verbose_name='学校名缩写', blank=False, default='', max_length=100)
+
+    user_number = models.BigIntegerField(verbose_name='学校用户数', default=0, blank=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = '学校'
+        verbose_name_plural = verbose_name + '列表'
+        db_table='School'
+
 class User_Info(models.Model):
     '''用户信息数据库模型'''
     roles = {
@@ -17,18 +32,17 @@ class User_Info(models.Model):
     }
     '''基础信息'''
 
-    username = models.CharField(verbose_name='用户名', max_length=20, default=None, blank=False, unique=True)
+    phone_number = models.CharField(verbose_name='手机号码', max_length=20, blank=False, default=None, unique=True)
 
     password = models.CharField(verbose_name='密码', max_length=1000, blank=False, default=None)
 
-    nickname = models.CharField(verbose_name='用户昵称', max_length=20, default=None, blank=False)
+    nickname = models.CharField(verbose_name='用户昵称', max_length=20, default=None, blank=False, unique=True)
 
     email = models.EmailField(verbose_name='邮箱', blank=False, default=None, unique=True)
 
     joined_date = models.DateTimeField(verbose_name='注册时间', default=now)
 
     '''详细信息'''
-    phone_number = models.CharField(verbose_name='手机号码', max_length=20, blank=False, default=None)
 
     user_role = models.CharField(verbose_name='用户身份', max_length=6, choices=roles, default=5)
 
@@ -40,11 +54,13 @@ class User_Info(models.Model):
 
     credit_score = models.IntegerField(verbose_name='信用分', default=500)
 
+    from_school = models.ForeignKey(School, verbose_name='学校', on_delete=models.CASCADE, blank=True)
+
     '''记录信息'''
     last_login_time = models.DateTimeField(verbose_name='最后登录时间', default=now)
 
     def __str__(self):
-        return self.username
+        return self.nickname
 
     class Meta:
         verbose_name = '用户'

@@ -25,7 +25,7 @@ class UserDashBoardView(APIView):
         :return:
         '''
         if request.session.get('login') != None:
-            user = User_Info.objects.get(username__exact=request.session.get('login'))
+            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
             if user.user_role == '6':
                 return JsonResponse({'err': '此账户已被封禁，请联系管理员'}, status=401)
             articles = Article.objects.filter(author=user)
@@ -84,7 +84,7 @@ class UserDashBoardView(APIView):
         :return:
         '''
         if request.session.get('login') != None:
-            user = User_Info.objects.get(username__exact=request.session.get('login'))
+            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
             if user.user_role == '6':
                 return JsonResponse({
                     'status': False,

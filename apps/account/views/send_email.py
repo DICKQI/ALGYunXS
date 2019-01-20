@@ -23,7 +23,7 @@ class SendView(APIView):
         try:
             if request.session.get('login') != None:
                 email_record = EmailVerifyRecord()
-                email = User_Info.objects.get(username__exact=request.session.get('login')).email
+                email = User_Info.objects.get(phone_number__exact=request.session.get('login')).email
                 code = self.random_str()
                 email_record.code = code
                 email_record.email = email

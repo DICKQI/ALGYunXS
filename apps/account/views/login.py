@@ -17,20 +17,20 @@ class LoginViews(APIView):
         jsonParams = json.loads(params)
         try:
             try:
-                User_Info.objects.get(username__exact=jsonParams['username'])
+                User_Info.objects.get(phone_number__exact=jsonParams['phone_number'])
             except:
                 return JsonResponse({
                     'status': False,
                     'err': '无此用户'
                 }, status=403)
-            user = User_Info.objects.get(username__exact=jsonParams['username'])
+            user = User_Info.objects.get(phone_number__exact=jsonParams['phone_number'])
             if user.user_role == 6:
                 return JsonResponse({
                     'status': False,
                     'err': '此账号已被封禁，请联系管理员'
                 }, status=403)
             if check_password(jsonParams['password'], user.password):
-                request.session['login'] = user.username
+                request.session['login'] = user.phone_number
                 user.last_login_time = now()
                 user.save()
                 return JsonResponse({'result': {
@@ -55,7 +55,7 @@ class LoginViews(APIView):
         :return:
         '''
         if request.session.get('login'):
-            user = User_Info.objects.get(username__exact=request.session.get('login'))
+            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
             request.session['login'] = None
             return JsonResponse({
                 'status': True,

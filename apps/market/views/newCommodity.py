@@ -22,7 +22,7 @@ class NewCommodityView(APIView):
                     'err': '输入错误'
                 }, status=403)
             try:
-                seller = User_Info.objects.get(username__exact=request.session.get('login'))
+                seller = User_Info.objects.get(phone_number__exact=request.session.get('login'))
                 try:
                     classification = Classification.objects.get(name__exact=jsonParams.get('classification'))
                 except:

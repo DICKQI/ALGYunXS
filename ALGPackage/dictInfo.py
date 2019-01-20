@@ -3,7 +3,7 @@ from django.db.models.fields.related import ManyToManyField, ForeignKey
 from django.db.models.fields import DateTimeField
 from apps.helps.models import Category
 from apps.market.models import Classification
-from apps.account.models import User_Info
+from apps.account.models import User_Info, School
 
 
 def model_to_dict(instance, fields=None, exclude=None):
@@ -36,26 +36,30 @@ def model_to_dict(instance, fields=None, exclude=None):
                 value = [{'id': i.id, 'fromUser': i.from_author.nickname, 'content': i.content, 'time': i.create_time}
                          for i in value] if instance.pk else None
             elif f.verbose_name == '商品图片':
-                # value = {'img':['https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + i.img.name + '?x-oss-process=style/head_portrait' for i in value]}
                 value = [{
                     'url': 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + i.img.name + '?x-oss-process=style/head_portrait',
                     'image_id': i.id
                 } for i in value]
         if isinstance(f, ForeignKey):
             if f.verbose_name == '分类':
-                value = Category.objects.get(cid__exact=value).name
+                value = {
+                    'id': value,
+                    'name': Category.objects.get(cid__exact=value).name
+                }
             elif f.verbose_name == '作者':
                 value = User_Info.objects.get(id=value).nickname
             elif f.verbose_name == '商品分类':
-                value = Classification.objects.get(cid__exact=value).name
-            elif f.verbose_name == '卖家':
-                value = User_Info.objects.get(id=value).nickname
-            elif f.verbose_name == '来源人':
-                value = User_Info.objects.get(id=value).nickname
-            elif f.verbose_name == '管理员':
-                value = User_Info.objects.get(id=value).nickname
-            elif f.verbose_name == '发布人':
-                value = User_Info.objects.get(id=value).nickname
+                value = {
+                    'id': value,
+                    'name': Classification.objects.get(id__exact=value).name
+                }
+            elif f.verbose_name == '卖家' or f.verbose_name == '来源人' or f.verbose_name == '管理员' or f.verbose_name == '发布人':
+                value = {
+                    'id': value,
+                    'user':User_Info.objects.get(id=value).nickname
+                }
+            elif f.verbose_name == '学校':
+                value = School.objects.get(id=value).name
         if isinstance(f, DateTimeField):
             data_time = str(value)
             year = data_time[0:4]

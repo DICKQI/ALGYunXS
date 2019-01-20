@@ -40,6 +40,7 @@ class DeleteImage(APIView):
                 auth = oss2.Auth('LTAIpK0JtS9hsWkG', 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs')
                 bucket = oss2.Bucket(auth, 'oss-cn-shenzhen.aliyuncs.com', 'algyunxs')
                 bucket.delete_object(object_name)
+                '''同时删除数据库表的内容'''
                 img.delete()
             except:
                 return JsonResponse({

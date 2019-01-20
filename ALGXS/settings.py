@@ -28,9 +28,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'e@0+j9l3*z_h5t3!^iu1_0!d#6oxys9wx**mni9cq^+yzf9*yq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -105,16 +105,6 @@ SUMMERNOTE_CONFIG = {
     'lang': 'zh-CN',
 
 }
-# 是否展开所有菜单
-JET_SIDE_MENU_COMPACT = True  # 菜单不是很多时建议为TRUE
-JET_SIDE_MENU_ITEMS = [  # A list of application or custom item dicts
-
-    {'label': '权限管理', 'items': [
-        {'name': 'auth.user', 'permissions': ['auth.user']},
-        {'name': 'auth.group', 'permissions': ['auth.user']},
-
-    ]},
-]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -273,11 +263,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'common_static'),
 ]
 '''服务器端专用oss存储'''
-ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
-ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
-END_POINT = 'oss-cn-shenzhen-internal.aliyuncs.com'
-BUCKET_NAME = 'algyunxs'
-BUCKET_ACL_TYPE = 'public-read-write'
-DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
+# ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
+# ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
+# END_POINT = 'oss-cn-shenzhen-internal.aliyuncs.com'
+# BUCKET_NAME = 'algyunxs'
+# BUCKET_ACL_TYPE = 'public-read-write'
+# DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')

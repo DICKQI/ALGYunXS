@@ -20,4 +20,4 @@ class Notice(models.Model):
         verbose_name_plural = '公告列表'
 
     def __str__(self):
-        return self.admin.username
+        return self.title

@@ -6,9 +6,8 @@ from django.dispatch.dispatcher import receiver
 
 class Classification(models.Model):
     '''商品分类数据库模型'''
-    cid = models.BigIntegerField(verbose_name='商品分类ID', default=1, primary_key=True)
 
-    name = models.CharField(verbose_name='商品分类名称', default=None, max_length=64, blank=False)
+    name = models.CharField(verbose_name='商品分类名称', default=None, max_length=64, blank=False, unique=True)
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 
@@ -32,7 +31,7 @@ class CComment(models.Model):
     star = models.IntegerField(verbose_name='点赞数', default=0)
 
     def __str__(self):
-        return self.fromUser.username
+        return self.fromUser.nickname
 
     class Meta:
         ordering = ['-update_time']
@@ -80,7 +79,7 @@ class Commodity(models.Model):
 
     last_mod_time = models.DateTimeField(verbose_name='最后修改时间', default=now)
 
-    classification = models.ForeignKey(Classification, verbose_name='商品分类', blank=True, null=True, on_delete=models.CASCADE)
+    classification = models.ForeignKey(Classification, verbose_name='商品分类', blank=False, null=True, on_delete=models.CASCADE)
 
     comment = models.ManyToManyField(CComment, verbose_name='商品评论', blank=True)
 

@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from apps.account.models import User_Info
-from apps.market.models import Commodity, Classification, CommodityImage
+from apps.market.models import Commodity, Classification
 from ALGPackage.dictInfo import model_to_dict
 from django.utils.timezone import now
 from django.http import JsonResponse
@@ -22,15 +22,22 @@ class CommodityView(APIView):
                 return JsonResponse({
                     'status': False,
                     'err': '找不到该内容'
-                }, status=403)
-            user = User_Info.objects.get(username__exact=request.session.get('login'))
+                }, status=404)
+            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+            if user != commodity.seller:
+                if commodity.status == 's':
+                    # 未发布的商品无法直接查看
+                    return JsonResponse({
+                        'status': False,
+                        'err': '找不到该内容'
+                    }, status=404)
             if commodity.seller == user:
                 editable = True
             else:
                 editable = False
             commodity.views += 1
             commodity.save()
-            cmdResult = model_to_dict(commodity)
+            cmdResult = model_to_dict(commodity,exclude='status')
             return JsonResponse({
                 'status': True,
                 'editable': editable,
@@ -52,14 +59,9 @@ class CommodityView(APIView):
         if request.session.get('login'):
             params = request.body
             jsonParams = json.loads(params)
-            if jsonParams.get('c_detail') == None:
-                return JsonResponse({
-                    'status': False,
-                    'err': 'input error'
-                }, status=403)
             try:
                 commodity = Commodity.objects.get(id=cid)
-                user = User_Info.objects.get(username__exact=request.session.get('login'))
+                user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
                 if commodity.seller != user:
                     if user.user_role != '12' or user.user_role != '525400':
                         return JsonResponse({
@@ -68,18 +70,19 @@ class CommodityView(APIView):
                         })
                     else:
                         pass
-                commodity.c_detail = jsonParams.get('c_detail')
-                if jsonParams.get('classification') != None:
+                if jsonParams.get('c_detail'):
+                    commodity.c_detail = jsonParams.get('c_detail')
+                if jsonParams.get('classification'):
                     try:
                         commodity.classification = Classification.objects.get(name__exact=jsonParams.get('classification'))
                     except:
                         return JsonResponse({
                             'status': False,
                             'err': '不存在此分类名'
-                        }, status=403)
-                if jsonParams.get('status') != None:
+                        }, status=404)
+                if jsonParams.get('status'):
                     commodity.status = jsonParams.get('status')
-                if jsonParams.get('name') != None:
+                if jsonParams.get('name'):
                     commodity.name = jsonParams.get('name')
                 commodity.last_mod_time = now()
                 commodity.save()
@@ -112,7 +115,7 @@ class CommodityView(APIView):
         if request.session.get('login'):
             try:
                 commodity = Commodity.objects.get(id=cid)
-                user = User_Info.objects.get(username__exact=request.session.get('login'))
+                user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
                 if commodity.seller != user:
                     if user.user_role != '12' or user.user_role != '525400':
                         return JsonResponse({

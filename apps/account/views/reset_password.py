@@ -13,7 +13,7 @@ class ResetView(APIView):
         :return:
         '''
         if request.session.get('login') != None:
-            user = User_Info.objects.get(username__exact=request.session.get('login'))
+            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
             try:
                 record = EmailVerifyRecord.objects.get(code__exact=r_code)
                 if record.code_status == 'used' or record.send_type == 'active':

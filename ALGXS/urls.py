@@ -22,11 +22,13 @@ from apps.Test import TestView
 
 urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('test/', TestView.as_view()),
     path('users/', include('apps.account.urls', namespace='users')),
     path('market/', include('apps.market.urls', namespace='market')),
     path('helps/', include('apps.helps.urls', namespace='helps')),
+    path('ptj/', include('apps.PTJ.urls', namespace='ptj')),
+    path('fq/', include('apps.FandQ.urls', namespace='FandQ')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

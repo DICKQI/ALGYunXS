@@ -26,6 +26,8 @@ class PTJInfo(models.Model):
     STATUS_CHOICES = (
         ('v', '审核中'),
         ('p', '通过审核'),
+        ('f', '审核未通过，退回'),
+        ('d', '禁止发布')
     )
 
     publisher = models.ForeignKey(User_Info, verbose_name='发布人', on_delete=models.CASCADE)
