@@ -28,9 +28,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'e@0+j9l3*z_h5t3!^iu1_0!d#6oxys9wx**mni9cq^+yzf9*yq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -52,39 +52,6 @@ INSTALLED_APPS = [
     'apps.helps',
     'apps.FandQ',
 
-]
-# 主题
-JET_THEMES = [
-    {
-        'theme': 'default',  # theme folder name
-        'color': '#47bac1',  # color of the theme's button in user menu
-        'title': 'Default'  # theme title
-    },
-    {
-        'theme': 'green',
-        'color': '#44b78b',
-        'title': 'Green'
-    },
-    {
-        'theme': 'light-green',
-        'color': '#2faa60',
-        'title': 'Light Green'
-    },
-    {
-        'theme': 'light-violet',
-        'color': '#a464c4',
-        'title': 'Light Violet'
-    },
-    {
-        'theme': 'light-blue',
-        'color': '#5EADDE',
-        'title': 'Light Blue'
-    },
-    {
-        'theme': 'light-gray',
-        'color': '#222',
-        'title': 'Light Gray'
-    }
 ]
 # 富文本编辑器设置
 SUMMERNOTE_CONFIG = {
@@ -263,11 +230,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'common_static'),
 ]
 '''服务器端专用oss存储'''
-# ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
-# ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
-# END_POINT = 'oss-cn-shenzhen-internal.aliyuncs.com'
-# BUCKET_NAME = 'algyunxs'
-# BUCKET_ACL_TYPE = 'public-read-write'
-# DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
+ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
+ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
+END_POINT = 'oss-cn-shenzhen-internal.aliyuncs.com'
+BUCKET_NAME = 'algyunxs'
+BUCKET_ACL_TYPE = 'public-read-write'
+DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
