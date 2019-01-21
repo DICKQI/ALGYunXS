@@ -2,6 +2,7 @@
 case $1 in
     "start")
         uwsgi --socket :8000 --buffer-size 32768 --daemonize /var/log/ALGYunXS.log --module ALGXS.wsgi &
+        echo "ALGYun已启动"
     ;;
     "stop")
         port=8000
@@ -20,5 +21,7 @@ case $1 in
         kill -9 $pid
 
         uwsgi --socket :8000 --buffer-size 32768 --daemonize /var/log/ALGYunXS.log --module ALGXS.wsgi &
+
+        echo "ALGYun重启成功"
     ;;
 esac
