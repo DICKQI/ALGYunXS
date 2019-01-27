@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from apps.account.models import User_Info
+from apps.log.models import LoginLog
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 from django.utils.timezone import now
@@ -30,9 +31,16 @@ class LoginViews(APIView):
                     'err': '此账号已被封禁，请联系管理员'
                 }, status=403)
             if check_password(jsonParams['password'], user.password):
+                '''验证成功'''
                 request.session['login'] = user.phone_number
                 user.last_login_time = now()
                 user.save()
+                '''记录登录信息'''
+                ip = request.META['REMOTE_ADDR']
+                LoginLog.objects.create(
+                    ip=ip,
+                    user=user
+                )
                 return JsonResponse({'result': {
                     'status': True,
                     'id': user.id,

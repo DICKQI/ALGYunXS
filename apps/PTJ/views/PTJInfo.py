@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from apps.PTJ.models import *
-from ALGPackage.dictInfo import model_to_dict
+from ALGCommon.dictInfo import model_to_dict
 from django.http import JsonResponse
 
 

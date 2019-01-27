@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from apps.account.models import User_Info
 from apps.market.models import Commodity, Classification
-from ALGPackage.dictInfo import model_to_dict
+from apps.log.models import CommodityViewLog
+from ALGCommon.dictInfo import model_to_dict
 from django.utils.timezone import now
 from django.http import JsonResponse
 import json
@@ -10,7 +11,7 @@ import json
 class CommodityView(APIView):
     def get(self, request, cid):
         '''
-        获取文章详情
+        获取商品详情
         :param request:
         :param cid: 商品id
         :return:
@@ -36,6 +37,11 @@ class CommodityView(APIView):
             else:
                 editable = False
             commodity.views += 1
+            CommodityViewLog.objects.create(
+                ip=request.META['REMOTE_ADDR'],
+                commodity=commodity,
+                user=user
+            )
             commodity.save()
             cmdResult = model_to_dict(commodity,exclude='status')
             return JsonResponse({
@@ -51,7 +57,7 @@ class CommodityView(APIView):
 
     def put(self, request, cid):
         '''
-        修改文章内容
+        修改商品内容
         :param request:
         :param cid:
         :return:

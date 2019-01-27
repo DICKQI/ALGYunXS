@@ -1,6 +1,9 @@
 from django.urls import path
 from .views.listHelps import ListHelps
-app_name='helps'
+from .views.helpsInfo import HelpsInfoView
+
+app_name = 'helps'
 urlpatterns = [
+    path('<int:pid>/', HelpsInfoView.as_view(), name='helpsInfo'),
     path('list/', ListHelps.as_view(), name='listHelps')
 ]

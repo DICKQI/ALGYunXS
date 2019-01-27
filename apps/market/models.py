@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
 from apps.account.models import User_Info
-from django.db.models.signals import pre_delete
-from django.dispatch.dispatcher import receiver
 
 class Classification(models.Model):
     '''商品分类数据库模型'''

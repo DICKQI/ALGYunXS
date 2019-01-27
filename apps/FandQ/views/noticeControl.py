@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from apps.FandQ.models import Notice
 from apps.account.models import User_Info
 from django.http import JsonResponse
-from ALGPackage.dictInfo import model_to_dict
+from ALGCommon.dictInfo import model_to_dict
 
 class NoticeControlView(APIView):
     def get(self, requests):

@@ -2,7 +2,7 @@ from apps.market.models import Commodity
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from ALGPackage.dictInfo import model_to_dict
+from ALGCommon.dictInfo import model_to_dict
 
 
 class ListCommodity(APIView):
@@ -16,36 +16,30 @@ class ListCommodity(APIView):
         :param requests:
         :return:
         '''
-        if requests.session.get('login'):
+        try:
+            page = requests.GET.get('page')
+            commodityObj = Commodity.objects.all()
+            commodityPage = Paginator(commodityObj, 5)
+
             try:
-                page = requests.GET.get('page')
-                commodityObj = Commodity.objects.all()
-                commodityPage = Paginator(commodityObj, 5)
+                commodityList = commodityPage.page(page)
+            except PageNotAnInteger:
+                commodityList = commodityPage.page(1)
+            except EmptyPage:
+                commodityList = commodityPage.page(1)
 
-                try:
-                    commodityList = commodityPage.page(page)
-                except PageNotAnInteger:
-                    commodityList = commodityPage.page(1)
-                except EmptyPage:
-                    commodityList = commodityPage.page(1)
+            commodity = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in commodityList if
+                         mar.status == 'p' or mar.status == 'o']
 
-                commodity = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in commodityList if
-                             mar.status == 'p' or mar.status == 'o']
+            return JsonResponse({
+                'status': True,
+                'commodityList': commodity,
+                'has_previous': commodityList.has_previous(),
+                'has_next': commodityList.has_next()
+            })
 
-                return JsonResponse({
-                    'status': True,
-                    'commodityList': commodity,
-                    'has_previous': commodityList.has_previous(),
-                    'has_next': commodityList.has_next()
-                })
-
-            except:
-                return JsonResponse({
-                    'status': False,
-                    'err': '出现未知的错误'
-                }, status=403)
-        else:
+        except:
             return JsonResponse({
                 'status': False,
-                'err': '你还未登录'
-            }, status=401)
+                'err': '出现未知的错误'
+            }, status=403)

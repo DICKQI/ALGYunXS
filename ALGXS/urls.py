@@ -18,12 +18,12 @@ from django.urls import path
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.Test import TestView
+from apps.AutoExecution.views import *
+
 
 urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('admin/', admin.site.urls),
-    path('test/', TestView.as_view()),
     path('users/', include('apps.account.urls', namespace='users')),
     path('market/', include('apps.market.urls', namespace='market')),
     path('helps/', include('apps.helps.urls', namespace='helps')),

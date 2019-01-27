@@ -8,7 +8,7 @@ class Category(models.Model):
     '''分类数据库模型'''
     cid = models.BigIntegerField(verbose_name='分类id', primary_key=True, default=1)
 
-    name = models.CharField(verbose_name='分类名', default='', blank=False, max_length=10)
+    name = models.CharField(verbose_name='分类名', default='', blank=False, max_length=10, unique=True)
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 

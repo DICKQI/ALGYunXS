@@ -46,7 +46,7 @@ class User_Info(models.Model):
 
     user_role = models.CharField(verbose_name='用户身份', max_length=6, choices=roles, default=5)
 
-    student_id = models.CharField(verbose_name='学号', max_length=15, default=0, blank=True)
+    student_id = models.CharField(verbose_name='学号', max_length=15, default=0, blank=True, unique=True)
 
     age = models.IntegerField(verbose_name='年龄', blank=True, default=1)
 
@@ -58,6 +58,14 @@ class User_Info(models.Model):
 
     '''记录信息'''
     last_login_time = models.DateTimeField(verbose_name='最后登录时间', default=now)
+
+    TimesOfPraise = models.IntegerField(verbose_name='好评次数', default=0)
+
+    TimesOfBadEvaluation = models.IntegerField(verbose_name='差评次数', default=0)
+
+    TimesOfPurchase = models.IntegerField(verbose_name='购买次数', default=0)
+
+
 
     def __str__(self):
         return self.nickname

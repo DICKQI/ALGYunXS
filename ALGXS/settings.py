@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.PTJ',
     'apps.helps',
     'apps.FandQ',
+    'apps.log',
 
 ]
 # 富文本编辑器设置
@@ -73,10 +74,11 @@ SUMMERNOTE_CONFIG = {
 
 }
 MIDDLEWARE = [
+    'ALGMiddleware.VisitLogMiddleware.VisitLogFirewall',
+    'ALGMiddleware.IPFirewallMiddleware.IPFirewall',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from ALGPackage.dictInfo import model_to_dict
+from ALGCommon.dictInfo import model_to_dict
 from apps.PTJ.models import PTJInfo
 
 

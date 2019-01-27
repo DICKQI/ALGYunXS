@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from apps.account.models import User_Info
 from apps.market.models import Classification
-from ALGPackage.dictInfo import model_to_dict
+from ALGCommon.dictInfo import model_to_dict
 from django.http import JsonResponse
 import json
 
