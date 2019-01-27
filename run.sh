@@ -35,6 +35,7 @@ case $1 in
     ;;
     "watch")
         tail -f /var/log/ALGYunXS.log
+    ;;
     *)
         echo "unknown command"
     ;;
