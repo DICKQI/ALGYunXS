@@ -33,6 +33,8 @@ case $1 in
     "createsuperuser")
         python3 manage.py createsuperuser
     ;;
+    "watch")
+        tail -f /var/log/ALGYunXS.log
     *)
         echo "unknown command"
     ;;
