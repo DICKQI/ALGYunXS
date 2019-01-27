@@ -24,4 +24,9 @@ case $1 in
 
         echo "ALGYun重启成功"
     ;;
+    "makemigrations")
+        python3 manage.py makemigrations account FandQ helps log market PTJ
+    ;;
+    "migrate")
+        python3 manage.py migrate
 esac
