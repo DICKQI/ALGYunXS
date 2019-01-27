@@ -29,4 +29,11 @@ case $1 in
     ;;
     "migrate")
         python3 manage.py migrate
+    ;;
+    "createsuperuser")
+        python3 manage.py createsuperuser
+    ;;
+    *)
+        echo "unknown command"
+    ;;
 esac
