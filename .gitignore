@@ -11,6 +11,7 @@ apps/market/migrations
 .idea
 apps/helps/migrations
 apps/FandQ/migrations
+apps/log/migrations
 media
 apps/account/views/__pycache__
 apps/market/views/__pycache__
