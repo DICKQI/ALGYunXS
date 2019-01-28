@@ -8,15 +8,12 @@ from threading import Timer
 '''
 
 def reset():
-    try:
-        logs = VisitLog.objects.all()
-        for log in logs:
-            if log.lock == False:
-                log.five_min_visit = 0
-                log.save()
-        global timer
-        timer = Timer(300, reset).start()
-        print('reset count complete')
-    except:
-        return
+    logs = VisitLog.objects.all()
+    for log in logs:
+        if log.lock == False:
+            log.five_min_visit = 0
+            log.save()
+    global timer
+    timer = Timer(300, reset).start()
+    print('reset count complete')
 reset()
