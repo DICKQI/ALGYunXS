@@ -21,7 +21,7 @@ class VisitLogFirewall(MiddlewareMixin):
             visitLog.five_min_visit += 1
             if visitLog.five_min_visit >= 300:
                 visitLog.lock = True
-                Timer(300, unlockIP, [str(request.META['REMOTE_ADDR'])]).start()
+                Timer(10, unlockIP, [str(request.META['REMOTE_ADDR'])]).start()
             visitLog.save()
             return None
         except:
