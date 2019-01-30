@@ -46,7 +46,7 @@ class User_Info(models.Model):
 
     user_role = models.CharField(verbose_name='用户身份', max_length=6, choices=roles, default=5)
 
-    student_id = models.CharField(verbose_name='学号', max_length=15, default=0, blank=True, unique=True)
+    student_id = models.CharField(verbose_name='学号', max_length=15, default=0, blank=True)
 
     age = models.IntegerField(verbose_name='年龄', blank=True, default=1)
 

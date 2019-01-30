@@ -4,10 +4,11 @@ from apps.log.models import LoginLog
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 from django.utils.timezone import now
+from django.db.models import Q
 import json
 
 
-class LoginViews(APIView):
+class BaseViews(APIView):
     def post(self, request):
         '''
         登录账户
@@ -17,21 +18,25 @@ class LoginViews(APIView):
         params = request.body
         jsonParams = json.loads(params)
         try:
-            try:
-                User_Info.objects.get(phone_number__exact=jsonParams['phone_number'])
-            except:
+
+            user = User_Info.objects.filter(
+                Q(phone_number__exact=jsonParams.get('phone_number')) |
+                Q(email__exact=jsonParams.get('email')) |
+                Q(id=jsonParams.get('id'))
+            )
+            if user.exists():
+                user = user[0]
+            else:
                 return JsonResponse({
                     'status': False,
                     'err': '无此用户'
                 }, status=403)
-            user = User_Info.objects.get(phone_number__exact=jsonParams['phone_number'])
-            if user.user_role == 6:
+            if user.user_role == '6':
                 return JsonResponse({
                     'status': False,
                     'err': '此账号已被封禁，请联系管理员'
                 }, status=403)
-            if check_password(jsonParams['password'], user.password):
-                '''验证成功'''
+            if check_password(jsonParams.get('password'), user.password):
                 request.session['login'] = user.phone_number
                 user.last_login_time = now()
                 user.save()
@@ -41,10 +46,10 @@ class LoginViews(APIView):
                     ip=ip,
                     user=user
                 )
-                return JsonResponse({'result': {
+                return JsonResponse({
                     'status': True,
                     'id': user.id,
-                }})
+                })
             else:
                 return JsonResponse({
                     'status': True,

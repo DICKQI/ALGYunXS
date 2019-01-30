@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from ..esCheck import es_test
 import json
 
 
@@ -105,9 +106,6 @@ class UserDashBoardView(APIView):
                 if jsonParams.get('age') != None:
                     user.age = jsonParams.get('age')
                     has_change['age'] = jsonParams.get('age')
-                if jsonParams.get('studentID') != None:
-                    user.student_id = jsonParams.get('studentID')
-                    has_change['studentID'] = jsonParams.get('studentID')
                 if request.FILES.get('head_img') != None:
                     user.head_portrait = request.FILES.get('head_img')
                     has_change['head_portrait'] = 'change'
@@ -115,15 +113,14 @@ class UserDashBoardView(APIView):
                     user.phone_number = jsonParams.get('phone_number')
                     has_change['phone_number'] = jsonParams.get('phone_number')
                 if jsonParams.get('email') != None:
-                    try:
-                        User_Info.objects.get(email=jsonParams.get('email'))
+                    if  User_Info.objects.filter(email=jsonParams.get('email')).exists():
                         return JsonResponse({
                             'status': False,
                             'err': '邮箱已存在'
                         }, status=401)
-                    except:
-                        user.email = jsonParams.get('email')
-                        has_change['email'] = jsonParams.get('email')
+                    user.email = jsonParams.get('email')
+                    user.user_role = '5' # 将邮箱设置为未验证状态
+                    has_change['email'] = jsonParams.get('email')
                 user.save()
                 return JsonResponse({
                     'status': True,
@@ -140,3 +137,28 @@ class UserDashBoardView(APIView):
                 'status': False,
                 'err': '你还未登录呢'
             }, status=401)
+
+    def post(self, requests):
+
+        if requests.session.get('login'):
+            params = json.loads(requests.body)
+
+            if es_test(params.get('school'), params.get('username'), params.get('password')).result():
+                user = User_Info.objects.filter(phone_number__exact=requests.session.get('login'))[0]
+                user.student_id = params.get('username')
+                user.save()
+                return JsonResponse({
+                    'status':True,
+                    'id':user.id
+                })
+            else:
+                return JsonResponse({
+                    'status': False,
+                    'err': '验证失败，请重试'
+                }, status=403)
+        else:
+            return JsonResponse({
+                'status': False,
+                'err': '你还未登录呢'
+            }, status=401)
+
