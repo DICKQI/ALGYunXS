@@ -1,5 +1,4 @@
 from apps.log.models import VisitLog
-from threading import Timer
 
 # Create your views here.
 '''
@@ -13,7 +12,11 @@ def reset():
         if log.lock == False:
             log.five_min_visit = 0
             log.save()
-    global timer
-    timer = Timer(300, reset).start()
     print('reset count complete')
-reset()
+
+jobs = [
+    {
+        'name':reset,
+        'time': [5, -1, -1, -1, -1]
+    }
+]

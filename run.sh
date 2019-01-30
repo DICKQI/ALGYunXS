@@ -1,10 +1,10 @@
 #!/bin/bash
 case $1 in
-    "start")
+    "up")
         uwsgi --socket :8000 --buffer-size 32768 --daemonize /var/log/ALGYunXS.log --module ALGXS.wsgi &
         echo "ALGYun已启动"
     ;;
-    "stop")
+    "down")
         port=8000
         lsof -i :$port | awk '{print $2}' > tmp
         pid=$(awk 'NR==2{print}' tmp);
@@ -33,7 +33,7 @@ case $1 in
     "createsuperuser")
         python3 manage.py createsuperuser
     ;;
-    "watch")
+    "log")
         tail -f /var/log/ALGYunXS.log
     ;;
     *)
