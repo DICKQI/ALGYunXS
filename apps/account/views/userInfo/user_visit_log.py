@@ -4,7 +4,11 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from ALGCommon.dictInfo import model_to_dict
 
+
 class UserLogView(APIView):
+    COMMODITY_INCLUDE_FIELDS = [
+        'id', 'name'
+    ]
 
     def get(self, request):
         '''
@@ -21,13 +25,14 @@ class UserLogView(APIView):
                 commodityList = [commodity.commodity for commodity in commodityLog]
                 helpsList = [helps.HelpsArticle for helps in helpsLog]
 
-                commodityResult = [model_to_dict(commodity) for commodity in commodityList]
+                commodityResult = [model_to_dict(commodity, fields=self.COMMODITY_INCLUDE_FIELDS) for commodity in
+                                   commodityList]
                 helpsResult = [model_to_dict(helps) for helps in helpsList]
 
                 return JsonResponse({
-                    'status':True,
-                    'commodity':commodityResult,
-                    'helps':helpsResult
+                    'status': True,
+                    'commodity': commodityResult,
+                    'helps': helpsResult
                 })
             except:
                 return JsonResponse({

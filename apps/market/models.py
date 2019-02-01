@@ -49,11 +49,11 @@ class CommodityImage(models.Model):
     img = models.ImageField(verbose_name='商品图片', blank=False, default='', upload_to='commodity')
 
     class Meta:
-        verbose_name = '图片'
+        verbose_name = '商品图片'
         verbose_name_plural = verbose_name + "列表"
 
     def __str__(self):
-        return str(self.img.name)
+        return str(self.img)
 
 class Commodity(models.Model):
     '''商品数据库模型'''

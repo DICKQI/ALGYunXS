@@ -50,7 +50,7 @@ class User_Info(models.Model):
 
     age = models.IntegerField(verbose_name='年龄', blank=True, default=1)
 
-    head_portrait = models.ImageField(verbose_name='头像', upload_to='head_portrait', blank=True)
+    head_portrait = models.ImageField(verbose_name='头像', max_length=2000, blank=True, upload_to='head_portrait')
 
     credit_score = models.IntegerField(verbose_name='信用分', default=500)
 
@@ -100,3 +100,40 @@ class EmailVerifyRecord(models.Model):
 
     def __str__(self):
         return self.email + " " + self.code_status
+
+
+class Notifications(models.Model):
+    '''评论消息通知数据流模型'''
+
+    types = {
+        ('helps', '帮助文章'),
+        ('market', '商品'),
+        ('message', '消息')
+    }
+
+    aboutUser = models.ForeignKey(User_Info, verbose_name='被通知的用户', on_delete=models.CASCADE)
+
+    relatedID = models.IntegerField(verbose_name='关联评论id', default=0, blank=False)
+
+    type = models.CharField(verbose_name='消息类型', choices=types, max_length=20)
+
+    isRead = models.BooleanField(verbose_name='是否已读', default=False, blank=False)
+
+    @staticmethod
+    def send(id, type, user_id):
+        '''发送消息'''
+        user = User_Info.objects.get(id=user_id)
+        Notifications.objects.create(
+            aboutUser=user,
+            relatedID=id,
+            type=type
+        )
+
+    class Meta:
+        db_table = 'notifications'
+
+    def __str__(self):
+        return self.relatedID
+
+
+

@@ -20,10 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-
 urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('admin/', admin.site.urls),
+
     path('users/', include('apps.account.urls', namespace='users')),
     path('market/', include('apps.market.urls', namespace='market')),
     path('helps/', include('apps.helps.urls', namespace='helps')),
