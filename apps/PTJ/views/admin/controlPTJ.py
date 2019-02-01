@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 import json
 
-class ActivePTJView(APIView):
+class ControlPTJView(APIView):
 
     def put(self, requests, cid):
         '''
