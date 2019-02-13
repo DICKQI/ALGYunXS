@@ -37,6 +37,7 @@ class RegisterView(APIView):
                 'status': False,
                 'err': '学校不存在'
             }, status=401)
+        school = school[0]
         newUser = User_Info.objects.create(
             phone_number=jsonParams.get('phone_number'),
             password=hash_password,
