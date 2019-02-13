@@ -31,7 +31,12 @@ class RegisterView(APIView):
             }, status=401)
 
         hash_password = make_password(jsonParams.get('password'))
-        school = School.objects.get(abbreviation__exact=str(jsonParams.get('school')).upper())
+        school = School.objects.filter(abbreviation__exact=str(jsonParams.get('school')).upper())
+        if not school.exists():
+            return JsonResponse({
+                'status': False,
+                'err': '学校不存在'
+            }, status=401)
         newUser = User_Info.objects.create(
             phone_number=jsonParams.get('phone_number'),
             password=hash_password,
