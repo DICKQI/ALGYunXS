@@ -15,7 +15,7 @@ class SendView(APIView):
         return ran_str
     def get(self, request, send_type):
         '''
-        发送激活邮件
+        发送验证码邮件
         :param request:
         :param send_type: 发送类型
         :return:
@@ -23,7 +23,7 @@ class SendView(APIView):
         try:
             if request.session.get('login') != None:
                 email_record = EmailVerifyRecord()
-                email = User_Info.objects.get(phone_number__exact=request.session.get('login')).email
+                email = User_Info.objects.get(email=request.session.get('login')).email
                 code = self.random_str()
                 email_record.code = code
                 email_record.email = email
@@ -31,7 +31,7 @@ class SendView(APIView):
                 email_record.save()
                 if send_type == 'active':
                     email_title = '注册激活链接'
-                    email_body = '请点击下面的链接激活您的邮箱algyun.cn/users/active/{0}'.format(code)
+                    email_body = '请点击下面的链接激活您的邮箱https://algyun.cn/users/active/{0}'.format(code)
                     send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
                     if send_status:
                         return JsonResponse({'result':{
@@ -40,7 +40,7 @@ class SendView(APIView):
                         }})
                 elif send_type == 'forget':
                     email_title = '注册重置密码链接'
-                    email_body = '请点击下面的链接重置你的密码algyun.cn/users/reset/{0}'.format(code)
+                    email_body = '请点击下面的链接重置你的密码https://algyun.cn/users/reset/{0}'.format(code)
                     send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
                     if send_status:
                         return JsonResponse({'result': {

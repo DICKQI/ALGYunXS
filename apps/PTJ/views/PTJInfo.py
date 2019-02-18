@@ -49,7 +49,7 @@ class PTJInfoView(APIView):
         '''
         if requests.session.get('login') != None:
             try:
-                user = User_Info.objects.get(phone_number__exact=requests.session.get('login'))
+                user = User_Info.objects.get(email=requests.session.get('login'))
                 try:
                     ptj = PTJInfo.objects.get(id=pid)
                 except:

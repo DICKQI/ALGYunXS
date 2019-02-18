@@ -19,7 +19,7 @@ class ActiveView(APIView):
                         'status': False,
                         'err': '激活失败'
                     })
-                user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+                user = User_Info.objects.get(email=request.session.get('login'))
                 if record.email == user.email:
                     user.user_role = '4'
                     user.save()

@@ -15,7 +15,7 @@ class ControlPTJView(APIView):
         '''
         if requests.session.get('login'):
             try:
-                user = User_Info.objects.get(phone_number__exact=requests.session.get('login'))
+                user = User_Info.objects.get(email=requests.session.get('login'))
                 if user.user_role != '515400' or user.user_role != '1234':
                     return JsonResponse({
                         'status': False,

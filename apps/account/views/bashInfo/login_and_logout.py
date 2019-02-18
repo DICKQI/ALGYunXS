@@ -18,9 +18,8 @@ class BaseViews(APIView):
         params = request.body
         jsonParams = json.loads(params)
         try:
-
+            # 可以使用id或者邮箱登录
             user = User_Info.objects.filter(
-                Q(phone_number__exact=jsonParams.get('phone_number')) |
                 Q(email__exact=jsonParams.get('email')) |
                 Q(id=jsonParams.get('id'))
             )
@@ -37,7 +36,7 @@ class BaseViews(APIView):
                     'err': '此账号已被封禁，请联系管理员'
                 }, status=403)
             if check_password(jsonParams.get('password'), user.password):
-                request.session['login'] = user.phone_number
+                request.session['login'] = user.email
                 user.last_login_time = now()
                 user.save()
                 '''记录登录信息'''
@@ -49,6 +48,7 @@ class BaseViews(APIView):
                 return JsonResponse({
                     'status': True,
                     'id': user.id,
+                    'email':user.email
                 })
             else:
                 return JsonResponse({
@@ -68,7 +68,7 @@ class BaseViews(APIView):
         :return:
         '''
         if request.session.get('login'):
-            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+            user = User_Info.objects.get(email=request.session.get('login'))
             request.session['login'] = None
             return JsonResponse({
                 'status': True,

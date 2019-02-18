@@ -24,7 +24,7 @@ class CommodityView(APIView):
                     'status': False,
                     'err': '找不到该内容'
                 }, status=404)
-            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+            user = User_Info.objects.get(email=request.session.get('login'))
             if user != commodity.seller:
                 if commodity.status == 's':
                     # 未发布的商品无法直接查看
@@ -67,7 +67,7 @@ class CommodityView(APIView):
             jsonParams = json.loads(params)
             try:
                 commodity = Commodity.objects.get(id=cid)
-                user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+                user = User_Info.objects.get(email=request.session.get('login'))
                 if commodity.seller != user:
                     if user.user_role != '12' or user.user_role != '525400':
                         return JsonResponse({
@@ -97,7 +97,7 @@ class CommodityView(APIView):
                     'status': True,
                     'id': commodity.id,
                     'name': commodity.name,
-                    'after detail': commodity.c_detail,
+                    'after_detail': commodity.c_detail,
                     'commodity_status': commodity.status,
                     'classification': commodity.classification.name
                 })
@@ -122,7 +122,7 @@ class CommodityView(APIView):
         if request.session.get('login'):
             try:
                 commodity = Commodity.objects.get(id=cid)
-                user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+                user = User_Info.objects.get(email=request.session.get('login'))
                 if commodity.seller != user:
                     if user.user_role != '12' or user.user_role != '525400':
                         return JsonResponse({
@@ -162,7 +162,7 @@ class CommodityView(APIView):
                     'err': '输入错误'
                 }, status=403)
             try:
-                seller = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+                seller = User_Info.objects.get(email=request.session.get('login'))
                 try:
                     classification = Classification.objects.get(name__exact=jsonParams.get('classification'))
                 except:

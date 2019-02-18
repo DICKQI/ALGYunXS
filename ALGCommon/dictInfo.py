@@ -33,7 +33,8 @@ def model_to_dict(instance, fields=None, exclude=None):
                 value = [{'id': i.id, 'fromUser': i.fromUser.nickname, 'content': i.content,
                           'time': str(i.update_time)[0:10], 'star': i.star} for i in value] if instance.pk else None
             elif f.verbose_name == '文章评论':
-                value = [{'id': i.id, 'fromUser': i.from_author.nickname, 'content': i.content, 'time': i.create_time}
+                value = [{'id': i.id, 'fromUser': i.from_author.nickname, 'content': i.content,
+                          'time': str(i.create_time)[0:10]}
                          for i in value] if instance.pk else None
             elif f.verbose_name == '商品图片':
                 value = [{
@@ -56,7 +57,7 @@ def model_to_dict(instance, fields=None, exclude=None):
             elif f.verbose_name == '卖家' or f.verbose_name == '来源人' or f.verbose_name == '管理员' or f.verbose_name == '发布人':
                 value = {
                     'id': value,
-                    'user':User_Info.objects.get(id=value).nickname
+                    'user': User_Info.objects.get(id=value).nickname
                 }
             elif f.verbose_name == '学校':
                 value = School.objects.get(id=value).name

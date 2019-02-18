@@ -5,9 +5,9 @@ from .models import User_Info, School
 class AdminUserInfo(admin.ModelAdmin):
 
     list_per_page = 50
-    search_fields = ['phone_number', 'email']
+    search_fields = ['email']
     list_filter = ['user_role']
-    list_display = ['phone_number', 'nickname', 'email', 'student_id', 'credit_score', 'last_login_time']
+    list_display = ['nickname', 'email', 'student_id', 'credit_score', 'last_login_time']
 
 @admin.register(School)
 class AdminSchool(admin.ModelAdmin):

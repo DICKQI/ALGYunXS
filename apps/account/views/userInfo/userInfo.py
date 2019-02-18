@@ -26,7 +26,7 @@ class UserDashBoardView(APIView):
         :return:
         '''
         if request.session.get('login') != None:
-            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+            user = User_Info.objects.get(email=request.session.get('login'))
             if user.user_role == '6':
                 return JsonResponse({'err': '此账户已被封禁，请联系管理员'}, status=401)
             articles = Article.objects.filter(author=user)
@@ -85,7 +85,7 @@ class UserDashBoardView(APIView):
         :return:
         '''
         if request.session.get('login') != None:
-            user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+            user = User_Info.objects.get(email=request.session.get('login'))
             if user.user_role == '6':
                 return JsonResponse({
                     'status': False,
@@ -109,9 +109,6 @@ class UserDashBoardView(APIView):
                 if request.FILES.get('head_img') != None:
                     user.head_portrait = request.FILES.get('head_img')
                     has_change['head_portrait'] = 'change'
-                if jsonParams.get('phone_number') != None:
-                    user.phone_number = jsonParams.get('phone_number')
-                    has_change['phone_number'] = jsonParams.get('phone_number')
                 if jsonParams.get('email') != None:
                     if  User_Info.objects.filter(email=jsonParams.get('email')).exists():
                         return JsonResponse({
@@ -132,30 +129,6 @@ class UserDashBoardView(APIView):
                     'status': False,
                     'err': '密码错误'
                 }, status=401)
-        else:
-            return JsonResponse({
-                'status': False,
-                'err': '你还未登录呢'
-            }, status=401)
-
-    def post(self, requests):
-
-        if requests.session.get('login'):
-            params = json.loads(requests.body)
-
-            if es_test(params.get('school'), params.get('username'), params.get('password')).result():
-                user = User_Info.objects.filter(phone_number__exact=requests.session.get('login'))[0]
-                user.student_id = params.get('username')
-                user.save()
-                return JsonResponse({
-                    'status':True,
-                    'id':user.id
-                })
-            else:
-                return JsonResponse({
-                    'status': False,
-                    'err': '验证失败，请重试'
-                }, status=403)
         else:
             return JsonResponse({
                 'status': False,

@@ -32,13 +32,14 @@ class User_Info(models.Model):
     }
     '''基础信息'''
 
-    phone_number = models.CharField(verbose_name='手机号码', max_length=20, blank=False, default=None, unique=True)
+    email = models.EmailField(verbose_name='邮箱', blank=False, default=None, unique=True)
+
+    # phone_number = models.CharField(verbose_name='手机号码', max_length=20, blank=False, default=None, unique=True)
 
     password = models.CharField(verbose_name='密码', max_length=1000, blank=False, default=None)
 
     nickname = models.CharField(verbose_name='用户昵称', max_length=20, default=None, blank=False, unique=True)
 
-    email = models.EmailField(verbose_name='邮箱', blank=False, default=None, unique=True)
 
     joined_date = models.DateTimeField(verbose_name='注册时间', default=now)
 

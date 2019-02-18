@@ -17,7 +17,7 @@ class NewPTJView(APIView):
                 param = requests.body
                 jsonParam = json.loads(param)
 
-                user = User_Info.objects.get(phone_number__exact=requests.session.get('login'))
+                user = User_Info.objects.get(email=requests.session.get('login'))
 
                 ptj = PTJInfo.objects.create(
                     publisher=user,

@@ -11,12 +11,6 @@ class RegisterView(APIView):
         '''注册账户'''
         params = request.body
         jsonParams = json.loads(params)
-        user = User_Info.objects.filter(phone_number__exact=jsonParams.get('phone_number'))
-        if user.exists():
-            return JsonResponse({
-                'status': False,
-                'err': '手机号已经被注册'
-            }, status=401)
         user = User_Info.objects.filter(email__exact=jsonParams.get('email'))
         if user.exists():
             return JsonResponse({
@@ -39,7 +33,6 @@ class RegisterView(APIView):
             }, status=401)
         school = school[0]
         newUser = User_Info.objects.create(
-            phone_number=jsonParams.get('phone_number'),
             password=hash_password,
             email=jsonParams.get('email'),
             nickname=jsonParams.get('nickname'),
@@ -51,7 +44,8 @@ class RegisterView(APIView):
         return JsonResponse({
             'status': True,
             'id': newUser.id,
-            'phone_number': newUser.phone_number,
+            'email': newUser.email,
             'nickname': newUser.nickname,
         })
+
 

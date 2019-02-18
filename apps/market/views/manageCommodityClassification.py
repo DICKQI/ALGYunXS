@@ -15,7 +15,7 @@ class CommodityClassificationView(APIView):
         '''
         if requests.session.get('login') != None:
             try:
-                user = User_Info.objects.get(phone_number__exact=requests.session.get('login'))
+                user = User_Info.objects.get(email=requests.session.get('login'))
                 if user.user_role == '12' or user.user_role == '515400':
                     param = requests.body
                     jsonParams = json.loads(param)

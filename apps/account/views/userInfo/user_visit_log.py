@@ -18,7 +18,7 @@ class UserLogView(APIView):
         '''
         if request.session.get('login'):
             try:
-                user = User_Info.objects.get(phone_number__exact=request.session.get('login'))
+                user = User_Info.objects.get(email__exact=request.session.get('login'))
                 commodityLog = CommodityViewLog.objects.filter(user=user)
                 helpsLog = HelpsViewLog.objects.filter(user=user)
 
