@@ -52,7 +52,7 @@ class BaseViews(APIView):
                 })
             else:
                 return JsonResponse({
-                    'status': True,
+                    'status': False,
                     'err': '密码错误'
                 }, status=401)
         except:
