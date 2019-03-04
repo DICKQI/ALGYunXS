@@ -79,7 +79,7 @@ MIDDLEWARE = [
     # alg middleware
     'ALGMiddleware.VisitLogMiddleware.VisitLogFirewall',
     'ALGMiddleware.IPFirewallMiddleware.IPFirewall',
-    # 'ALGMiddleware.origin-allow.AllowOrigin',
+    'ALGMiddleware.origin-allow.AllowOrigin',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,7 +91,7 @@ MIDDLEWARE = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
 
