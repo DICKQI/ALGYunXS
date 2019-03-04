@@ -74,6 +74,7 @@ SUMMERNOTE_CONFIG = {
 
 }
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'ALGMiddleware.VisitLogMiddleware.VisitLogFirewall',
     'ALGMiddleware.IPFirewallMiddleware.IPFirewall',
     'django.middleware.security.SecurityMiddleware',
@@ -82,7 +83,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
 
@@ -92,7 +92,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
 
-    '*'
+    '127.0.0.1:8080',
+    'localhost:8080',
 
 )
 CORS_ALLOW_METHODS = (
