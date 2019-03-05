@@ -5,7 +5,7 @@ import oss2
 
 
 class CImgView(APIView):
-    def put(self, request):
+    def put(self, request, cid):
         '''
         更新商品图片
         :param request:
@@ -15,16 +15,16 @@ class CImgView(APIView):
         if request.session.get('login') != None:
 
             try:
-                # commodity = Commodity.objects.get(id=cid)
-                # if commodity.commodity_img.count() > 5:
-                #     return JsonResponse({
-                #         'status': False,
-                #         'err': '已超出图片上限(最多5张照片)'
-                #     }, status=401)
+                commodity = Commodity.objects.get(id=cid)
+                if commodity.commodity_img.count() > 5:
+                    return JsonResponse({
+                        'status': False,
+                        'err': '已超出图片上限(最多5张照片)'
+                    }, status=401)
                 get_img = request.FILES.get('img')
                 img = CommodityImage.objects.create(img=get_img)
-                # commodity.commodity_img.add(img)
-                # commodity.save()
+                commodity.commodity_img.add(img)
+                commodity.save()
                 return JsonResponse({
                     'status': True,
                     'result':img.id
@@ -48,18 +48,16 @@ class CImgView(APIView):
         :return:
         '''
         if request.session.get('login'):
-            try:
-                commodity = Commodity.objects.get(id=cid)
-            except:
+            commodity = Commodity.objects.filter(id=cid)
+            if not commodity.exists():
                 return JsonResponse({
-                    'status':False,
+                    'status': False,
                     'err': '商品不存在'
                 }, status=403)
-            try:
-                img = CommodityImage.objects.get(id=mid)
-            except:
+            img = CommodityImage.objects.filter(id=mid)
+            if not img.exists():
                 return JsonResponse({
-                    'status':False,
+                    'status': False,
                     'err': '图片不存在'
                 }, status=403)
             try:

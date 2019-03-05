@@ -19,20 +19,16 @@ class CommodityClassificationView(APIView):
                 if user.user_role == '12' or user.user_role == '515400':
                     param = requests.body
                     jsonParams = json.loads(param)
-
-                    try:
-                        Classification.objects.get(name__exact=jsonParams.get('name'))
+                    if Classification.objects.filter(name__exact=jsonParams.get('name')).exists():
                         return JsonResponse({
-                            'status':False,
-                            'err':'分类名已存在'
+                            'status': False,
+                            'err': '分类名已存在'
                         })
-                    except:
-                        classification = Classification.objects.create(name=jsonParams.get('name'))
-
-                        return JsonResponse({
-                            'status': True,
-                            'id': classification.id
-                        })
+                    classification = Classification.objects.create(name=jsonParams.get('name'))
+                    return JsonResponse({
+                        'status': True,
+                        'id': classification.id
+                    })
                 else:
                     return JsonResponse({
                         'status': False,
@@ -51,7 +47,7 @@ class CommodityClassificationView(APIView):
 
     def get(self, requests):
         '''
-        获取商品列表
+        获取商品分类列表
         :param requests:
         :return:
         '''

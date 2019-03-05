@@ -17,13 +17,13 @@ class CommodityView(APIView):
         :return:
         '''
         if request.session.get('login'):
-            try:
-                commodity = Commodity.objects.get(id=cid)
-            except:
+            commodity = Commodity.objects.filter(id=cid)
+            if not commodity.exists():
                 return JsonResponse({
                     'status': False,
                     'err': '找不到该内容'
                 }, status=404)
+            commodity = commodity[0]
             user = User_Info.objects.get(email=request.session.get('login'))
             if user != commodity.seller:
                 if commodity.status == 's':
@@ -66,7 +66,13 @@ class CommodityView(APIView):
             params = request.body
             jsonParams = json.loads(params)
             try:
-                commodity = Commodity.objects.get(id=cid)
+                commodity = Commodity.objects.filter(id=cid)
+                if not commodity.exists():
+                    return JsonResponse({
+                        'status': False,
+                        'err': '找不到该内容'
+                    }, status=404)
+                commodity = commodity[0]
                 user = User_Info.objects.get(email=request.session.get('login'))
                 if commodity.seller != user:
                     if user.user_role != '12' or user.user_role != '525400':
@@ -121,7 +127,13 @@ class CommodityView(APIView):
         '''
         if request.session.get('login'):
             try:
-                commodity = Commodity.objects.get(id=cid)
+                commodity = Commodity.objects.filter(id=cid)
+                if not commodity.exists():
+                    return JsonResponse({
+                        'status': False,
+                        'err': '找不到该内容'
+                    }, status=404)
+                commodity = commodity[0]
                 user = User_Info.objects.get(email=request.session.get('login'))
                 if commodity.seller != user:
                     if user.user_role != '12' or user.user_role != '525400':
@@ -163,9 +175,8 @@ class CommodityView(APIView):
                 }, status=403)
             try:
                 seller = User_Info.objects.get(email=request.session.get('login'))
-                try:
-                    classification = Classification.objects.get(name__exact=jsonParams.get('classification'))
-                except:
+                classification = Classification.objects.filter(name__exact=jsonParams.get('classification'))
+                if not classification.exists():
                     return JsonResponse({
                         'status': False,
                         'err': '找不到该分类'
