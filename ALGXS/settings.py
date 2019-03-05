@@ -79,7 +79,6 @@ MIDDLEWARE = [
     # alg middleware
     'ALGMiddleware.VisitLogMiddleware.VisitLogFirewall',
     'ALGMiddleware.IPFirewallMiddleware.IPFirewall',
-    'ALGMiddleware.Header.ALGHeader',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -209,7 +208,6 @@ EMAIL_FROM = 'algyun@163.com'
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-PAGE_NUM = 5  # 每页显示的文章数
 
 LANGUAGE_CODE = 'zh-hans'
 
