@@ -79,7 +79,7 @@ MIDDLEWARE = [
     # alg middleware
     'ALGMiddleware.VisitLogMiddleware.VisitLogFirewall',
     'ALGMiddleware.IPFirewallMiddleware.IPFirewall',
-    'ALGMiddleware.origin-allow.AllowOrigin',
+    'ALGMiddleware.Header.ALGHeader',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
