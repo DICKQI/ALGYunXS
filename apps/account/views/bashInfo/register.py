@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from apps.account.models import User_Info, School
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
-from random import Random
+import random
 import json
 
 
@@ -32,7 +32,9 @@ class RegisterView(APIView):
                 'err': '学校不存在'
             }, status=401)
         school = school[0]
+        newid = self.randomID()
         newUser = User_Info.objects.create(
+            id=newid,
             password=hash_password,
             email=jsonParams.get('email'),
             nickname=jsonParams.get('nickname'),
@@ -48,4 +50,12 @@ class RegisterView(APIView):
             'nickname': newUser.nickname,
         })
 
-
+    def randomID(self):
+        '''
+        生成随机不重复的id
+        :return:
+        '''
+        newid = random.randint(100000000, 999999999)
+        while User_Info.objects.filter(id=newid).exists():
+            newid = random.randint(100000000, 999999999)
+        return newid

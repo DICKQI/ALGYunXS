@@ -70,5 +70,7 @@ def model_to_dict(instance, fields=None, exclude=None):
             min = data_time[14:16]
             sec = data_time[17:19]
             value = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec
+        if f.verbose_name == '文章附图':
+            value = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + value.name + '?x-oss-process=style/head_portrait'
         data[f.name] = value
     return data

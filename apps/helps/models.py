@@ -92,6 +92,8 @@ class Article(models.Model):
 
     comment = models.ManyToManyField(AComment, verbose_name='文章评论', blank=True)
 
+    img = models.ImageField(verbose_name='文章附图', default='', blank=False, upload_to='article')
+
     class Meta:
         verbose_name = '互帮互助文章'
         verbose_name_plural = '文章列表'

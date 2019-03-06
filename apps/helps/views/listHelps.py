@@ -7,7 +7,7 @@ from apps.helps.models import Article
 
 class ListHelps(APIView):
     EXCLUDE_FIELDS = [
-        'comment', 'create_time', 'last_mod_time', 'status'
+        'comment', 'create_time', 'status'
     ]
 
     def get(self, requests):
