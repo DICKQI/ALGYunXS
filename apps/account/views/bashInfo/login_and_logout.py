@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from apps.account.models import User_Info
 from apps.log.models import LoginLog
+from ALGCommon.check_login import check_login
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 from django.utils.timezone import now
@@ -61,21 +62,16 @@ class BaseViews(APIView):
                 'err': '出现了预期以外的错误'
             }, status=403)
 
+    @check_login
     def delete(self, request):
         '''
         登出账户
         :param request:
         :return:
         '''
-        if request.session.get('login'):
-            user = User_Info.objects.get(email=request.session.get('login'))
-            request.session['login'] = None
-            return JsonResponse({
-                'status': True,
-                'id': user.id
-            })
-        else:
-            return JsonResponse({
-                'status': False,
-                'err': '你还未登录呢'
-            }, status=401)
+        user = User_Info.objects.get(email=request.session.get('login'))
+        request.session['login'] = None
+        return JsonResponse({
+            'status': True,
+            'id': user.id
+        })
