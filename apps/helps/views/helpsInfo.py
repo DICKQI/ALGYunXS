@@ -1,8 +1,9 @@
 from rest_framework.views import APIView
 from django.http import JsonResponse
+from django.db.models import Q
 from ALGCommon.dictInfo import model_to_dict
 from ALGCommon.check_login import check_login
-from apps.helps.models import Article, Category, Tag
+from apps.helps.models import Article, Category, Tag, HelpsStarRecord
 from apps.account.models import User_Info
 from apps.log.models import HelpsViewLog
 import json
@@ -32,7 +33,15 @@ class HelpsInfoView(APIView):
                     'status': False,
                     'err': '找不到该内容'
                 }, status=404)
-        article.views += 1
+        if user != article.author:
+            article.views += 1
+        if not HelpsStarRecord.objects.filter(
+            Q(star_man=user) and Q(article=article)
+        ).exists():
+            can_star = True
+        else:
+            can_star = False
+
         HelpsViewLog.objects.create(
             ip=request.META['REMOTE_ADDR'],
             user=user,
@@ -40,7 +49,8 @@ class HelpsInfoView(APIView):
         )
         return JsonResponse({
             'status': True,
-            'article': model_to_dict(article)
+            'article': model_to_dict(article),
+            'can_star': can_star
         })
 
     @check_login

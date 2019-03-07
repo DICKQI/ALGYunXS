@@ -92,6 +92,8 @@ class Article(models.Model):
 
     comment = models.ManyToManyField(AComment, verbose_name='文章评论', blank=True)
 
+    stars = models.IntegerField(verbose_name='点赞数', blank=False, default=0)
+
     img = models.ImageField(verbose_name='文章附图', default='', blank=False, upload_to='article')
 
     class Meta:
@@ -99,5 +101,13 @@ class Article(models.Model):
         verbose_name_plural = '文章列表'
         db_table = 'Article'
         ordering = ['-last_mod_time']
+
     def __str__(self):
         return self.title
+
+
+class HelpsStarRecord(models.Model):
+    '''防止给文章重复点赞（点赞记录）'''
+    article = models.ForeignKey(Article, verbose_name='被点赞的文章', on_delete=models.CASCADE)
+
+    star_man = models.ForeignKey(User_Info, verbose_name='点赞人', on_delete=models.CASCADE)
