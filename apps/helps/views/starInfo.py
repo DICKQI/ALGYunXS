@@ -18,29 +18,35 @@ class StarInfoView(APIView):
         :param aid:
         :return:
         '''
+        try:
+            article = Article.objects.filter(id=aid)
+            if not article.exists():
+                return JsonResponse({
+                    'status': False,
+                    'err': '文章不存在'
+                }, status=404)
+            article = article[0]
 
-        article = Article.objects.filter(id=aid)
-        if not article.exists():
+            if HelpsStarRecord.objects.filter(
+                    Q(article=article) and Q(star_man=User_Info.objects.get(email=request.session.get('login')))
+            ).exists():
+                return JsonResponse({
+                    'status': False,
+                    'err': '不能重复点赞噢'
+                }, status=401)
+            article.star += 1
+            article.save()
+            HelpsStarRecord.objects.create(
+                star_man=User_Info.objects.get(email=request.session.get('login')),
+                article=article
+            )
+            return JsonResponse({
+                'status': True,
+                'id': aid
+            })
+        except:
             return JsonResponse({
                 'status': False,
-                'err': '文章不存在'
-            }, status=404)
-        article = article[0]
+                'err': '出现未知错误'
+            }, status=403)
 
-        if HelpsStarRecord.objects.filter(
-                Q(article=article) and Q(star_man=User_Info.objects.get(email=request.session.get('login')))
-        ).exists():
-            return JsonResponse({
-                'status': False,
-                'err': '不能重复点赞噢'
-            }, status=401)
-        article.star += 1
-        article.save()
-        HelpsStarRecord.objects.create(
-            star_man=User_Info.objects.get(email=request.session.get('login')),
-            article=article
-        )
-        return JsonResponse({
-            'status': True,
-            'id': aid
-        })
