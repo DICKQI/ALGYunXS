@@ -36,7 +36,7 @@ class HelpsInfoView(APIView):
         if user != article.author:
             article.views += 1
         if not HelpsStarRecord.objects.filter(
-            Q(star_man=user) and Q(article=article)
+            Q(star_man=user) & Q(article=article)
         ).exists():
             can_star = True
         else:
