@@ -29,6 +29,7 @@ urlpatterns = [
     path('helps/', include('apps.helps.urls', namespace='helps')),
     path('ptj/', include('apps.PTJ.urls', namespace='ptj')),
     path('fq/', include('apps.FandQ.urls', namespace='FandQ')),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

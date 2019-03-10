@@ -6,7 +6,7 @@ from apps.market.models import Classification
 from apps.account.models import User_Info, School
 
 
-def model_to_dict(instance, fields=None, exclude=None):
+def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
     """
     改造django.forms.models.model_to_dict()方法
     :param instance:
@@ -32,10 +32,10 @@ def model_to_dict(instance, fields=None, exclude=None):
             elif f.verbose_name == '商品评论':
                 value = [{'id': i.id, 'fromUser': i.fromUser.nickname, 'content': i.content,
                           'time': str(i.update_time)[0:10], 'star': i.star} for i in value] if instance.pk else None
-            elif f.verbose_name == '文章评论':
-                value = [{'id': i.id, 'fromUser': i.from_author.nickname, 'content': i.content,
-                          'time': str(i.create_time)[0:10]}
-                         for i in value] if instance.pk else None
+            # elif f.verbose_name == '文章评论':
+            #     value = [{'id': i.id, 'fromUser': i.from_author.nickname, 'content': i.content, 'stars': i.star,
+            #               'time': str(i.create_time)[0:10]}
+            #              for i in value] if instance.pk else None
             elif f.verbose_name == '商品图片':
                 value = [{
                     'url': 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + i.img.name + '?x-oss-process=style/head_portrait',

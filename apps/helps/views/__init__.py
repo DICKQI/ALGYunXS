@@ -1,8 +1,9 @@
-from .listHelps import ListHelps
-from .helpsInfo import HelpsInfoView
-from .AImageInfo import ImageView
-from .starInfo import StarInfoView
+from .article.listHelps import ListHelps
+from .article.helpsInfo import HelpsInfoView
+from .image.AImageInfo import ImageView
+from .star.starInfo import StarInfoView
+from .comment.commentInfo import CommentInfoView
 
 __all__ = [
-    'HelpsInfoView', 'ListHelps', 'ImageView', 'StarInfoView'
+    'HelpsInfoView', 'ListHelps', 'ImageView', 'StarInfoView', 'CommentInfoView'
 ]

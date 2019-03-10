@@ -10,6 +10,11 @@ import json
 
 
 class HelpsInfoView(APIView):
+
+    EXCLUDE_FIELDS = [
+        'comment'
+    ]
+
     @check_login
     def get(self, request, pid):
         '''
@@ -34,9 +39,12 @@ class HelpsInfoView(APIView):
                     'err': '找不到该内容'
                 }, status=404)
         if user != article.author:
+            manage = False
             article.views += 1
+        else:
+            manage = True
         if not HelpsStarRecord.objects.filter(
-            Q(star_man=user) & Q(article=article)
+                Q(star_man=user) & Q(article=article)
         ).exists():
             can_star = True
         else:
@@ -47,16 +55,18 @@ class HelpsInfoView(APIView):
             user=user,
             HelpsArticle=article
         )
+        print(request.META)
         return JsonResponse({
             'status': True,
-            'article': model_to_dict(article),
-            'can_star': can_star
+            'article': model_to_dict(article, exclude=self.EXCLUDE_FIELDS),
+            'can_star': can_star,
+            'manage': manage
         })
 
     @check_login
     def put(self, request, pid):
         '''
-        修稿文章信息
+        修改文章信息
         :param request:
         :param pid:
         :return:

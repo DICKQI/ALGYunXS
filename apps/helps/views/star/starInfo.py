@@ -1,11 +1,10 @@
 from rest_framework.views import APIView
-from ..models import Article, HelpsStarRecord
+from apps.helps.models import Article, HelpsStarRecord
 from apps.account.models import User_Info
 from django.http import JsonResponse
 from django.db.models import Q
 from ALGCommon.check_login import check_login
-from ALGCommon.dictInfo import model_to_dict
-import json
+
 
 
 class StarInfoView(APIView):
