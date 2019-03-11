@@ -70,10 +70,20 @@ class CommentInfoView(APIView):
         comment = comment[0]
         user = User_Info.objects.get(email=request.session.get("login"))
         if comment.from_author != user:
-            return JsonResponse({
-                'status': False,
-                'err': '你没有权限操作'
-            }, status=401)
+            # 是否是评论来源人
+            if user.user_role == '515400' or user.user_role == '123':
+                # 是否是总管理员或者helps管理员
+                comment.content = '评论已被封禁'
+                comment.save()
+                return JsonResponse({
+                    'status': True,
+                    'id': cid
+                })
+            else:
+                return JsonResponse({
+                    'status': False,
+                    'err': '你没有权限操作'
+                }, status=401)
         comment.delete()
         return JsonResponse({
             'status': True,

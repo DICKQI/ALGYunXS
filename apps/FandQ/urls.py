@@ -1,5 +1,5 @@
 from django.urls import path
-from .views.noticePost import NoticeView
+from .views.noticeInfo import NoticeView
 from .views.noticeControl import NoticeControlView
 
 app_name = 'FandQ'

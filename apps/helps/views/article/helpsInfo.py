@@ -55,7 +55,7 @@ class HelpsInfoView(APIView):
             user=user,
             HelpsArticle=article
         )
-        print(request.META)
+        # print(request.META)
         return JsonResponse({
             'status': True,
             'article': model_to_dict(article, exclude=self.EXCLUDE_FIELDS),
