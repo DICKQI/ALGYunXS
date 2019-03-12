@@ -94,7 +94,7 @@ class Article(models.Model):
 
     stars = models.IntegerField(verbose_name='点赞数', blank=False, default=0)
 
-    img = models.ImageField(verbose_name='文章附图', default='', blank=False, upload_to='article')
+    img = models.ImageField(verbose_name='文章附图', default='', blank=True, upload_to='article')
 
     class Meta:
         verbose_name = '互帮互助文章'
