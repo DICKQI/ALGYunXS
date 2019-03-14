@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.db.models import Q
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.check_login import check_login
+from ALGCommon.userCheck import check_login, authCheck
 from apps.helps.models import Article, Category, Tag, HelpsStarRecord
 from apps.account.models import User_Info
 from apps.log.models import HelpsViewLog
@@ -55,12 +55,11 @@ class HelpsInfoView(APIView):
             user=user,
             HelpsArticle=article
         )
-        # print(request.META)
         return JsonResponse({
             'status': True,
             'article': model_to_dict(article, exclude=self.EXCLUDE_FIELDS),
-            'can_star': can_star,
-            'manage': manage
+            'can_star': can_star, # 是否已对其点赞
+            'manage': manage # 是否是管理员
         })
 
     @check_login
@@ -78,8 +77,7 @@ class HelpsInfoView(APIView):
                 'err': '找不到该内容'
             }, status=404)
         article = article[0]
-        user = User_Info.objects.get(email__exact=request.session.get('login'))
-        if user != article.author:
+        if not authCheck(['123', '515400'], request.session.get('login'), article):
             return JsonResponse({
                 'status': False,
                 'err': '你没有权限'
@@ -137,13 +135,11 @@ class HelpsInfoView(APIView):
                 'err': '找不到该内容'
             }, status=404)
         article = article[0]
-        user = User_Info.objects.get(email=request.session.get('login'))
-        if article.author != user:
-            if user.user_role != '123' or user.user_role != '515400':
-                return JsonResponse({
-                    'status': False,
-                    'err': '你没有权限'
-                }, status=401)
+        if not authCheck(['123', '515400'], request.session.get('login'), article):
+            return JsonResponse({
+                        'status': False,
+                        'err': '你没有权限'
+                    }, status=401)
         article.delete()
         return JsonResponse({
             'status': True,

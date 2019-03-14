@@ -2,7 +2,7 @@ from apps.account.models import User_Info
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from ..esCheck import es_test
-from ALGCommon.check_login import check_login
+from ALGCommon.userCheck import check_login
 import json
 
 

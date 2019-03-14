@@ -11,6 +11,9 @@ urlpatterns = [
     # comment
     path('<int:aid>/comment/', CommentInfoView.as_view(), name='CommentInfo'),
     path('<int:aid>/comment/delete/<int:cid>/', CommentInfoView.as_view(), name='deleteComment'),
+    # tags info
+    path('tags/', TagsListView.as_view(), name='tagsView'),
+    path('tags/<int:tid>/', TagsInfoView.as_view(), name='tagsInfo'),
     # image info
     path('image/<int:aid>/', ImageView.as_view(), name='imageInfo'),
     # list info

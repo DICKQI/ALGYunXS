@@ -1,4 +1,4 @@
 from threading import Timer
 
 def recalculation():
-    pass
+    print(1)

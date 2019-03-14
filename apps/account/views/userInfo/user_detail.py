@@ -2,7 +2,8 @@ from apps.account.models import User_Info, Notifications
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.check_login import check_login
+from ALGCommon.userCheck import check_login
+import time
 
 
 class MeView(APIView):
@@ -18,6 +19,7 @@ class MeView(APIView):
         :param request:
         :return:
         '''
+        start = time.time()
         user = User_Info.objects.get(email=request.session.get('login'))
         userResult = model_to_dict(user, fields=self.USER_INCLUDE_FIELDS)
         if user.head_portrait:
@@ -43,8 +45,10 @@ class MeView(APIView):
                 'has_notifications': True,
                 'count':cnt
             })
+        end = time.time()
         return JsonResponse({
             'status': True,
             'myself': userResult,
-            'has_notifications': False
+            'has_notifications': False,
+            'time': end - start
         })

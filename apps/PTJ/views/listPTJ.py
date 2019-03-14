@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from ALGCommon.paginator import paginator
 from ALGCommon.dictInfo import model_to_dict
 from apps.PTJ.models import PTJInfo
 
@@ -15,13 +15,7 @@ class ListPTJ(APIView):
         '''
         ptjAll = PTJInfo.objects.all()
         page = requests.GET.get('page')
-        ptjPage = Paginator(ptjAll, 5)
-        try:
-            ptjList = ptjPage.page(page)
-        except PageNotAnInteger:
-            ptjList = ptjPage.page(1)
-        except EmptyPage:
-            ptjList = ptjPage.page(1)
+        ptjList = paginator(ptjAll, page)
 
         ptj = [model_to_dict(ptjs, exclude='create_time') for ptjs in ptjList if ptjs.status == 'p']
 

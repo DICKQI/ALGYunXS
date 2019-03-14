@@ -3,7 +3,7 @@ from apps.helps.models import Article, HelpsStarRecord
 from apps.account.models import User_Info
 from django.http import JsonResponse
 from django.db.models import Q
-from ALGCommon.check_login import check_login
+from ALGCommon.userCheck import check_login
 
 
 

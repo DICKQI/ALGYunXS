@@ -1,7 +1,7 @@
 from apps.market.models import Commodity
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from ALGCommon.paginator import paginator
 from ALGCommon.dictInfo import model_to_dict
 
 
@@ -19,14 +19,7 @@ class ListCommodity(APIView):
         try:
             page = requests.GET.get('page')
             commodityObj = Commodity.objects.all()
-            commodityPage = Paginator(commodityObj, 5)
-
-            try:
-                commodityList = commodityPage.page(page)
-            except PageNotAnInteger:
-                commodityList = commodityPage.page(1)
-            except EmptyPage:
-                commodityList = commodityPage.page(1)
+            commodityList = paginator(commodityObj, page)
 
             commodity = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in commodityList if
                          mar.status == 'p' or mar.status == 'o']

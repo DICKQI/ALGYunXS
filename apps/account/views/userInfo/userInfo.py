@@ -3,7 +3,7 @@ from apps.market.models import Commodity
 from apps.helps.models import Article
 from apps.PTJ.models import PTJInfo
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.check_login import check_login
+from ALGCommon.userCheck import check_login
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
@@ -32,9 +32,9 @@ class UserDashBoardView(APIView):
         articles = Article.objects.filter(author=user)
         markets = Commodity.objects.filter(seller=user)
         ptj = PTJInfo.objects.filter(publisher=user)
-        artPage = Paginator(articles, 5)
-        marPage = Paginator(markets, 5)
-        ptjPage = Paginator(ptj, 5)
+        artPage = Paginator(articles, 10)
+        marPage = Paginator(markets, 10)
+        ptjPage = Paginator(ptj, 10)
 
         apage = request.GET.get('apage')
         mpage = request.GET.get('mpage')

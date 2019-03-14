@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from apps.account.models import User_Info, EmailVerifyRecord
-from ALGCommon.check_login import check_login
+from ALGCommon.userCheck import check_login
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 import json

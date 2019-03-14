@@ -27,18 +27,19 @@ class CImgView(APIView):
                 commodity.save()
                 return JsonResponse({
                     'status': True,
-                    'result':img.id
+                    'result': img.id
                 })
             except:
                 return JsonResponse({
-                    'status':False,
+                    'status': False,
                     'err': '意料以外的错误'
                 }, status=403)
         else:
             return JsonResponse({
-                'status':False,
+                'status': False,
                 'err': '你还未登录'
             }, status=401)
+
     def delete(self, request, cid, mid):
         '''
         给文章移除图片
@@ -64,7 +65,7 @@ class CImgView(APIView):
                 commodity.commodity_img.remove(img)
             except:
                 return JsonResponse({
-                    'status':False,
+                    'status': False,
                     'err': '删除失败'
                 }, status=403)
             commodity.save()
@@ -78,15 +79,15 @@ class CImgView(APIView):
                 img.delete()
             except:
                 return JsonResponse({
-                    'status':False,
+                    'status': False,
                     'err': '删除失败'
                 }, status=403)
             return JsonResponse({
-                'status':True,
-                'result':'删除成功'
+                'status': True,
+                'result': '删除成功'
             })
         else:
             return JsonResponse({
-                'status':False,
+                'status': False,
                 'err': '你还没登录呢'
             }, status=401)
