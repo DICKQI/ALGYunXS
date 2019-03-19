@@ -1,8 +1,7 @@
 from rest_framework.views import APIView
-from apps.account.models import User_Info
 from apps.market.models import Classification
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login
+from ALGCommon.userCheck import check_login, authCheck
 from django.http import JsonResponse
 import json
 
@@ -16,25 +15,24 @@ class CommodityClassificationView(APIView):
         :return:
         '''
         try:
-            user = User_Info.objects.get(email=requests.session.get('login'))
-            if user.user_role == '12' or user.user_role == '515400':
-                param = requests.body
-                jsonParams = json.loads(param)
-                if Classification.objects.filter(name__exact=jsonParams.get('name')).exists():
-                    return JsonResponse({
-                        'status': False,
-                        'err': '分类名已存在'
-                    })
-                classification = Classification.objects.create(name=jsonParams.get('name'))
-                return JsonResponse({
-                    'status': True,
-                    'id': classification.id
-                })
-            else:
+            if not authCheck(['12', '515400'], requests.session.get('login')):
                 return JsonResponse({
                     'status': False,
                     'err': '你没有权限'
                 }, status=401)
+            param = requests.body
+            jsonParams = json.loads(param)
+
+            if Classification.objects.filter(name__exact=jsonParams.get('name')).exists():
+                return JsonResponse({
+                    'status': False,
+                    'err': '分类名已存在'
+                }, status=401)
+            classification = Classification.objects.create(name=jsonParams.get('name'))
+            return JsonResponse({
+                'status': True,
+                'id': classification.id
+            })
         except:
             return JsonResponse({
                 'status': False,

@@ -22,7 +22,7 @@ def check_login(func):
 
 
 
-def authCheck(role, email, obj):
+def authCheck(role, email, obj=None):
     '''
     通用权限检测
     :param role:
@@ -42,9 +42,7 @@ def authCheck(role, email, obj):
             return True
 
     if isinstance(role, list):
-        print(2)
         if user.user_role in role:
-            print(3)
             return True
         else:
             return False

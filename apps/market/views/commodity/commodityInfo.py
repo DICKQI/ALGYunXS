@@ -3,7 +3,7 @@ from apps.account.models import User_Info
 from apps.market.models import Commodity, Classification
 from apps.log.models import CommodityViewLog
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login
+from ALGCommon.userCheck import check_login, authCheck
 from django.utils.timezone import now
 from django.http import JsonResponse
 import json
@@ -69,15 +69,11 @@ class CommodityView(APIView):
                     'err': '找不到该内容'
                 }, status=404)
             commodity = commodity[0]
-            user = User_Info.objects.get(email=request.session.get('login'))
-            if commodity.seller != user:
-                if user.user_role != '12' or user.user_role != '525400':
-                    return JsonResponse({
-                        'status': False,
-                        'err': '你没有权限'
-                    })
-                else:
-                    pass
+            if not authCheck(['12', '515400'], request.session.get('login'), commodity):
+                return JsonResponse({
+                    'status': False,
+                    'err': '你没有权限'
+                }, status=401)
             if jsonParams.get('c_detail'):
                 commodity.c_detail = jsonParams.get('c_detail')
             if jsonParams.get('classification'):
@@ -125,17 +121,15 @@ class CommodityView(APIView):
                     'err': '找不到该内容'
                 }, status=404)
             commodity = commodity[0]
-            user = User_Info.objects.get(email=request.session.get('login'))
-            if commodity.seller != user:
-                if user.user_role != '12' or user.user_role != '525400':
-                    return JsonResponse({
-                        'status': False,
-                        'err': '你没有权限'
-                    }, status=401)
+            if not authCheck(['12', '515400'], request.session.get('login'), commodity):
+                return JsonResponse({
+                    'status': False,
+                    'err': '你没有权限'
+                }, status=401)
             commodity.delete()
             return JsonResponse({
                 'status': True,
-                'result': '已删除' + cid + '号文章'
+                'id': cid
             })
         except:
             return JsonResponse({
@@ -151,8 +145,7 @@ class CommodityView(APIView):
         :param cid:
         :return:
         '''
-        param = request.body
-        jsonParams = json.loads(param)
+        jsonParams = json.loads(request.body)
         if jsonParams.get('name') == None or jsonParams.get('c_detail') == None or jsonParams.get(
                 'classification') == None:
             return JsonResponse({
@@ -161,12 +154,13 @@ class CommodityView(APIView):
             }, status=403)
         try:
             seller = User_Info.objects.get(email=request.session.get('login'))
-            classification = Classification.objects.filter(name__exact=jsonParams.get('classification'))
+            classification = Classification.objects.filter(id=jsonParams.get('classification'))
             if not classification.exists():
                 return JsonResponse({
                     'status': False,
                     'err': '找不到该分类'
                 })
+            classification = classification[0]
             if jsonParams.get('status') != None:
                 status = jsonParams.get('status')
             else:

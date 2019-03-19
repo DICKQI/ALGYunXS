@@ -6,8 +6,6 @@ from apps.account.models import User_Info
 # Create your models here.
 class Category(models.Model):
     '''分类数据库模型'''
-    cid = models.BigIntegerField(verbose_name='分类id', primary_key=True, default=1)
-
     name = models.CharField(verbose_name='分类名', default='', blank=False, max_length=10, unique=True)
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
@@ -80,7 +78,7 @@ class Article(models.Model):
 
     status = models.CharField(verbose_name='文章状态', choices=STATUS_CHOICES, max_length=2, default='草稿')
 
-    views = models.IntegerField(verbose_name='浏览量', default=0)
+    views = models.PositiveIntegerField(verbose_name='浏览量', default=0)
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 
@@ -92,7 +90,7 @@ class Article(models.Model):
 
     comment = models.ManyToManyField(AComment, verbose_name='文章评论', blank=True)
 
-    stars = models.IntegerField(verbose_name='点赞数', blank=False, default=0)
+    stars = models.PositiveIntegerField(verbose_name='点赞数', blank=False, default=0)
 
     img = models.ImageField(verbose_name='文章附图', default='', blank=True, upload_to='article')
 

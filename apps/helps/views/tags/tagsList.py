@@ -20,7 +20,7 @@ class TagsListView(APIView):
             tag_count.append({'id': tags_all[i].id, 'count': tags_all[i].article__count})
 
         id = []
-        for i in sorted(tag_count, key=itemgetter('count'), reverse=True):
+        for i in sorted(tag_count, key=itemgetter('count'), reverse=True)[:10]:
             id.append(i.get('id'))
 
         tags = [model_to_dict(Tag.objects.get(id=tid), exclude='create_time') for tid in id]

@@ -19,7 +19,6 @@ class MeView(APIView):
         :param request:
         :return:
         '''
-        start = time.time()
         user = User_Info.objects.get(email=request.session.get('login'))
         userResult = model_to_dict(user, fields=self.USER_INCLUDE_FIELDS)
         if user.head_portrait:
@@ -45,10 +44,8 @@ class MeView(APIView):
                 'has_notifications': True,
                 'count':cnt
             })
-        end = time.time()
         return JsonResponse({
             'status': True,
             'myself': userResult,
-            'has_notifications': False,
-            'time': end - start
+            'has_notifications': False
         })

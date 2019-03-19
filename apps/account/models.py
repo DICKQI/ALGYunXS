@@ -40,7 +40,6 @@ class User_Info(models.Model):
 
     nickname = models.CharField(verbose_name='用户昵称', max_length=20, default=None, blank=False, unique=True)
 
-
     joined_date = models.DateTimeField(verbose_name='注册时间', default=now)
 
     '''详细信息'''
