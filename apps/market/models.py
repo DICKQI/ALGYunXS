@@ -9,6 +9,8 @@ class Classification(models.Model):
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 
+    create_man = models.ForeignKey(User_Info, verbose_name='创建人', on_delete=models.CASCADE, blank=False, default='')
+
     class Meta:
         ordering = ['name']
         verbose_name = '商品分类'
@@ -95,6 +97,28 @@ class Commodity(models.Model):
 
 class CommodityStarRecord(models.Model):
     '''防止给文章重复点赞（点赞记录）'''
-    article = models.ForeignKey(Commodity, verbose_name='被点赞的商品', on_delete=models.CASCADE)
+    commodity = models.ForeignKey(Commodity, verbose_name='被点赞的商品', on_delete=models.CASCADE)
 
     star_man = models.ForeignKey(User_Info, verbose_name='点赞人', on_delete=models.CASCADE)
+
+class CommodityOrder(models.Model):
+    '''商品订单'''
+    STATUS_CHOISE = (
+        ('u', '未支付'),
+        ('p', '已支付'),
+        ('c', '已完成')
+    )
+
+    commodity = models.ForeignKey(Commodity, verbose_name='关联商品', on_delete=models.CASCADE)
+
+    buyer = models.ForeignKey(User_Info, verbose_name='购买人', on_delete=models.CASCADE)
+
+    create_time = models.DateTimeField(verbose_name='订单产生时间', default=now)
+
+    status = models.CharField(verbose_name='订单状态', choices=STATUS_CHOISE, default='u', blank=False, max_length=10)
+
+    class Meta:
+        verbose_name = '商品订单'
+        verbose_name_plural = verbose_name + '列表'
+        db_table = 'commodityOrder'
+        ordering = ['-create_time']

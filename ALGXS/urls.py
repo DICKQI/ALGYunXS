@@ -27,6 +27,7 @@ urlpatterns = [
     path('users/', include('apps.account.urls', namespace='users')),
     path('market/', include('apps.market.urls', namespace='market')),
     path('helps/', include('apps.helps.urls', namespace='helps')),
+    path('tail/', include('apps.tailwind.urls', namespace='tailwind')),
     path('ptj/', include('apps.PTJ.urls', namespace='ptj')),
     path('fq/', include('apps.FandQ.urls', namespace='FandQ')),
 

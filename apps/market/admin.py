@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Commodity, CComment, Classification, CommodityImage
+from .models import Commodity, CComment, Classification, CommodityImage, CommodityOrder
 from django_summernote.admin import SummernoteModelAdmin
 
 # Register your models here.
@@ -29,3 +29,4 @@ admin.site.register(Commodity, CommodityAdmin)
 admin.site.register(CComment, CommentAdmin)
 admin.site.register(Classification)
 admin.site.register(CommodityImage)
+admin.site.register(CommodityOrder)
