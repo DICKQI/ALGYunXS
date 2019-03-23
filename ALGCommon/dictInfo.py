@@ -32,10 +32,6 @@ def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
             elif f.verbose_name == '商品评论':
                 value = [{'id': i.id, 'fromUser': i.fromUser.nickname, 'content': i.content,
                           'time': str(i.update_time)[0:10], 'star': i.star} for i in value] if instance.pk else None
-            # elif f.verbose_name == '文章评论':
-            #     value = [{'id': i.id, 'fromUser': i.from_author.nickname, 'content': i.content, 'stars': i.star,
-            #               'time': str(i.create_time)[0:10]}
-            #              for i in value] if instance.pk else None
             elif f.verbose_name == '商品图片':
                 value = [{
                     'url': 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + i.img.name + '?x-oss-process=style/head_portrait',
@@ -45,7 +41,7 @@ def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
             if f.verbose_name == '分类':
                 value = {
                     'id': value,
-                    'name': Category.objects.get(cid__exact=value).name
+                    'name': Category.objects.get(id__exact=value).name
                 }
             elif f.verbose_name == '作者':
                 value = User_Info.objects.get(id=value).nickname
