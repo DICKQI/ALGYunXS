@@ -8,6 +8,8 @@ apps/__pycache__
 apps/account/__pycache__
 apps/account/migrations
 apps/market/migrations
+apps/tailwind/migrations
+apps/tailwind/__pycache__
 .idea
 apps/helps/migrations
 apps/FandQ/migrations

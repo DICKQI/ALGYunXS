@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from apps.market.models import Classification
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login, authCheck
+from ALGCommon.userCheck import check_login, authCheck, getUser
 from django.http import JsonResponse
 import json
 
@@ -22,13 +22,16 @@ class CommodityClassificationView(APIView):
                 }, status=401)
             param = requests.body
             jsonParams = json.loads(param)
-
+            user = getUser(requests.session.get('login'))
             if Classification.objects.filter(name__exact=jsonParams.get('name')).exists():
                 return JsonResponse({
                     'status': False,
                     'err': '分类名已存在'
                 }, status=401)
-            classification = Classification.objects.create(name=jsonParams.get('name'))
+            classification = Classification.objects.create(
+                name=jsonParams.get('name'),
+                create_man=user
+            )
             return JsonResponse({
                 'status': True,
                 'id': classification.id

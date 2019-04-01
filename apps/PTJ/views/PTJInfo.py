@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from apps.PTJ.models import *
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login
+from ALGCommon.userCheck import check_login, getUser
 from django.http import JsonResponse
 import json
 
@@ -46,7 +46,7 @@ class PTJInfoView(APIView):
         :return:
         '''
         try:
-            user = User_Info.objects.get(email=requests.session.get('login'))
+            user = getUser(requests.session.get('login'))
             try:
                 ptj = PTJInfo.objects.get(id=pid)
             except:
@@ -82,7 +82,7 @@ class PTJInfoView(APIView):
             param = requests.body
             jsonParam = json.loads(param)
 
-            user = User_Info.objects.get(email=requests.session.get('login'))
+            user = getUser(requests.session.get('login'))
 
             ptj = PTJInfo.objects.create(
                 publisher=user,
