@@ -30,6 +30,7 @@ urlpatterns = [
     path('tail/', include('apps.tailwind.urls', namespace='tailwind')),
     path('ptj/', include('apps.PTJ.urls', namespace='ptj')),
     path('fq/', include('apps.FandQ.urls', namespace='FandQ')),
+    path('autoAPI/', include('apps.AutoExecution.urls', namespace='AutoExecution')), # 被自动执行的API，前端人员不需要知道
 
 ]
 if settings.DEBUG:

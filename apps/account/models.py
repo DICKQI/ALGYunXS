@@ -16,7 +16,8 @@ class School(models.Model):
     class Meta:
         verbose_name = '学校'
         verbose_name_plural = verbose_name + '列表'
-        db_table='School'
+        db_table = 'School'
+
 
 class User_Info(models.Model):
     '''用户信息数据库模型'''
@@ -65,8 +66,6 @@ class User_Info(models.Model):
 
     TimesOfPurchase = models.IntegerField(verbose_name='购买次数', default=0)
 
-
-
     def __str__(self):
         return self.nickname
 
@@ -102,7 +101,7 @@ class EmailVerifyRecord(models.Model):
         return self.email + " " + self.code_status
 
 
-class Notifications(models.Model):
+class CommentNotifications(models.Model):
     '''评论消息通知数据流模型'''
 
     types = {
@@ -123,17 +122,42 @@ class Notifications(models.Model):
     def send(id, type, user_id):
         '''发送消息'''
         user = User_Info.objects.get(id=user_id)
-        Notifications.objects.create(
+        CommentNotifications.objects.create(
             aboutUser=user,
             relatedID=id,
             type=type
         )
 
     class Meta:
-        db_table = 'notifications'
+        db_table = 'CommentNotifications'
 
     def __str__(self):
         return self.relatedID
 
 
+class OrderNotification(models.Model):
+    '''订单通知'''
+    relatedUser = models.ForeignKey(User_Info, verbose_name='通知用户', on_delete=models.CASCADE)
 
+    relatedCommodityID = models.BigIntegerField(verbose_name='关联的商品', default=None, null=False, blank=False)
+
+    relatedOrderID = models.BigIntegerField(verbose_name='关联订单', default=None, null=False, blank=False)
+
+    noticeTime = models.DateTimeField(verbose_name='通知时间', default=now)
+
+    isRead = models.BooleanField(verbose_name='是否已读', default=False, blank=False)
+
+    @staticmethod
+    def send(user, order, commodity):
+        OrderNotification.objects.create(
+            relatedUser=user,
+            relatedCommodityID=commodity.id,
+            relatedOrderID=order.id
+        )
+
+    class Meta:
+        db_table = 'OrderNotifications'
+        ordering = ['-noticeTime']
+
+    def __str__(self):
+        return self.relatedUser.nickname

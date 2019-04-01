@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.timezone import now
 from apps.account.models import User_Info
+import datetime
+
 
 class Classification(models.Model):
     '''商品分类数据库模型'''
@@ -19,6 +21,7 @@ class Classification(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class CComment(models.Model):
     '''商品评论表'''
@@ -47,6 +50,7 @@ class CStarRecord(models.Model):
 
     star_man = models.ForeignKey(User_Info, on_delete=models.CASCADE)
 
+
 class CommodityImage(models.Model):
     img = models.ImageField(verbose_name='商品图片', blank=False, default='', upload_to='commodity')
 
@@ -56,6 +60,7 @@ class CommodityImage(models.Model):
 
     def __str__(self):
         return str(self.img)
+
 
 class Commodity(models.Model):
     '''商品数据库模型'''
@@ -81,11 +86,13 @@ class Commodity(models.Model):
 
     stars = models.PositiveIntegerField(verbose_name='点赞数', default=0, blank=False)
 
-    classification = models.ForeignKey(Classification, verbose_name='商品分类', blank=False, null=True, on_delete=models.CASCADE)
+    classification = models.ForeignKey(Classification, verbose_name='商品分类', blank=False, null=True,
+                                       on_delete=models.CASCADE)
 
     comment = models.ManyToManyField(CComment, verbose_name='商品评论', blank=True)
 
     commodity_img = models.ManyToManyField(CommodityImage, verbose_name='商品图片', default='', blank=True)
+
     class Meta:
         verbose_name = '商品'
         verbose_name_plural = '商品列表'
@@ -95,27 +102,41 @@ class Commodity(models.Model):
     def __str__(self):
         return self.name
 
+
 class CommodityStarRecord(models.Model):
     '''防止给文章重复点赞（点赞记录）'''
     commodity = models.ForeignKey(Commodity, verbose_name='被点赞的商品', on_delete=models.CASCADE)
 
     star_man = models.ForeignKey(User_Info, verbose_name='点赞人', on_delete=models.CASCADE)
 
+
 class CommodityOrder(models.Model):
     '''商品订单'''
-    STATUS_CHOISE = (
-        ('u', '未支付'),
-        ('p', '已支付'),
-        ('c', '已完成')
+    STATUS_CHOICE = (
+        ('已下单', '已下单'),
+        ('已完成', '已完成')
     )
+
+    # PAY_WAY_CHOICE = (
+    #     ('线上支付', '线上支付'),
+    #     ('线下支付', '线下支付')
+    # )
+
+    id = models.BigIntegerField(verbose_name='订单号', primary_key=True, blank=False)
 
     commodity = models.ForeignKey(Commodity, verbose_name='关联商品', on_delete=models.CASCADE)
 
     buyer = models.ForeignKey(User_Info, verbose_name='购买人', on_delete=models.CASCADE)
 
-    create_time = models.DateTimeField(verbose_name='订单产生时间', default=now)
+    address = models.CharField(verbose_name='收货地址', max_length=100, blank=True)
 
-    status = models.CharField(verbose_name='订单状态', choices=STATUS_CHOISE, default='u', blank=False, max_length=10)
+    create_time = models.DateTimeField(verbose_name='订单产生时间', default=now, blank=False)
+
+    end_time = models.DateTimeField(verbose_name='订单完成时间', blank=True, default=None, null=True)
+
+    unConfirmDeadline = models.DateTimeField(verbose_name='自动完成时间', blank=True, default=None, null=True)
+
+    status = models.CharField(verbose_name='订单状态', choices=STATUS_CHOICE, default='未支付', blank=False, max_length=10)
 
     class Meta:
         verbose_name = '商品订单'

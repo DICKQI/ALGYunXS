@@ -48,7 +48,9 @@ INSTALLED_APPS = [
 
     'apps.account',
     'apps.market',
+    'apps.tailwind',
     'apps.PTJ',
+    'apps.AutoExecution',
     'apps.helps',
     'apps.FandQ',
     'apps.log',
@@ -79,8 +81,10 @@ MIDDLEWARE = [
     # alg middleware
     'ALGMiddleware.VisitLogMiddleware.VisitLogFirewall',
     'ALGMiddleware.IPFirewallMiddleware.IPFirewall',
+    # django middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'ALGMiddleware.AccountBlackListForbidden.AccountForbidden',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',

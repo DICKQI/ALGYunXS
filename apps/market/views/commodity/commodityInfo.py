@@ -10,6 +10,11 @@ import json
 
 
 class CommodityView(APIView):
+
+    EXCLUDE_FIELDS = [
+        'comment'
+    ]
+
     @check_login
     def get(self, request, cid):
         '''
@@ -44,10 +49,10 @@ class CommodityView(APIView):
             user=user
         )
         commodity.save()
-        cmdResult = model_to_dict(commodity, exclude='status')
+        cmdResult = model_to_dict(commodity, exclude=self.EXCLUDE_FIELDS)
         return JsonResponse({
             'status': True,
-            'editable': editable,
+            'editable': editable, # 属于自己的商品，可以修改、删除，但是不能购买
             'commodity': cmdResult
         })
 

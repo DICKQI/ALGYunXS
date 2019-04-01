@@ -53,3 +53,6 @@ def authCheck(role, email, obj=None):
             return False
     else:
         return False
+
+def getUser(email):
+    return User_Info.objects.get(email=email)

@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 from ALGCommon.userCheck import check_login
 from ALGCommon.dictInfo import model_to_dict
+from ALGCommon.paginator import paginator
 import json
 
 
@@ -108,20 +109,23 @@ class CommentInfoView(APIView):
         result = []
         user = User_Info.objects.get(email=request.session.get('login'))
         comments = article.comment.all()
+        commentList = paginator(comments, request.GET.get('page'))
         i = 0
-        for comment in comments:
+        for comment in commentList:
             result.append(model_to_dict(comment))
             if comment.from_author == user:
                 result[i]['manage'] = True
             else:
                 result[i]['manage'] = False
-            if comment.from_author.user_role == '515400' or comment.from_author.user_role  == '123':
+            if user.user_role == '515400' or user.user_role  == '123':
                 result[i]['admin'] = True
             else:
                 result[i]['admin'] = False
             i += 1
         return JsonResponse({
             'status': True,
-            'comment': result
+            'comment': result,
+            'has_previous': commentList.has_previous(),
+            'has_next': commentList.has_next()
         })
 

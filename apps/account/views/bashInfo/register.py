@@ -55,7 +55,7 @@ class RegisterView(APIView):
         生成随机不重复的id
         :return:
         '''
-        newid = random.randint(100000000, 999999999)
+        newid = random.randint(100000000, 9999999999)
         while User_Info.objects.filter(id=newid).exists():
-            newid = random.randint(100000000, 999999999)
+            newid = random.randint(100000000, 9999999999)
         return newid

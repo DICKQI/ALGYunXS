@@ -2,7 +2,7 @@ from itertools import chain
 from django.db.models.fields.related import ManyToManyField, ForeignKey
 from django.db.models.fields import DateTimeField
 from apps.helps.models import Category
-from apps.market.models import Classification
+from apps.market.models import Classification, Commodity
 from apps.account.models import User_Info, School
 
 
@@ -29,9 +29,6 @@ def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
         if isinstance(f, ManyToManyField):
             if f.verbose_name == '标签':
                 value = [i.name for i in value] if instance.pk else None
-            elif f.verbose_name == '商品评论':
-                value = [{'id': i.id, 'fromUser': i.fromUser.nickname, 'content': i.content,
-                          'time': str(i.update_time)[0:10], 'star': i.star} for i in value] if instance.pk else None
             elif f.verbose_name == '商品图片':
                 value = [{
                     'url': 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + i.img.name + '?x-oss-process=style/head_portrait',
@@ -50,13 +47,18 @@ def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
                     'id': value,
                     'name': Classification.objects.get(id__exact=value).name
                 }
-            elif f.verbose_name == '卖家' or f.verbose_name == '来源人' or f.verbose_name == '管理员' or f.verbose_name == '发布人':
+            elif f.verbose_name == '卖家' or f.verbose_name == '来源人' or f.verbose_name == '管理员' or f.verbose_name == '发布人' or f.verbose_name == '创建人' or f.verbose_name == '购买人':
                 value = {
                     'id': value,
                     'user': User_Info.objects.get(id=value).nickname
                 }
             elif f.verbose_name == '学校':
                 value = School.objects.get(id=value).name
+            elif f.verbose_name == '关联商品':
+                value = {
+                    'id': value,
+                    'name': Commodity.objects.get(id=value).name
+                }
         if isinstance(f, DateTimeField):
             data_time = str(value)
             year = data_time[0:4]
@@ -66,6 +68,7 @@ def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
             min = data_time[14:16]
             sec = data_time[17:19]
             value = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec
+        # 给文章的附图用的
         if f.verbose_name == '文章附图':
             value = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + value.name + '?x-oss-process=style/head_portrait'
         data[f.name] = value

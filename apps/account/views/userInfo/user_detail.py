@@ -1,4 +1,4 @@
-from apps.account.models import User_Info, Notifications
+from apps.account.models import User_Info
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from ALGCommon.dictInfo import model_to_dict
@@ -26,26 +26,7 @@ class MeView(APIView):
                 user.head_portrait) + '?x-oss-process=style/head_portrait'
 
         '''检查是否有未读通知'''
-        notifications = Notifications.objects.filter(aboutUser=user)
-        if notifications.exists():
-            cnt = 0
-            for no in notifications:
-                if no.isRead == False:
-                    cnt += 1
-            if cnt == 0:
-                return JsonResponse({
-                    'status': True,
-                    'myself': userResult,
-                    'has_notifications':False
-                })
-            return JsonResponse({
-                'status': True,
-                'myself': userResult,
-                'has_notifications': True,
-                'count':cnt
-            })
         return JsonResponse({
             'status': True,
             'myself': userResult,
-            'has_notifications': False
         })

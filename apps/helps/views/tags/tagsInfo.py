@@ -39,5 +39,5 @@ class TagsInfoView(APIView):
         except:
             return JsonResponse({
                 'status': False,
-                'err': '出现位置错误'
+                'err': '出现未知错误'
             }, status=403)

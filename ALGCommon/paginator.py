@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 def paginator(obj, page):
     '''
-    通用分页器
+    自定义通用分页器
     :param obj:
     :param page:
     :return:

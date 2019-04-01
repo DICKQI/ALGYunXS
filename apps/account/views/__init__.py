@@ -7,8 +7,9 @@ from .userInfo.user_visit_log import UserLogView
 from .userInfo.userEsCheck import ESCheckView
 from .roleInfo.active_user import ActiveView
 from .roleInfo.send_email import SendView
+from .Notification.notificationInfo import NotificationView
 
 __all__ = [
     'BaseViews', 'UserDashBoardView', 'MeView', 'RegisterView', 'SendView', 'ActiveView', 'ResetView', 'UserLogView',
-    'ESCheckView'
+    'ESCheckView', 'NotificationView'
 ]

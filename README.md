@@ -1,4 +1,4 @@
-# ALGYun v1.0
+# ALGYun v1.1
 
 ## 简介
 ALGYun 是后端程序基于python语言开发，使用django框架，web前端使用react开发，小程序端使用Taro框架开发的集学生二手交易，学生互帮互助信息，学生兼职信息发布等于一体的多功能平台
@@ -15,6 +15,8 @@ web前端：react
 ## 模块说明
 
 market模块：商品模块
+
+tailwind模块：顺风帮模块
 
 account模块：用户模块
 
@@ -38,3 +40,8 @@ AutoExecution模块：自动执行脚本，负责自动维护网站
 本github仓库是平台的后端代码web前端代码链接为:https://github.com/zhcxk1998/AlgYun-front-end
 
 小程序端代码链接:https://github.com/DICKQI/ALGYunXS_taro
+
+
+## 项目介绍
+
+本项目集成了学生的互助消息发布，学生二手闲置转让，学生顺风帮助等功能。
