@@ -16,9 +16,10 @@ class BaseViews(APIView):
         :param request:
         :return:
         '''
-        params = request.body
-        jsonParams = json.loads(params)
+
         try:
+            params = request.body
+            jsonParams = json.loads(params)
             # 可以使用id或者邮箱登录
             user = User_Info.objects.filter(
                 Q(email__exact=jsonParams.get('email')) |
