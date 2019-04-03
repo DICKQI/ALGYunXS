@@ -8,25 +8,6 @@ import requests
     每5分钟重置一次
 '''
 def resetIP():
-    # db = pymysql.connect('localhost', 'root', 'macbook123456', 'ALGYunXS')
-    #
-    # cursor = db.cursor()
-    #
-    # sql = "select * from log_visitlog"
-    #
-    # try:
-    #     cursor.execute(sql)
-    #     result = cursor.fetchall()
-    #     for row in result:
-    #         try:
-    #             sql = "update log_visitlog set five_min_visit = 0 where ip='%s'" % row[1]
-    #             cursor.execute(sql)
-    #             db.commit()
-    #         except:
-    #             raise Exception
-    # except:
-    #     raise Exception
-    # db.close()
     requests.get('https://algyun.cn:81/autoAPI/IP/')
 
 if __name__ == '__main__':

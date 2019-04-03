@@ -15,10 +15,11 @@ urlpatterns = [
     # order info
     path('<int:cid>/order/', OrderView.as_view(), name='place_order'),
     path('<int:cid>/order/<int:ocid>/', OrderView.as_view(), name='orderInfo'),
-    # classification
-    path('classification/new/', CommodityClassificationView.as_view(), name='Classification'),
-    path('classification/list/', CommodityClassificationView.as_view(), name='classification_list'),
     # c image
     path('<int:cid>/image/', CImgView.as_view(), name='update_img'),
     path('<int:cid>/image/<int:mid>', CImgView.as_view(), name='delete_img'),
+    # classification
+    path('classification/new/', CommodityClassificationView.as_view(), name='Classification'),
+    path('classification/list/', CommodityClassificationView.as_view(), name='classification_list'),
+
 ]

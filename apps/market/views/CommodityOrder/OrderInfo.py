@@ -49,8 +49,7 @@ class OrderView(APIView):
                     'status': False
                 }, status=403)
             # 新建订单
-            orderID = self.randomID()
-            print(1)
+            orderID = self.generateID()
             order = CommodityOrder.objects.create(
                 id=orderID,
                 commodity=commodity,
@@ -171,20 +170,34 @@ class OrderView(APIView):
                 'status': False,
                 'err': '订单未找到'
             }, status=404)
-
+        user =  getUser(request.session.get('login'))
+        if user != order.commodity.seller or user != order.buyer:
+            if user.user_role not in ['515400', '12']:
+                return JsonResponse({
+                    'err': '你没有权限查看',
+                    'status': False
+                }, status=401)
         return JsonResponse({
             'status': True,
             'order': model_to_dict(order)
         })
 
-    def randomID(self):
+    def generateID(self):
         '''
         生成订单号
         :return:
         '''
         year, month, day = da.now().year, da.now().month, da.now().day
-        id = random.randint(1000, 9999)
-        orderID = str(year) + str(month) + str(day) + str(id)
+        datetime = str(year) + str(month) + str(day)
+        oldOrder = CommodityOrder.objects.first()
+        oldTime = str(oldOrder.id)[:len(str(oldOrder.id)) - 4]
+        if oldTime == datetime:
+            newID = str(int(str(oldOrder.id)[-4:]) + 1)
+        else:
+            newID = '0000'
+        for i in range(4 - len(newID)):
+            newID = '0' + newID
+        orderID = datetime + newID
         return orderID
 
     def getOrder(self, cid, ocid):
