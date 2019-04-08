@@ -13,12 +13,12 @@ class IPInfoView(APIView):
         :return:
         '''
         begin = time.time()
-        logs = VisitLog.objects.all()
+        logs = VisitLog.objects.filter(lock=False)
         for log in logs:
-            if not log.lock:
-                log.five_min_visit = 0
-                log.save()
+            log.five_min_visit = 0
+            log.save()
         end = time.time()
+
         return HttpResponse(end - begin)
 
     def delete(self, request):
@@ -27,11 +27,12 @@ class IPInfoView(APIView):
         :param request:
         :return:
         '''
-        logs = VisitLog.objects.all()
+        begin = time.time()
+        logs = VisitLog.objects.filter(lock=True)
         for log in logs:
-            if log.lock:
-                log.lock = False
-                log.five_min_visit = 0
-                log.save()
-        return HttpResponse('回家吧')
+            log.lock = False
+            log.five_min_visit = 0
+            log.save()
+        end = time.time()
+        return HttpResponse(end - begin)
 
