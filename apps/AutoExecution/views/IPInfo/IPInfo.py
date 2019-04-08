@@ -1,6 +1,7 @@
 from apps.log.models import VisitLog
 from rest_framework.views import APIView
 from django.http import HttpResponse
+import time
 
 
 class IPInfoView(APIView):
@@ -11,12 +12,14 @@ class IPInfoView(APIView):
         :param request:
         :return:
         '''
+        begin = time.time()
         logs = VisitLog.objects.all()
         for log in logs:
             if not log.lock:
                 log.five_min_visit = 0
                 log.save()
-        return HttpResponse('可以啦')
+        end = time.time()
+        return HttpResponse(end - begin)
 
     def delete(self, request):
         '''
