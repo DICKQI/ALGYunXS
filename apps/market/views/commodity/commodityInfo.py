@@ -11,10 +11,6 @@ import json
 
 class CommodityView(APIView):
 
-    EXCLUDE_FIELDS = [
-        'comment'
-    ]
-
     @check_login
     def get(self, request, cid):
         '''
@@ -49,10 +45,10 @@ class CommodityView(APIView):
             user=user
         )
         commodity.save()
-        cmdResult = model_to_dict(commodity, exclude=self.EXCLUDE_FIELDS)
+        cmdResult = model_to_dict(commodity, exclude='comment')
         return JsonResponse({
             'status': True,
-            'editable': editable, # 属于自己的商品，可以修改、删除，但是不能购买
+            'editable': editable,  # 属于自己的商品，可以修改、删除，但是不能购买
             'commodity': cmdResult
         })
 
@@ -118,6 +114,7 @@ class CommodityView(APIView):
         :param cid:
         :return:
         '''
+        # noinspection PyBroadException
         try:
             commodity = Commodity.objects.filter(id=cid)
             if not commodity.exists():
@@ -157,6 +154,7 @@ class CommodityView(APIView):
                 'status': False,
                 'err': '输入错误'
             }, status=403)
+        # noinspection PyBroadException
         try:
             seller = User_Info.objects.get(email=request.session.get('login'))
             classification = Classification.objects.filter(id=jsonParams.get('classification'))

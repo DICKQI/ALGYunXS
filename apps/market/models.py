@@ -84,8 +84,6 @@ class Commodity(models.Model):
 
     last_mod_time = models.DateTimeField(verbose_name='最后修改时间', default=now)
 
-    stars = models.PositiveIntegerField(verbose_name='点赞数', default=0, blank=False)
-
     classification = models.ForeignKey(Classification, verbose_name='商品分类', blank=False, null=True,
                                        on_delete=models.CASCADE)
 
@@ -101,13 +99,6 @@ class Commodity(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class CommodityStarRecord(models.Model):
-    '''防止给文章重复点赞（点赞记录）'''
-    commodity = models.ForeignKey(Commodity, verbose_name='被点赞的商品', on_delete=models.CASCADE)
-
-    star_man = models.ForeignKey(User_Info, verbose_name='点赞人', on_delete=models.CASCADE)
 
 
 class CommodityOrder(models.Model):

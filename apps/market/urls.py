@@ -12,6 +12,8 @@ urlpatterns = [
     # comment
     path('<int:cid>/comment/', CommentInfoView.as_view(), name='commentInfo'),
     path('<int:cid>/comment/<int:ccid>/', CommentInfoView.as_view(), name='commentDelete'),
+    # comment star
+    path('<int:cid>/comment/<int:ccid>/star/', CommentStarView.as_view(), name='commentStarInfo'),
     # order info
     path('<int:cid>/order/', OrderView.as_view(), name='place_order'),
     path('<int:cid>/order/<int:ocid>/', OrderView.as_view(), name='orderInfo'),

@@ -18,8 +18,7 @@ class BaseViews(APIView):
         '''
 
         try:
-            params = request.body
-            jsonParams = json.loads(params)
+            jsonParams = json.loads(request.body)
             # 可以使用id或者邮箱登录
             user = User_Info.objects.filter(
                 Q(email__exact=jsonParams.get('email')) |
@@ -43,9 +42,11 @@ class BaseViews(APIView):
                 user.save()
                 '''记录登录信息'''
                 ip = request.META['REMOTE_ADDR']
+                device = jsonParams.get('device')
                 LoginLog.objects.create(
                     ip=ip,
-                    user=user
+                    user=user,
+                    login_device=device
                 )
                 return JsonResponse({
                     'status': True,

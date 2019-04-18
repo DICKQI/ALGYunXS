@@ -17,6 +17,7 @@ urlpatterns = [
     path('send_email/<str:send_type>/', SendView.as_view(), name='my__send_email'),
     path('active_user/<str:a_code>/', ActiveView.as_view(), name='my__active_user'),
     # notice
-    path('notice/', NotificationView.as_view(), name='notification'),
+    path('notice/', CheckNotificationView.as_view(), name='checkNotification'),
+    path('notice/get/', NotificationView.as_view(), name='notification'),
     path('notice/<int:nid>/<str:type>', NotificationView.as_view(), name='notificationInfo'),
 ]

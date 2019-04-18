@@ -61,7 +61,7 @@ class OrderView(APIView):
             commodity.status = 'o'
             commodity.save()
             # 通知商品所有者
-            OrderNotification.send(user, commodity, order)
+            OrderNotification.send(user, order, commodity)
             return JsonResponse({
                 'status': True,
                 'id': order.id
@@ -75,7 +75,7 @@ class OrderView(APIView):
     @check_login
     def delete(self, request, cid, ocid):
         '''
-        删除订单
+        取消订单（未完成情况下）
         :param request:
         :param cid:
         :param ocid:
@@ -83,7 +83,7 @@ class OrderView(APIView):
         '''
         try:
             order = self.getOrder(cid, ocid)
-            if not isinstance(order, CommodityOrder):
+            if not isinstance(order, CommodityOrder) or order.status == '已下单':
                 return JsonResponse({
                     'status': False,
                     'err': '订单未找到'
@@ -97,7 +97,6 @@ class OrderView(APIView):
                         'status': False,
                         'err': '你没有权限'
                     }, status=401)
-            order = order[0]
             order.delete()
             commodity.status = 'p'
             return JsonResponse({

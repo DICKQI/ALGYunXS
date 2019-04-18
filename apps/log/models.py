@@ -5,10 +5,20 @@ from apps.market.models import Commodity
 from apps.helps.models import Article
 
 class LoginLog(models.Model):
+
+    device = (
+        ('android', '安卓'),
+        ('apple', '苹果'),
+        ('web', '网页'),
+        ('weapp', '微信小程序')
+    )
+
     '''记录用户登录信息'''
     ip = models.CharField(verbose_name='用户ip', max_length=200, blank=False, default='')
 
     user = models.ForeignKey(User_Info, verbose_name='关联用户', on_delete=models.CASCADE, blank=False, default='')
+
+    login_device = models.CharField(verbose_name='登录端', blank=False, default='web', choices=device, max_length=100)
 
     loginTime = models.DateTimeField(verbose_name='登录时间', default=now)
 

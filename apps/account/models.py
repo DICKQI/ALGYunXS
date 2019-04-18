@@ -118,6 +118,8 @@ class CommentNotifications(models.Model):
 
     isRead = models.BooleanField(verbose_name='是否已读', default=False, blank=False)
 
+    noticeTime = models.DateTimeField(verbose_name='通知时间', default=now, blank=False)
+
     @staticmethod
     def send(id, type, user_id):
         '''发送消息'''

@@ -1,9 +1,8 @@
-from apps.market.models import Commodity, CComment
-from apps.account.models import User_Info
+from apps.market.models import Commodity, CComment, CStarRecord
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.db.models import Q
-from ALGCommon.userCheck import check_login
+from ALGCommon.userCheck import check_login, getUser
 from ALGCommon.dictInfo import model_to_dict
 from ALGCommon.paginator import paginator
 import json
@@ -27,7 +26,7 @@ class CommentInfoView(APIView):
                     'status': False
                 }, status=404)
             commodity = commodity[0]
-            user = User_Info.objects.get(email=request.session.get('login'))
+            user = getUser(request.session.get('login'))
             result = []
             comments = commodity.comment.all()
             commentList = paginator(comments, request.GET.get('page'))
@@ -42,6 +41,12 @@ class CommentInfoView(APIView):
                     result[i]['admin'] = True
                 else:
                     result[i]['admin'] = False
+                if CStarRecord.objects.filter(
+                    Q(comment=comment) & Q(star_man=user)
+                ).exists():
+                    result[i]['stared'] = True
+                else:
+                    result[i]['stared'] = False
                 i += 1
             return JsonResponse({
                 'status': True,
@@ -71,7 +76,7 @@ class CommentInfoView(APIView):
             }, status=404)
         params = json.loads(request.body)
         commodity = commodity[0]
-        user = User_Info.objects.get(email=request.session.get('login'))
+        user = getUser(request.session.get('login'))
         try:
             content = params.get('content')
         except:
@@ -114,7 +119,7 @@ class CommentInfoView(APIView):
                 'err': '评论不存在'
             }, status=404)
         comment = comment[0]
-        user = User_Info.objects.get(email=request.session.get('login'))
+        user = getUser(request.session.get('login'))
         if comment.fromUser != user:
             if user.user_role in ['515400', '12']: # 管理员操作
                 comment.content = '评论已被封禁'
