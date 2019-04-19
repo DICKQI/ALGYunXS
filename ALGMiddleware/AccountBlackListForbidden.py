@@ -9,7 +9,7 @@ class AccountForbidden(MiddlewareMixin):
             if user.user_role == '6':
                 return JsonResponse({
                     'status': False,
-                    'err': '账号已被封禁'
+                    'err': '账号已被封禁,'
                 }, status=401)
             else:
                 return None

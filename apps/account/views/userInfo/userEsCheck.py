@@ -1,8 +1,7 @@
-from apps.account.models import User_Info
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from ..esCheck import es_test
-from ALGCommon.userCheck import check_login, getUser
+from ALGCommon.userAuthCommon import check_login, getUser
 import json
 
 
@@ -15,10 +14,11 @@ class ESCheckView(APIView):
         :return:
         '''
         params = json.loads(requests.body)
-
-        if es_test(params.get('school'), params.get('username'), params.get('password')).result():
+        esResult = es_test(params.get('school'), params.get('username'), params.get('password')).result()
+        if esResult:
             user = getUser(requests.session.get('login'))
             user.student_id = params.get('username')
+            user.RealName = esResult.get('name')
             user.save()
             return JsonResponse({
                 'status': True,

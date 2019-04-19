@@ -2,7 +2,7 @@ from apps.market.models import Commodity, CComment, CStarRecord
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.db.models import Q
-from ALGCommon.userCheck import check_login, getUser
+from ALGCommon.userAuthCommon import check_login, getUser
 
 
 class CommentStarView(APIView):

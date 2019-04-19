@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 from rest_framework.views import APIView
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login, getUser
+from ALGCommon.userAuthCommon import check_login, getUser, studentCheck
 import json
 from datetime import datetime as da
 from datetime import timedelta
@@ -22,6 +22,12 @@ class OrderView(APIView):
         :return:
         '''
         try:
+            user = getUser(email=request.session.get('login'))
+            if not studentCheck(user):
+                return JsonResponse({
+                    'status': False,
+                    'err': '你还未进行学生认证，请前往学生认证后再下单'
+                })
             commodity = Commodity.objects.filter(id=cid)
             if not commodity.exists():
                 return JsonResponse({
@@ -34,7 +40,7 @@ class OrderView(APIView):
                     'status': False,
                     'err': '商品已售出'
                 }, status=401)
-            user = getUser(email=request.session.get('login'))
+
             if commodity.seller == user:
                 return JsonResponse({
                     'status': False,

@@ -2,7 +2,7 @@ from apps.account.models import CommentNotifications, OrderNotification
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.db.models import Q
-from ALGCommon.userCheck import check_login, getUser
+from ALGCommon.userAuthCommon import check_login, getUser
 from ALGCommon.dictInfo import model_to_dict
 
 

@@ -49,6 +49,8 @@ class User_Info(models.Model):
 
     student_id = models.CharField(verbose_name='学号', max_length=15, default=0, blank=True)
 
+    RealName = models.CharField(verbose_name='真实姓名', max_length=100, default=None, null=True, blank=True)
+
     age = models.IntegerField(verbose_name='年龄', blank=True, default=1)
 
     head_portrait = models.ImageField(verbose_name='头像', max_length=2000, blank=True, upload_to='head_portrait')

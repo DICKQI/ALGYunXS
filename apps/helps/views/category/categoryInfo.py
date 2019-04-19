@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from apps.helps.models import Category
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login, authCheck
+from ALGCommon.userAuthCommon import check_login, authCheck
 from django.http import JsonResponse
 import json
 

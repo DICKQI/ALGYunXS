@@ -4,12 +4,14 @@ from apps.helps.models import Article
 from apps.market.models import Commodity
 from apps.PTJ.models import PTJInfo
 
+
 def check_login(func):
     '''
     用于检查用户是否登录的装饰器
     :param func:
     :return:
     '''
+
     def wrapper(self, request, *args, **kwargs):
         if request.session.get('login') != None:
             return func(self, request, *args, **kwargs)
@@ -18,8 +20,8 @@ def check_login(func):
                 'status': False,
                 'err': '你还未登录'
             }, status=401)
-    return wrapper
 
+    return wrapper
 
 
 def authCheck(role, email, obj=None):
@@ -54,5 +56,13 @@ def authCheck(role, email, obj=None):
     else:
         return False
 
+
 def getUser(email):
     return User_Info.objects.get(email=email)
+
+
+def studentCheck(user):
+    if user.user_role != '515400':
+        if user.student_id == 0:
+            return False
+    return True

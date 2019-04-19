@@ -3,7 +3,7 @@ from apps.account.models import User_Info
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.db.models import Q
-from ALGCommon.userCheck import check_login
+from ALGCommon.userAuthCommon import check_login, getUser, studentCheck
 from ALGCommon.dictInfo import model_to_dict
 from ALGCommon.paginator import paginator
 import json
@@ -19,6 +19,12 @@ class CommentInfoView(APIView):
         :param aid:
         :return:
         '''
+        user = getUser(request.session.get("login"))
+        if not studentCheck(user):
+            return JsonResponse({
+                'err': '请完成学生认证',
+                'status': False
+            }, status=403)
         article = Article.objects.filter(id=aid)
         if not article.exists():
             return JsonResponse({
@@ -27,7 +33,7 @@ class CommentInfoView(APIView):
             }, status=404)
         article = article[0]
         params = json.loads(request.body)
-        user = User_Info.objects.get(email=request.session.get("login"))
+
         try:
             comment = AComment.objects.create(
                 from_author=user,

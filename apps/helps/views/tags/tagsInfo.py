@@ -1,7 +1,7 @@
 from apps.helps.models import Tag, Article
 from rest_framework.views import APIView
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login
+from ALGCommon.userAuthCommon import check_login
 from ALGCommon.paginator import paginator
 from django.http import JsonResponse
 

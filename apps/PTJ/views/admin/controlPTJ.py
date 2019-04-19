@@ -2,7 +2,7 @@ from apps.account.models import User_Info
 from apps.PTJ.models import PTJInfo
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from ALGCommon.userCheck import check_login, getUser
+from ALGCommon.userAuthCommon import check_login, getUser
 import json
 
 class ControlPTJView(APIView):

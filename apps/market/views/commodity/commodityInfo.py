@@ -3,7 +3,7 @@ from apps.account.models import User_Info
 from apps.market.models import Commodity, Classification
 from apps.log.models import CommodityViewLog
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login, authCheck
+from ALGCommon.userAuthCommon import check_login, authCheck, getUser, studentCheck
 from django.utils.timezone import now
 from django.http import JsonResponse
 import json
@@ -156,7 +156,12 @@ class CommodityView(APIView):
             }, status=403)
         # noinspection PyBroadException
         try:
-            seller = User_Info.objects.get(email=request.session.get('login'))
+            seller = getUser(request.session.get('login'))
+            if not studentCheck(seller):
+                return JsonResponse({
+                    'status': False,
+                    'err': '你还未进行学生认证，请前往学生认证后再发布商品'
+                })
             classification = Classification.objects.filter(id=jsonParams.get('classification'))
             if not classification.exists():
                 return JsonResponse({

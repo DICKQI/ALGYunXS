@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.db.models import Q
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login, authCheck
+from ALGCommon.userAuthCommon import check_login, authCheck, studentCheck, getUser
 from apps.helps.models import Article, Category, Tag, HelpsStarRecord
 from apps.account.models import User_Info
 from apps.log.models import HelpsViewLog
@@ -153,6 +153,12 @@ class HelpsInfoView(APIView):
         :param request:
         :return:
         '''
+        user = getUser(request.session.get('login'))
+        if not studentCheck(user):
+            return JsonResponse({
+                'status': False,
+                'err': '请完成学生认证'
+            }, status=403)
         params = json.loads(request.body)
         try:
             title = params['title']
@@ -170,7 +176,7 @@ class HelpsInfoView(APIView):
                 'err': '标题重复'
             }, status=401)
         article = Article.objects.create(
-            author=User_Info.objects.get(email=request.session.get('login')),
+            author=user,
             title=title,
             content=content,
             status=status,

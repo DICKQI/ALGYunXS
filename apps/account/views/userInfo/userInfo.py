@@ -3,7 +3,7 @@ from apps.market.models import Commodity
 from apps.helps.models import Article
 from apps.PTJ.models import PTJInfo
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login
+from ALGCommon.userAuthCommon import check_login
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password

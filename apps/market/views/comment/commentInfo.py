@@ -2,7 +2,7 @@ from apps.market.models import Commodity, CComment, CStarRecord
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.db.models import Q
-from ALGCommon.userCheck import check_login, getUser
+from ALGCommon.userAuthCommon import check_login, getUser, studentCheck
 from ALGCommon.dictInfo import model_to_dict
 from ALGCommon.paginator import paginator
 import json
@@ -77,6 +77,11 @@ class CommentInfoView(APIView):
         params = json.loads(request.body)
         commodity = commodity[0]
         user = getUser(request.session.get('login'))
+        if not studentCheck(user):
+            return JsonResponse({
+                'err': '请完成学生认证后再评论',
+                'status': False
+            })
         try:
             content = params.get('content')
         except:

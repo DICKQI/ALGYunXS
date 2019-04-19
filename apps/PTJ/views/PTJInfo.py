@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from apps.PTJ.models import *
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userCheck import check_login, getUser
+from ALGCommon.userAuthCommon import check_login, getUser
 from django.http import JsonResponse
 import json
 

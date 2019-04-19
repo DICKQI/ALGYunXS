@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from ALGCommon.userCheck import check_login
+from ALGCommon.userAuthCommon import check_login
 from apps.helps.models import Article
 import oss2
 
