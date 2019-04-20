@@ -12,6 +12,8 @@ case $1 in
         kill -9 $pid
 
         echo "ALGYun已经关闭"
+
+        rm tmp
     ;;
     "restart")
         port=8000
@@ -23,6 +25,8 @@ case $1 in
         uwsgi --socket :8000 --buffer-size 32768 --daemonize /var/log/ALGYunXS.log --module ALGXS.wsgi &
 
         echo "ALGYun重启成功"
+
+        rm tmp
     ;;
     "makemigrationsall")
         python3 manage.py makemigrations account FandQ helps log market PTJ
