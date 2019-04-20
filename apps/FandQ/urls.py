@@ -1,6 +1,5 @@
 from django.urls import path
-from .views.noticeInfo import NoticeView
-from .views.noticeControl import NoticeControlView
+from .views import *
 
 app_name = 'FandQ'
 urlpatterns = [

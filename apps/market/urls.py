@@ -17,6 +17,7 @@ urlpatterns = [
     # order info
     path('<int:cid>/order/', OrderView.as_view(), name='place_order'),
     path('<int:cid>/order/<int:ocid>/', OrderView.as_view(), name='orderInfo'),
+    path('<int:cid>/order/<int:ocid>/confirm/<str:type>/', ConfirmOrderView.as_view(), name='confirmOrder'),
     # c image
     path('<int:cid>/image/', CImgView.as_view(), name='update_img'),
     path('<int:cid>/image/<int:mid>', CImgView.as_view(), name='delete_img'),

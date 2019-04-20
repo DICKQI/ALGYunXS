@@ -12,9 +12,16 @@ class AutoOrderView(APIView):
         :param request:
         :return:
         '''
-        orders = CommodityOrder.objects.filter(status='已下单')
+        orders = CommodityOrder.objects.filter(status='已确认')
         for order in orders:
-            if datetime.datetime.now() >= order.unConfirmDeadline:
+            if datetime.datetime.now() >= order.unCompleteDeadline:
                 order.status = '已完成'
                 order.save()
         return HttpResponse('好哦好哦')
+
+    def delete(self, request):
+        orders = CommodityOrder.objects.filter(status='未确认')
+        for order in orders:
+            if datetime.datetime.now() >= order.unConfirmDeadline:
+                order.delete()
+        return HttpResponse('嘿嘿嘿')

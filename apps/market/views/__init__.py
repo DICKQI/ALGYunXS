@@ -5,8 +5,9 @@ from .classification.ClassificationInfo import CommodityClassificationView
 from .comment.commentInfo import CommentInfoView
 from .comment.star.commentStarInfo import CommentStarView
 from .CommodityOrder.OrderInfo import OrderView
+from .CommodityOrder.ConfirmOrder import ConfirmOrderView
 
 __all__ = [
     'ListCommodity', 'CImgView', 'CommodityClassificationView', 'CommodityView', 'CommentInfoView', 'OrderView',
-    'CommentStarView'
+    'CommentStarView', 'ConfirmOrderView'
 ]

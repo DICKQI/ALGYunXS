@@ -20,4 +20,3 @@ class TailwindUserView(APIView):
                 'status': False,
                 'err': '请完成学生认证'
             }, status=403)
-        

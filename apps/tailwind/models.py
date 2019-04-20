@@ -74,7 +74,7 @@ class TailwindOrder(models.Model):
 class TailwindUserConfig(models.Model):
     '''有闲用户个人设置'''
 
-    relatedUser = models.ForeignKey(User_Info, verbose_name='关联主用户', on_delete=models.CASCADE, unique=True)
+    relatedUser = models.OneToOneField(User_Info, verbose_name='关联主用户', on_delete=models.CASCADE, unique=True)
 
     dormitory = models.CharField(verbose_name='宿舍楼', default=None, null=True, blank=True, max_length=100)
 

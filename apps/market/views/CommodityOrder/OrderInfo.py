@@ -3,12 +3,14 @@ from apps.account.models import User_Info, OrderNotification
 from django.http import JsonResponse
 from django.db.models import Q
 from rest_framework.views import APIView
+from django.core.mail import send_mail
 from ALGCommon.dictInfo import model_to_dict
 from ALGCommon.userAuthCommon import check_login, getUser, studentCheck
-import json
 from datetime import datetime as da
 from datetime import timedelta
-import random
+import json
+from ALGXS.settings import EMAIL_FROM
+
 
 
 class OrderView(APIView):
@@ -49,6 +51,7 @@ class OrderView(APIView):
             params = json.loads(request.body)
             try:
                 address = params.get('address')
+                time = params.get('time')
             except:
                 return JsonResponse({
                     'err': '输入错误',
@@ -56,18 +59,25 @@ class OrderView(APIView):
                 }, status=403)
             # 新建订单
             orderID = self.generateID()
+            '''创建一个"未确认"订单'''
             order = CommodityOrder.objects.create(
                 id=orderID,
                 commodity=commodity,
                 buyer=user,
                 address=address,
-                unConfirmDeadline=da.now() + timedelta(days=15)
+                unConfirmDeadline=da.now() + timedelta(minutes=time)
             )
             # 商品状态修改
             commodity.status = 'o'
             commodity.save()
             # 通知商品所有者
+            '''站内通知'''
             OrderNotification.send(user, order, commodity)
+            '''邮件通知'''
+
+            email_title = '您的商品被下单啦，请尽快处理噢'
+            email_body = '您的商品已被下单，请尽快处理，感谢您使用ALGYun智慧校园~'
+            send_mail(email_title, email_body, EMAIL_FROM, [request.session.get('login')])
             return JsonResponse({
                 'status': True,
                 'id': order.id
@@ -81,7 +91,7 @@ class OrderView(APIView):
     @check_login
     def delete(self, request, cid, ocid):
         '''
-        取消订单（未完成情况下）
+        取消订单（未确认情况下）
         :param request:
         :param cid:
         :param ocid:
@@ -89,7 +99,7 @@ class OrderView(APIView):
         '''
         try:
             order = self.getOrder(cid, ocid)
-            if not isinstance(order, CommodityOrder) or order.status == '已下单':
+            if not isinstance(order, CommodityOrder) or order.status == '未确认':
                 return JsonResponse({
                     'status': False,
                     'err': '订单未找到'

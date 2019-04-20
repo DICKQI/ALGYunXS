@@ -76,6 +76,8 @@ class Commodity(models.Model):
 
     views = models.PositiveIntegerField(verbose_name='浏览量', default=0)
 
+    price = models.FloatField(verbose_name='价格', default=0.0, blank=False)
+
     c_detail = models.TextField(verbose_name='商品描述详情', blank=False)
 
     status = models.CharField(verbose_name='商品状态', max_length=10, choices=STATUS_CHOICES, default='s')
@@ -104,14 +106,11 @@ class Commodity(models.Model):
 class CommodityOrder(models.Model):
     '''商品订单'''
     STATUS_CHOICE = (
-        ('已下单', '已下单'),
+        ('未确认', '未确认'),
+        ('已确认', '已确认'),
+        ('已发货', '已发货'),
         ('已完成', '已完成')
     )
-
-    # PAY_WAY_CHOICE = (
-    #     ('线上支付', '线上支付'),
-    #     ('线下支付', '线下支付')
-    # )
 
     id = models.BigIntegerField(verbose_name='订单号', primary_key=True, blank=False)
 
@@ -125,7 +124,9 @@ class CommodityOrder(models.Model):
 
     end_time = models.DateTimeField(verbose_name='订单完成时间', blank=True, default=None, null=True)
 
-    unConfirmDeadline = models.DateTimeField(verbose_name='自动完成时间', blank=True, default=None, null=True)
+    unCompleteDeadline = models.DateTimeField(verbose_name='自动完成时间', blank=True, default=None, null=True)
+
+    unConfirmDeadline = models.DateTimeField(verbose_name='卖家未确认自动结束订单截止时间', blank=True, default=None, null=True)
 
     status = models.CharField(verbose_name='订单状态', choices=STATUS_CHOICE, default='未支付', blank=False, max_length=10)
 
@@ -134,3 +135,8 @@ class CommodityOrder(models.Model):
         verbose_name_plural = verbose_name + '列表'
         db_table = 'commodityOrder'
         ordering = ['-create_time']
+
+    def __str__(self):
+        return self.commodity.name
+
+

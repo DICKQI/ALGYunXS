@@ -90,6 +90,8 @@ class CommodityView(APIView):
                 commodity.status = jsonParams.get('status')
             if jsonParams.get('name'):
                 commodity.name = jsonParams.get('name')
+            if jsonParams.get('price'):
+                commodity.price = jsonParams.get('price')
             commodity.last_mod_time = now()
             commodity.save()
             return JsonResponse({
@@ -149,7 +151,7 @@ class CommodityView(APIView):
         '''
         jsonParams = json.loads(request.body)
         if jsonParams.get('name') == None or jsonParams.get('c_detail') == None or jsonParams.get(
-                'classification') == None:
+                'classification') == None or jsonParams.get('price'):
             return JsonResponse({
                 'status': False,
                 'err': '输入错误'
@@ -178,6 +180,7 @@ class CommodityView(APIView):
                 name=jsonParams.get('name'),
                 c_detail=jsonParams.get('c_detail'),
                 classification=classification,
+                price=jsonParams.get('price'),
                 status=status
             )
             return JsonResponse({

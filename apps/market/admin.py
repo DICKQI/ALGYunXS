@@ -15,7 +15,7 @@ make_published.short_description = "设置所选为发表"
 make_sold_out.short_description = '设置所选为已售出'
 class CommodityAdmin(SummernoteModelAdmin):
     summernote_fields = ('c_detail', )
-    list_display = ['name', 'seller', 'status', 'create_time', 'last_mod_time']
+    list_display = ['name', 'seller', 'price', 'status', 'create_time', 'last_mod_time']
     list_per_page = 30
     list_filter = ['status']
     search_fields = ['name', 'seller']

@@ -10,7 +10,9 @@ import requests
 def ConfirmOvertimeOrder():
     requests.get('https://algyun.cn:81/autoAPI/commodity/order/')
 
+def CompleteTimeOrder():
+    requests.delete('https://algyun.cn:81/autoAPI/commodity/order/')
 
 if __name__ == '__main__':
-    # deleteUnPayOrder()
+    CompleteTimeOrder()
     ConfirmOvertimeOrder()
