@@ -55,7 +55,7 @@ class PTJInfoView(APIView):
                     'err': '内容不存在'
                 }, status=404)
             if ptj.publisher != user:
-                if user.user_role != '525400' or user.user_role != '1234':
+                if user.user_role != '525400':
                     return JsonResponse({
                         'status': False,
                         'err': '你没有权限'
@@ -83,6 +83,12 @@ class PTJInfoView(APIView):
             jsonParam = json.loads(param)
 
             user = getUser(requests.session.get('login'))
+
+            if user.user_role != '515400' or user.user_role != '1234':
+                return JsonResponse({
+                    'status': False,
+                    'err': '你没有权限'
+                }, status=401)
 
             ptj = PTJInfo.objects.create(
                 publisher=user,

@@ -14,6 +14,13 @@ def check_login(func):
 
     def wrapper(self, request, *args, **kwargs):
         if request.session.get('login') != None:
+            user = getUser(request.session.get('login'))
+            '''检测是否为黑名单用户，黑名单用户限制一切功能'''
+            if user.user_role == '6':
+                return JsonResponse({
+                    'err': '账号已被封禁，请联系管理员',
+                    'status': False
+                }, status=401)
             return func(self, request, *args, **kwargs)
         else:
             return JsonResponse({

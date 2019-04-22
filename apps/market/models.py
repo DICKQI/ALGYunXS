@@ -109,7 +109,8 @@ class CommodityOrder(models.Model):
         ('未确认', '未确认'),
         ('已确认', '已确认'),
         ('已发货', '已发货'),
-        ('已完成', '已完成')
+        ('已完成', '已完成'),
+        ('已评价', '已评价')
     )
 
     id = models.BigIntegerField(verbose_name='订单号', primary_key=True, blank=False)
@@ -140,3 +141,29 @@ class CommodityOrder(models.Model):
         return self.commodity.name
 
 
+class BuyerRateModel(models.Model):
+    '''买家评价'''
+
+    rateChoice = (
+        ('好评', '好评'),
+        ('差评', '差评')
+    )
+
+    relatedOrder = models.ForeignKey(CommodityOrder, verbose_name='关联订单', on_delete=models.CASCADE, default=None,
+                                     blank=False)
+
+    content = models.TextField(verbose_name='评价内容', default=None, blank=False)
+
+    create_time = models.DateTimeField(verbose_name='评价时间', default=now, blank=False)
+
+    rateType = models.CharField(verbose_name='评价类型', default='好评', max_length=10, choices=rateChoice)
+
+
+    class Meta:
+        verbose_name = '买家评价'
+        verbose_name_plural = verbose_name + '列表'
+        db_table = 'BuyerRateModel'
+        ordering = ['-create_time']
+
+    def __str__(self):
+        return self.relatedOrder.commodity.name

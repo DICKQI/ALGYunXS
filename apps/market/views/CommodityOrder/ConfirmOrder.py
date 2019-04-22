@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from ALGCommon.userAuthCommon import check_login, getUser
 from .OrderInfo import OrderView
+from datetime import datetime as da
+from datetime import timedelta
 import json
 
 class ConfirmOrderView(APIView):
@@ -38,6 +40,8 @@ class ConfirmOrderView(APIView):
                 'status': False,
                 'err': '参数错误'
             })
+        '''设置自动确认收货截止时间'''
+        order.unCompleteDeadline = da.now() + timedelta(days=15)
         order.save()
         return JsonResponse({
             'status': True,

@@ -2,7 +2,7 @@ from itertools import chain
 from django.db.models.fields.related import ManyToManyField, ForeignKey
 from django.db.models.fields import DateTimeField
 from apps.helps.models import Category
-from apps.market.models import Classification, Commodity
+from apps.market.models import Classification, Commodity, CommodityOrder
 from apps.account.models import User_Info, School
 
 
@@ -40,14 +40,15 @@ def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
                     'id': value,
                     'name': Category.objects.get(id__exact=value).name
                 }
-            elif f.verbose_name == '作者':
-                value = User_Info.objects.get(id=value).nickname
             elif f.verbose_name == '商品分类':
                 value = {
                     'id': value,
                     'name': Classification.objects.get(id__exact=value).name
                 }
-            elif f.verbose_name == '卖家' or f.verbose_name == '来源人' or f.verbose_name == '管理员' or f.verbose_name == '发布人' or f.verbose_name == '创建人' or f.verbose_name == '购买人':
+            elif f.verbose_name == '卖家' or f.verbose_name == '作者' or\
+                    f.verbose_name == '来源人' or f.verbose_name == '管理员' or\
+                    f.verbose_name == '发布人' or f.verbose_name == '创建人' or\
+                    f.verbose_name == '购买人':
                 value = {
                     'id': value,
                     'user': User_Info.objects.get(id=value).nickname
@@ -58,6 +59,14 @@ def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
                 value = {
                     'id': value,
                     'name': Commodity.objects.get(id=value).name
+                }
+            elif f.verbose_name == '关联订单':
+                value = {
+                    'oid': value,
+                    'commodity': {
+                        'cid': CommodityOrder.objects.get(id=value).commodity.id,
+                        'name': CommodityOrder.objects.get(id=value).commodity.name
+                    },
                 }
         if isinstance(f, DateTimeField):
             data_time = str(value)

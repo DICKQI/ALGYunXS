@@ -15,6 +15,7 @@ code XS
 '''
 import os
 import pymysql
+import json
 
 pymysql.install_as_MySQLdb()
 
@@ -84,7 +85,6 @@ MIDDLEWARE = [
     # django middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'ALGMiddleware.AccountBlackListForbidden.AccountForbidden',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -98,7 +98,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
 
-    '*'
+    '*',
 
 )
 CORS_ALLOW_METHODS = (
@@ -173,15 +173,10 @@ WSGI_APPLICATION = 'ALGXS.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+database_config = json.load(open('/etc/ALGconfig/database_config.json'))
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ALGYunXS',
-        'USER': 'root',
-        'PASSWORD': 'macbook123456',
-        'HOST': 'localhost',
-        'PORT': 3306
-    }
+    'default': database_config
 }
 
 # redis 配置

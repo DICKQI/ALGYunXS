@@ -3,11 +3,11 @@ from apps.market.models import Commodity
 from apps.helps.models import Article
 from apps.PTJ.models import PTJInfo
 from ALGCommon.dictInfo import model_to_dict
-from ALGCommon.userAuthCommon import check_login
+from ALGCommon.userAuthCommon import check_login, getUser
+from ALGCommon.paginator import paginator
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import json
 
 
@@ -20,48 +20,38 @@ class UserDashBoardView(APIView):
     ]
 
     @check_login
-    def get(self, request):
+    def get(self, request, uid=0):
         '''
         用户控制台
         :param request:
         :return:
         '''
-        user = User_Info.objects.get(email=request.session.get('login'))
-        if user.user_role == '6':
-            return JsonResponse({'err': '此账户已被封禁，请联系管理员'}, status=401)
+        if uid == 0:
+            user = User_Info.objects.get(email=request.session.get('login'))
+        else:
+            user = User_Info.objects.filter(id=uid)
+            if not user.exists():
+                return JsonResponse({
+                    'status': False,
+                    'err': '用户不存在'
+                }, status=404)
+            user = user[0]
         articles = Article.objects.filter(author=user)
         markets = Commodity.objects.filter(seller=user)
         ptj = PTJInfo.objects.filter(publisher=user)
-        artPage = Paginator(articles, 10)
-        marPage = Paginator(markets, 10)
-        ptjPage = Paginator(ptj, 10)
 
         apage = request.GET.get('apage')
         mpage = request.GET.get('mpage')
         ppge = request.GET.get('ppage')
-        try:
-            artList = artPage.page(apage)
-        except PageNotAnInteger:
-            artList = artPage.page(1)
-        except EmptyPage:
-            artList = artPage.page(artPage.num_pages)
-        try:
-            marList = marPage.page(mpage)
-        except PageNotAnInteger:
-            marList = marPage.page(1)
-        except EmptyPage:
-            marList = marPage.page(marPage.num_pages)
-        try:
-            ptjList = ptjPage.page(ppge)
-        except PageNotAnInteger:
-            ptjList = ptjPage.page(1)
-        except EmptyPage:
-            ptjList = ptjPage.page(1)
+        artList = paginator(articles, apage)
+        marList = paginator(markets, mpage)
+        ptjList = paginator(ptj, ppge)
         artResult = [model_to_dict(art, exclude='comment') for art in artList]
         marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
         ptjResult = [model_to_dict(ptjs) for ptjs in ptjList]
         return JsonResponse({
             'status': True,
+            'myself': True if getUser(request.session.get('login')).id == user.id else False,
             'article': artResult,
             'commodity': marResult,
             'PTJ': ptjResult,

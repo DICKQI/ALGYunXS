@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Commodity, CComment, Classification, CommodityImage, CommodityOrder
+from .models import Commodity, CComment, Classification, CommodityImage, CommodityOrder, BuyerRateModel
 from django_summernote.admin import SummernoteModelAdmin
 
 # Register your models here.
@@ -24,9 +24,13 @@ class CommodityAdmin(SummernoteModelAdmin):
 class CommentAdmin(SummernoteModelAdmin):
     summernote_fields = ('content', )
     list_display = ['fromUser']
+class RateAdmin(SummernoteModelAdmin):
+    summernote_fields = ('content',)
+    # list_display = ['relatedOrder']
 
 admin.site.register(Commodity, CommodityAdmin)
 admin.site.register(CComment, CommentAdmin)
+admin.site.register(BuyerRateModel, RateAdmin)
 admin.site.register(Classification)
 admin.site.register(CommodityImage)
 admin.site.register(CommodityOrder)
