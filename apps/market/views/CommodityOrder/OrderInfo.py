@@ -51,13 +51,13 @@ class OrderView(APIView):
             params = json.loads(request.body)
             try:
                 address = params.get('address')
-                time = params.get('time')
+                time = int(params.get('time'))
             except:
                 return JsonResponse({
                     'err': '输入错误',
                     'status': False
                 }, status=403)
-            # 新建订单
+            '''新建订单'''
             orderID = self.generateID()
             '''创建一个"未确认"订单'''
             order = CommodityOrder.objects.create(
@@ -67,17 +67,18 @@ class OrderView(APIView):
                 address=address,
                 unConfirmDeadline=da.now() + timedelta(minutes=time)
             )
-            # 商品状态修改
+            '''商品状态修改'''
             commodity.status = 'o'
             commodity.save()
-            # 通知商品所有者
+            '''通知商品所有者'''
             '''站内通知'''
             OrderNotification.send(user, order, commodity)
             '''邮件通知'''
-
             email_title = '您的商品被下单啦，请尽快处理噢'
-            email_body = '您的商品已被下单，请尽快处理，感谢您使用ALGYun智慧校园~'
-            send_mail(email_title, email_body, EMAIL_FROM, [request.session.get('login')])
+            email_body = '您的商品已被下单，请尽快处理，感谢您使用ALG智慧校园~'
+            email = request.session.get('login')
+            send_mail(email_title, email_body, EMAIL_FROM, [email])
+            '''结束'''
             return JsonResponse({
                 'status': True,
                 'id': order.id
@@ -205,11 +206,14 @@ class OrderView(APIView):
         year, month, day = da.now().year, da.now().month, da.now().day
         datetime = str(year) + str(month) + str(day)
         oldOrder = CommodityOrder.objects.first()
+        if not oldOrder:
+            orderID = datetime + '0001'
+            return orderID
         oldTime = str(oldOrder.id)[:len(str(oldOrder.id)) - 4]
         if oldTime == datetime:
             newID = str(int(str(oldOrder.id)[-4:]) + 1)
         else:
-            newID = '0000'
+            newID = '0001'
         for i in range(4 - len(newID)):
             newID = '0' + newID
         orderID = datetime + newID
