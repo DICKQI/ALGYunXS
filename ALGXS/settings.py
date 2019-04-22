@@ -209,12 +209,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.163.com'  # 邮箱服务器
-EMAIL_PORT = 994
-EMAIL_HOST_USER = 'algyunxs@163.com'  # 帐号
-EMAIL_HOST_PASSWORD = 'algyun666'  # 密码
-EMAIL_FROM = 'algyun@163.com'
+email_config = json.load(open('/etc/ALGconfig/ALG_email_config.json'))
+
+EMAIL_USE_SSL = email_config.get('EMAIL_USE_SSL')
+EMAIL_HOST = email_config.get('EMAIL_HOST')  # 邮箱服务器
+EMAIL_PORT = email_config.get('EMAIL_PORT')
+EMAIL_HOST_USER = email_config.get('EMAIL_HOST_USER')  # 帐号
+EMAIL_HOST_PASSWORD = email_config.get('EMAIL_HOST_PASSWORD')  # 密码
+EMAIL_FROM = email_config.get('EMAIL_FROM')
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -244,11 +247,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'common_static'),
 ]
 '''服务器端专用oss存储'''
-ACCESS_KEY_ID = 'LTAIpK0JtS9hsWkG'
-ACCESS_KEY_SECRET = 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs'
-END_POINT = 'oss-cn-shenzhen-internal.aliyuncs.com'
-BUCKET_NAME = 'algyunxs'
-BUCKET_ACL_TYPE = 'public-read-write'
-DEFAULT_FILE_STORAGE = 'aliyun_oss2_storage.backends.AliyunMediaStorage'
+ossConfig = json.load(open('/etc/ALGconfig/ossConfig.json'))
+ACCESS_KEY_ID = ossConfig.get('ACCESS_KEY_ID')
+ACCESS_KEY_SECRET = ossConfig.get('ACCESS_KEY_SECRET')
+END_POINT = ossConfig.get('END_POINT')
+BUCKET_NAME = ossConfig.get('BUCKET_NAME')
+BUCKET_ACL_TYPE = ossConfig.get('BUCKET_ACL_TYPE')
+DEFAULT_FILE_STORAGE = ossConfig.get('DEFAULT_FILE_STORAGE')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
