@@ -164,7 +164,7 @@ class CommodityView(APIView):
                     'status': False,
                     'err': '你还未进行学生认证，请前往学生认证后再发布商品'
                 })
-            classification = Classification.objects.filter(id=jsonParams.get('classification'))
+            classification = Classification.objects.filter(name=jsonParams.get('classification'))
             if not classification.exists():
                 return JsonResponse({
                     'status': False,
