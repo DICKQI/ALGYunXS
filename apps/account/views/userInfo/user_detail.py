@@ -25,7 +25,10 @@ class MeView(APIView):
             userResult['head'] = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + str(
                 user.head_portrait) + '?x-oss-process=style/head_portrait'
 
-        '''检查是否有未读通知'''
+        if user.user_role == '5':
+            userResult['email_active'] = False
+        else:
+            userResult['email_active'] = True
         return JsonResponse({
             'status': True,
             'myself': userResult,

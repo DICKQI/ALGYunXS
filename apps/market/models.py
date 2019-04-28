@@ -110,7 +110,8 @@ class CommodityOrder(models.Model):
         ('已确认', '已确认'),
         ('已发货', '已发货'),
         ('已完成', '已完成'),
-        ('已评价', '已评价')
+        ('已评价', '已评价'),
+        ('已取消', '已取消'),
     )
 
     id = models.BigIntegerField(verbose_name='订单号', primary_key=True, blank=False)

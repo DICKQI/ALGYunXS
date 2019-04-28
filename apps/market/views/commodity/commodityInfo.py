@@ -151,7 +151,7 @@ class CommodityView(APIView):
         '''
         jsonParams = json.loads(request.body)
         if jsonParams.get('name') == None or jsonParams.get('c_detail') == None or jsonParams.get(
-                'classification') == None or jsonParams.get('price'):
+                'classification') == None or jsonParams.get('price') == None:
             return JsonResponse({
                 'status': False,
                 'err': '输入错误'
