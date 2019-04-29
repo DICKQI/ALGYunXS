@@ -7,7 +7,7 @@ from ALGCommon.dictInfo import model_to_dict
 
 class ListCommodity(APIView):
     EXCLUDE_FIELDS = [
-        'comment', 'create_time', 'last_mod_time', 'status'
+        'comment', 'create_time', 'last_mod_time', 'status', 'c_detail', 'commodity_img'
     ]
 
     def get(self, requests):
@@ -23,12 +23,14 @@ class ListCommodity(APIView):
 
             commodity = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in commodityList if
                          mar.status == 'p' or mar.status == 'o']
-
+            i = 0
+            for com in commodity:
+                com['commodity_img'] = commodityList[i].commodity_img.first()
             return JsonResponse({
                 'status': True,
                 'commodityList': commodity,
                 'has_previous': commodityList.has_previous(),
-                'has_next': commodityList.has_next()
+                'has_next': commodityList.has_next(),
             })
 
         except:
