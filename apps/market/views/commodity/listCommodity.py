@@ -25,7 +25,12 @@ class ListCommodity(APIView):
                          mar.status == 'p' or mar.status == 'o']
             i = 0
             for com in commodity:
-                com['commodity_img'] = commodityList[i].commodity_img.first()
+                if commodityList[i].commodity_img.first():
+                    com['commodity_img'] = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + commodityList[
+                        i].commodity_img.first().img.name + '?x-oss-process=style/head_portrait'
+                else:
+                    com['commodity_img'] = None
+                i += 1
             return JsonResponse({
                 'status': True,
                 'commodityList': commodity,
