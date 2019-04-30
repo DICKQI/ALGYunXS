@@ -44,7 +44,7 @@ case $1 in
         tail -f /var/log/ALGYunXS.log
     ;;
     "backup")
-        mysqldump -u root -p ALGYunXS > alg_database_backup.sql
+        mysqldump -u root -p ALGYunXS > /home/database-backup/alg_database_backup.sql
     ;;
     *)
         echo "unknown command"
