@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('admin/', admin.site.urls),
+    path('super/', include('apps.SuperAdmin.urls', namespace='SuperAdmin')),
 
     path('users/', include('apps.account.urls', namespace='users')),
     path('market/', include('apps.market.urls', namespace='market')),

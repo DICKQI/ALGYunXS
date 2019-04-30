@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_summernote',
 
+    'apps.SuperAdmin',
     'apps.account',
     'apps.market',
     'apps.tailwind',

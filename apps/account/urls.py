@@ -8,7 +8,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='my_register'),
     # userInfo
     path('dashboard/', UserDashBoardView.as_view(), name='my_dashboard'),
-    path('dashboard/<int:uid>/', UserDashBoardView.as_view(), name='my_dashboard'),
+    path('dashboard/<int:uid>/', UserDashBoardView.as_view(), name='users_dashboard'),
     path('dashboard/me/', MeView.as_view(), name='myself_info'),
     path('dashboard/log/', UserLogView.as_view(), name='my_view_log'),
     path('reset_password/', ResetView.as_view(), name='check_r_code'),
