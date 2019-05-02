@@ -6,13 +6,15 @@ urlpatterns = [
     # baseInfo
     path('', BaseViews.as_view(), name='my_login'),
     path('register/', RegisterView.as_view(), name='my_register'),
-    # userInfo
+    # dashboard
     path('dashboard/', UserDashBoardView.as_view(), name='my_dashboard'),
     path('dashboard/<int:uid>/', UserDashBoardView.as_view(), name='users_dashboard'),
     path('dashboard/me/', MeView.as_view(), name='myself_info'),
     path('dashboard/log/', UserLogView.as_view(), name='my_view_log'),
+    # password
     path('reset_password/', ResetView.as_view(), name='check_r_code'),
     path('reset_password/<str:r_code>/', ResetView.as_view(), name='my__reset_password'),
+    # es
     path('escheck/', ESCheckView.as_view(), name='es_check'),
     # roleInfo
     path('send_email/<str:send_type>/', SendView.as_view(), name='my__send_email'),

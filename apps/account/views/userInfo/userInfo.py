@@ -38,17 +38,16 @@ class UserDashBoardView(APIView):
             user = user[0]
         articles = Article.objects.filter(author=user)
         markets = Commodity.objects.filter(seller=user)
-        ptj = PTJInfo.objects.filter(publisher=user)
-
+        # ptj = PTJInfo.objects.filter(publisher=user)
         apage = request.GET.get('apage')
         mpage = request.GET.get('mpage')
-        ppge = request.GET.get('ppage')
+        # ppge = request.GET.get('ppage')
         artList = paginator(articles, apage)
         marList = paginator(markets, mpage)
-        ptjList = paginator(ptj, ppge)
+        # ptjList = paginator(ptj, ppge)
         artResult = [model_to_dict(art, exclude='comment') for art in artList]
         marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
-        ptjResult = [model_to_dict(ptjs) for ptjs in ptjList]
+        # ptjResult = [model_to_dict(ptjs) for ptjs in ptjList]
 
         i = 0
         for com in marResult:
@@ -64,13 +63,13 @@ class UserDashBoardView(APIView):
             'myself': True if getUser(request.session.get('login')).id == user.id else False,
             'article': artResult,
             'commodity': marResult,
-            'PTJ': ptjResult,
+            # 'PTJ': ptjResult,
             'A_has_previous': artList.has_previous(),
             'A_has_next': artList.has_next(),
             'M_has_previous': marList.has_previous(),
             'M_has_next': marList.has_next(),
-            'P_has_previous': ptjList.has_previous(),
-            'P_has_next': ptjList.has_next()
+            # 'P_has_previous': ptjList.has_previous(),
+            # 'P_has_next': ptjList.has_next()
         })
 
     @check_login
@@ -80,48 +79,66 @@ class UserDashBoardView(APIView):
         :param request:
         :return:
         '''
-        user = User_Info.objects.get(email=request.session.get('login'))
-        if user.user_role == '6':
+        try:
+            user = User_Info.objects.get(email=request.session.get('login'))
+            if user.user_role == '6':
+                return JsonResponse({
+                    'status': False,
+                    'err': '此账户已被封禁，请联系管理员'
+                })
+            params = request.body
+            jsonParams = json.loads(params)
+            if jsonParams.get('password') == None:
+                return JsonResponse({
+                    'status': False,
+                    'err': '请输入密码'
+                })
+            if check_password(jsonParams.get('password'), user.password):
+                has_change = {}
+                if jsonParams.get('nickname') != None:
+                    user.nickname = jsonParams.get('nickname')
+                    has_change['nickname'] = jsonParams.get('nickname')
+                if jsonParams.get('age') != None:
+                    user.age = jsonParams.get('age')
+                    has_change['age'] = jsonParams.get('age')
+                if jsonParams.get('email') != None:
+                    if  User_Info.objects.filter(email=jsonParams.get('email')).exists():
+                        return JsonResponse({
+                            'status': False,
+                            'err': '邮箱已存在'
+                        }, status=401)
+                    user.email = jsonParams.get('email')
+                    user.user_role = '5' # 将邮箱设置为未验证状态
+                    has_change['email'] = jsonParams.get('email')
+                user.save()
+                return JsonResponse({
+                    'status': True,
+                    'id': user.id,
+                    'changed': has_change
+                })
+            else:
+                return JsonResponse({
+                    'status': False,
+                    'err': '密码错误'
+                }, status=401)
+        except:
             return JsonResponse({
                 'status': False,
-                'err': '此账户已被封禁，请联系管理员'
-            })
-        params = request.body
-        jsonParams = json.loads(params)
-        if jsonParams.get('password') == None:
-            return JsonResponse({
-                'status': False,
-                'err': '请输入密码'
-            })
-        if check_password(jsonParams.get('password'), user.password):
-            has_change = {}
-            if jsonParams.get('nickname') != None:
-                user.nickname = jsonParams.get('nickname')
-                has_change['nickname'] = jsonParams.get('nickname')
-            if jsonParams.get('age') != None:
-                user.age = jsonParams.get('age')
-                has_change['age'] = jsonParams.get('age')
-            if request.FILES.get('head_img') != None:
-                user.head_portrait = request.FILES.get('head_img')
-                has_change['head_portrait'] = 'change'
-            if jsonParams.get('email') != None:
-                if  User_Info.objects.filter(email=jsonParams.get('email')).exists():
-                    return JsonResponse({
-                        'status': False,
-                        'err': '邮箱已存在'
-                    }, status=401)
-                user.email = jsonParams.get('email')
-                user.user_role = '5' # 将邮箱设置为未验证状态
-                has_change['email'] = jsonParams.get('email')
-            user.save()
-            return JsonResponse({
-                'status': True,
-                'id': user.id,
-                'changed': has_change
-            })
-        else:
-            return JsonResponse({
-                'status': False,
-                'err': '密码错误'
-            }, status=401)
+                'err': '出现未知错误'
+            }, status=403)
 
+    @check_login
+    def post(self, request):
+        '''
+        新增/更换头像
+        :param request:
+        :return:
+        '''
+        user = getUser(request.session.get('login'))
+        if request.FILES.get('head_img') != None:
+            user.head_portrait = request.FILES.get('head_img')
+            user.save()
+        return JsonResponse({
+            'status': True,
+            'id': user.id
+        })
