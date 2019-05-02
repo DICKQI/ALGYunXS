@@ -2,6 +2,7 @@
 case $1 in
     "up")
         uwsgi --socket :8000 --buffer-size 32768 --daemonize /var/log/ALGYunXS.log --module ALGXS.wsgi &
+
         echo "ALGYun已启动"
     ;;
     "down")
@@ -28,8 +29,12 @@ case $1 in
 
         rm tmp
     ;;
-    "makemigrationsall")
-        python3 manage.py makemigrations account FandQ helps log market PTJ
+    "init database")
+        python3 manage.py makemigrations account FandQ helps log market PTJ tailwind
+
+        python3 manage.py migrate
+
+        echo "初始化项目数据库成功"
     ;;
     "makemigrations")
         python3 manage.py makemigrations ${@:2}
