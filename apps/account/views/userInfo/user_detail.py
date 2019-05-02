@@ -10,7 +10,8 @@ class MeView(APIView):
 
     USER_INCLUDE_FIELDS = [
         'nickname', 'email', 'student_id', 'age',
-        'credit_score', 'last_login_time', 'from_school', 'id'
+        'credit_score', 'last_login_time', 'from_school', 'id',
+        'signature'
     ]
     @check_login
     def get(self, request):

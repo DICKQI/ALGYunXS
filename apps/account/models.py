@@ -45,6 +45,8 @@ class User_Info(models.Model):
 
     '''详细信息'''
 
+    signature = models.CharField(verbose_name='个性签名', max_length=100, default='这个人很懒，什么都没写...', blank=True)
+
     user_role = models.CharField(verbose_name='用户身份', max_length=6, choices=roles, default=5)
 
     student_id = models.CharField(verbose_name='学号', max_length=15, default=0, blank=True)
