@@ -16,7 +16,7 @@ class UserDashBoardView(APIView):
         'comment', 'create_time'
     ]
     COMMODITY_EXCLUDE_FIELDS = [
-        'comment', 'create_time'
+        'comment', 'create_time', 'last_mod_time', 'status', 'c_detail', 'commodity_img'
     ]
 
     @check_login
@@ -49,6 +49,16 @@ class UserDashBoardView(APIView):
         artResult = [model_to_dict(art, exclude='comment') for art in artList]
         marResult = [model_to_dict(mar, exclude='comment') for mar in marList]
         ptjResult = [model_to_dict(ptjs) for ptjs in ptjList]
+
+        i = 0
+        for com in marResult:
+            if marList[i].commodity_img.first():
+                com['commodity_img'] = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + marList[
+                    i].commodity_img.first().img.name + '?x-oss-process=style/head_portrait'
+            else:
+                com['commodity_img'] = None
+            i += 1
+
         return JsonResponse({
             'status': True,
             'myself': True if getUser(request.session.get('login')).id == user.id else False,
