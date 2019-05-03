@@ -5,7 +5,7 @@ import oss2
 
 
 class CImgView(APIView):
-    def put(self, request, cid):
+    def post(self, request, cid):
         '''
         更新商品图片
         :param request:
