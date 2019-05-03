@@ -75,8 +75,6 @@ class CommodityView(APIView):
                     'status': False,
                     'err': '你没有权限'
                 }, status=401)
-            if jsonParams.get('c_detail'):
-                commodity.c_detail = jsonParams.get('c_detail')
             if jsonParams.get('classification'):
                 try:
                     commodity.classification = Classification.objects.get(
@@ -88,8 +86,8 @@ class CommodityView(APIView):
                     }, status=404)
             if jsonParams.get('status'):
                 commodity.status = jsonParams.get('status')
-            if jsonParams.get('name'):
-                commodity.name = jsonParams.get('name')
+            if jsonParams.get('detail'):
+                commodity.name = jsonParams.get('detail')
             if jsonParams.get('price'):
                 commodity.price = jsonParams.get('price')
             commodity.last_mod_time = now()
@@ -97,7 +95,7 @@ class CommodityView(APIView):
             return JsonResponse({
                 'status': True,
                 'id': commodity.id,
-                'name': commodity.name,
+                'detail': commodity.detail,
                 'after_detail': commodity.c_detail,
                 'commodity_status': commodity.status,
                 'classification': commodity.classification.name
@@ -150,45 +148,44 @@ class CommodityView(APIView):
         :return:
         '''
         jsonParams = json.loads(request.body)
-        if jsonParams.get('name') == None or jsonParams.get('c_detail') == None or jsonParams.get(
+        if jsonParams.get('detail') == None or jsonParams.get(
                 'classification') == None or jsonParams.get('price') == None:
             return JsonResponse({
                 'status': False,
                 'err': '输入错误'
             }, status=403)
         # noinspection PyBroadException
-        try:
-            seller = getUser(request.session.get('login'))
-            if not studentCheck(seller):
-                return JsonResponse({
-                    'status': False,
-                    'err': '你还未进行学生认证，请前往学生认证后再发布商品'
-                })
-            classification = Classification.objects.filter(name=jsonParams.get('classification'))
-            if not classification.exists():
-                return JsonResponse({
-                    'status': False,
-                    'err': '找不到该分类'
-                })
-            classification = classification[0]
-            if jsonParams.get('status') != None:
-                status = jsonParams.get('status')
-            else:
-                status = 's'
-            newCommodity = Commodity.objects.create(
-                seller=seller,
-                name=jsonParams.get('name'),
-                c_detail=jsonParams.get('c_detail'),
-                classification=classification,
-                price=jsonParams.get('price'),
-                status=status
-            )
-            return JsonResponse({
-                'status': True,
-                'commodity': newCommodity.id
-            })
-        except:
+        # try:
+        seller = getUser(request.session.get('login'))
+        if not studentCheck(seller):
             return JsonResponse({
                 'status': False,
-                'err': '未知错误'
-            }, status=403)
+                'err': '你还未进行学生认证，请前往学生认证后再发布商品'
+            })
+        classification = Classification.objects.filter(name=jsonParams.get('classification'))
+        if not classification.exists():
+            return JsonResponse({
+                'status': False,
+                'err': '找不到该分类'
+            })
+        classification = classification[0]
+        if jsonParams.get('status') != None:
+            status = jsonParams.get('status')
+        else:
+            status = 's'
+        newCommodity = Commodity.objects.create(
+            seller=seller,
+            detail=jsonParams.get('detail'),
+            classification=classification,
+            price=jsonParams.get('price'),
+            status=status
+        )
+        return JsonResponse({
+            'status': True,
+            'commodity': newCommodity.id
+        })
+        # except:
+        #     return JsonResponse({
+        #         'status': False,
+        #         'err': '未知错误'
+        #     }, status=403)

@@ -7,7 +7,7 @@ from ALGCommon.dictInfo import model_to_dict
 
 class ListCommodity(APIView):
     EXCLUDE_FIELDS = [
-        'comment', 'create_time', 'last_mod_time', 'status', 'c_detail', 'commodity_img'
+        'comment', 'create_time', 'last_mod_time', 'status', 'commodity_img', 'detail'
     ]
 
     def get(self, requests):
@@ -30,7 +30,9 @@ class ListCommodity(APIView):
                         i].commodity_img.first().img.name + '?x-oss-process=style/head_portrait'
                 else:
                     com['commodity_img'] = None
+                com['detail'] = commodityList[i].detail[:30]
                 i += 1
+
             return JsonResponse({
                 'status': True,
                 'commodityList': commodity,
