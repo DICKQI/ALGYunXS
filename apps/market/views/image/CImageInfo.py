@@ -50,12 +50,14 @@ class CImgView(APIView):
                 'status': False,
                 'err': '商品不存在'
             }, status=403)
+        commodity = commodity[0]
         img = CommodityImage.objects.filter(id=mid)
         if not img.exists():
             return JsonResponse({
                 'status': False,
                 'err': '图片不存在'
             }, status=403)
+        img = img[0]
         try:
             commodity.commodity_img.remove(img)
         except:
