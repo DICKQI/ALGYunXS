@@ -87,7 +87,7 @@ class CommodityView(APIView):
             if jsonParams.get('status'):
                 commodity.status = jsonParams.get('status')
             if jsonParams.get('detail'):
-                commodity.name = jsonParams.get('detail')
+                commodity.detail = jsonParams.get('detail')
             if jsonParams.get('price'):
                 commodity.price = jsonParams.get('price')
             commodity.last_mod_time = now()
