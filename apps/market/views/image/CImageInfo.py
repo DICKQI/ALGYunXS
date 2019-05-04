@@ -58,6 +58,13 @@ class CImgView(APIView):
             }, status=403)
         try:
             commodity.commodity_img.remove(img)
+        except:
+            return JsonResponse({
+                'status': False,
+                'err': '删除失败'
+            }, status=403)
+        commodity.save()
+        try:
             '''删除oss文件'''
             object_name = 'media/' + str(img)
             auth = oss2.Auth('LTAIpK0JtS9hsWkG', 'cQpsrRs3Nhv6hTRpEMuUA2pjX6BlWs')
