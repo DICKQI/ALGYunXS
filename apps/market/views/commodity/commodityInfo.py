@@ -62,49 +62,49 @@ class CommodityView(APIView):
         '''
         params = request.body
         jsonParams = json.loads(params)
-        # try:
-        commodity = Commodity.objects.filter(id=cid)
-        if not commodity.exists():
-            return JsonResponse({
-                'status': False,
-                'err': '找不到该内容'
-            }, status=404)
-        commodity = commodity[0]
-        if not authCheck(['12', '515400'], request.session.get('login'), commodity):
-            return JsonResponse({
-                'status': False,
-                'err': '你没有权限'
-            }, status=401)
-        if jsonParams.get('classification'):
-            try:
-                commodity.classification = Classification.objects.get(
-                    name__exact=jsonParams.get('classification'))
-            except:
+        try:
+            commodity = Commodity.objects.filter(id=cid)
+            if not commodity.exists():
                 return JsonResponse({
                     'status': False,
-                    'err': '不存在此分类名'
+                    'err': '找不到该内容'
                 }, status=404)
-        if jsonParams.get('status'):
-            commodity.status = jsonParams.get('status')
-        if jsonParams.get('detail'):
-            commodity.detail = jsonParams.get('detail')
-        if jsonParams.get('price'):
-            commodity.price = jsonParams.get('price')
-        commodity.last_mod_time = now()
-        commodity.save()
-        return JsonResponse({
-            'status': True,
-            'id': commodity.id,
-            'detail': commodity.detail,
-            'after_detail': commodity.detail,
-            'commodity_status': commodity.status,
-            'classification': commodity.classification.name
-        })
-        # except:
-        #     return JsonResponse({
-        #         'status': False,
-        #         'err': '意料之外的错误'
-        #     }, status=403)
+            commodity = commodity[0]
+            if not authCheck(['12', '515400'], request.session.get('login'), commodity):
+                return JsonResponse({
+                    'status': False,
+                    'err': '你没有权限'
+                }, status=401)
+            if jsonParams.get('classification'):
+                try:
+                    commodity.classification = Classification.objects.get(
+                        name__exact=jsonParams.get('classification'))
+                except:
+                    return JsonResponse({
+                        'status': False,
+                        'err': '不存在此分类名'
+                    }, status=404)
+            if jsonParams.get('status'):
+                commodity.status = jsonParams.get('status')
+            if jsonParams.get('detail'):
+                commodity.detail = jsonParams.get('detail')
+            if jsonParams.get('price'):
+                commodity.price = jsonParams.get('price')
+            commodity.last_mod_time = now()
+            commodity.save()
+            return JsonResponse({
+                'status': True,
+                'id': commodity.id,
+                'detail': commodity.detail,
+                'after_detail': commodity.detail,
+                'commodity_status': commodity.status,
+                'classification': commodity.classification.name
+            })
+        except:
+            return JsonResponse({
+                'status': False,
+                'err': '意料之外的错误'
+            }, status=403)
 
     @check_login
     def delete(self, request, cid):
