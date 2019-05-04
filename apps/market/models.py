@@ -72,7 +72,7 @@ class Commodity(models.Model):
 
     seller = models.ForeignKey(User_Info, verbose_name='卖家', on_delete=models.CASCADE)
 
-    detail = models.CharField(verbose_name='商品内容', max_length=100, default=None, blank=False)
+    detail = models.TextField(verbose_name='商品内容', default=None, blank=False)
 
     views = models.PositiveIntegerField(verbose_name='浏览量', default=0)
 
