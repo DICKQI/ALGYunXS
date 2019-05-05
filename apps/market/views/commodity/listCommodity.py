@@ -7,7 +7,7 @@ from ALGCommon.dictInfo import model_to_dict
 
 class ListCommodity(APIView):
     EXCLUDE_FIELDS = [
-        'comment', 'create_time', 'last_mod_time', 'status', 'commodity_img', 'detail'
+        'comment', 'create_time', 'last_mod_time', 'status', 'detail'
     ]
 
     def get(self, requests):
@@ -23,16 +23,16 @@ class ListCommodity(APIView):
 
             commodity = [model_to_dict(mar, exclude=self.EXCLUDE_FIELDS) for mar in commodityList if
                          mar.status == 'p' or mar.status == 'o']
-            i = 0
             for com in commodity:
-                if commodityList[i].commodity_img.first():
-                    com['commodity_img'] = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + commodityList[
-                        i].commodity_img.first().img.name + '?x-oss-process=style/head_portrait'
+                if isinstance(com['commodity_img'], dict):
+                    com['commodity_img'] = com['commodity_img']['url']
+                elif isinstance(com['commodity_img'], list):
+                    if com['commodity_img']:
+                        com['commodity_img'] = com['commodity_img'][0]['url']
+                    else:
+                        com['commodity_img'] = None
                 else:
                     com['commodity_img'] = None
-                com['detail'] = commodityList[i].detail[:30]
-                i += 1
-
             return JsonResponse({
                 'status': True,
                 'commodityList': commodity,

@@ -16,7 +16,7 @@ class UserDashBoardView(APIView):
         'comment', 'create_time'
     ]
     COMMODITY_EXCLUDE_FIELDS = [
-        'comment', 'create_time', 'last_mod_time', 'status', 'c_detail', 'commodity_img'
+        'comment', 'create_time', 'last_mod_time', 'status', 'commodity_img'
     ]
 
     @check_login
