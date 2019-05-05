@@ -14,7 +14,7 @@ class Classification(models.Model):
     create_man = models.ForeignKey(User_Info, verbose_name='创建人', on_delete=models.CASCADE, blank=False, default='')
 
     class Meta:
-        ordering = ['name']
+        ordering = ['create_time']
         verbose_name = '商品分类'
         verbose_name_plural = verbose_name
         db_table = 'Classification'
