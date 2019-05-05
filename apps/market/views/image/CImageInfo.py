@@ -27,7 +27,7 @@ class CImgView(APIView):
             commodity.save()
             return JsonResponse({
                 'status': True,
-                'result': img.id
+                'id': img.id
             })
         except:
             return JsonResponse({
