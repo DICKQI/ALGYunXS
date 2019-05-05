@@ -137,7 +137,7 @@ class CommodityOrder(models.Model):
         ordering = ['-create_time']
 
     def __str__(self):
-        return self.commodity.name
+        return self.commodity.detail
 
 
 class BuyerRateModel(models.Model):
@@ -165,4 +165,20 @@ class BuyerRateModel(models.Model):
         ordering = ['-create_time']
 
     def __str__(self):
-        return self.relatedOrder.commodity.name
+        return self.relatedOrder.commodity.detail
+
+
+class CommodityCollection(models.Model):
+    '''用户收藏商品关联数据库模型'''
+
+    relatedUser = models.PositiveIntegerField(verbose_name='关联用户ID', blank=False, default='')
+
+    relatedCommodity = models.PositiveIntegerField(verbose_name='关联商品ID', blank=False, default='')
+
+    collectionTime = models.DateTimeField(verbose_name='收藏时间', default=now, blank=False)
+
+    class Meta:
+        verbose_name = '收藏的商品'
+        verbose_name_plural = verbose_name + '列表'
+        db_table = 'CommodityCollection'
+        ordering = ['-collectionTime']

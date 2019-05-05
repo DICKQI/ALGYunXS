@@ -109,3 +109,18 @@ class HelpsStarRecord(models.Model):
     article = models.ForeignKey(Article, verbose_name='被点赞的文章', on_delete=models.CASCADE)
 
     star_man = models.ForeignKey(User_Info, verbose_name='点赞人', on_delete=models.CASCADE)
+
+
+class ArticleCollection(models.Model):
+    '''收藏文章数据库模型'''
+    relatedUser = models.PositiveIntegerField(verbose_name='关联用户ID', blank=False, default=None)
+
+    relatedArticle = models.PositiveIntegerField(verbose_name='关联文章ID', blank=False, default=None)
+
+    collectionTime = models.DateTimeField(verbose_name='收藏时间', blank=False, default=now)
+
+    class Meta:
+        verbose_name = '收藏的文章'
+        verbose_name_plural = verbose_name + '列表'
+        db_table = 'ArticleCollection'
+        ordering = ['-collectionTime']

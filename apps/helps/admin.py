@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Tag, AComment, Article
+from .models import Category, Tag, AComment, Article, ArticleCollection
 from django_summernote.admin import SummernoteModelAdmin
 # Register your models here.
 
@@ -17,3 +17,4 @@ admin.site.register(Article, ArticleAdmin)
 admin.site.register(Category)
 admin.site.register(Tag)
 admin.site.register(AComment)
+admin.site.register(ArticleCollection)

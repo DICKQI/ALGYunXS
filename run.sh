@@ -29,7 +29,7 @@ case $1 in
 
         rm tmp
     ;;
-    "init database")
+    "initdatabase")
         python3 manage.py makemigrations account FandQ helps log market PTJ tailwind
 
         python3 manage.py migrate

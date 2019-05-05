@@ -10,6 +10,8 @@ apps/account/migrations
 apps/market/migrations
 apps/tailwind/migrations
 apps/tailwind/__pycache__
+apps/searchEngine/__pycache__
+apps/searchEngine/migrations
 .idea
 apps/helps/migrations
 apps/FandQ/migrations
