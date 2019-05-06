@@ -84,6 +84,8 @@ class Commodity(models.Model):
 
     last_mod_time = models.DateTimeField(verbose_name='最后修改时间', default=now)
 
+    last_mod_date = models.DateField(verbose_name='最后编辑日期', default=now)
+
     classification = models.ForeignKey(Classification, verbose_name='商品分类', blank=False, null=True,
                                        on_delete=models.CASCADE)
 
@@ -95,7 +97,7 @@ class Commodity(models.Model):
         verbose_name = '商品'
         verbose_name_plural = '商品列表'
         db_table = 'Commodity'
-        ordering = ['-last_mod_time', '-views']
+        ordering = ['-last_mod_date', '-views']
 
     def __str__(self):
         return self.detail[:30]
