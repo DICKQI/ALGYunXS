@@ -95,7 +95,7 @@ class Commodity(models.Model):
         verbose_name = '商品'
         verbose_name_plural = '商品列表'
         db_table = 'Commodity'
-        ordering = ['-views', '-last_mod_time']
+        ordering = ['-last_mod_time', '-views']
 
     def __str__(self):
         return self.detail[:30]
