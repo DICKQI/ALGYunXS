@@ -8,7 +8,7 @@ def paginator(obj, page):
     :param page:
     :return:
     '''
-    objPage = Paginator(obj, 10)
+    objPage = Paginator(obj, 11)
     try:
         objList = objPage.page(page)
     except PageNotAnInteger:
