@@ -38,7 +38,8 @@ class CommodityView(APIView):
             editable = True
         else:
             editable = False
-        commodity.views += 1
+        if user != commodity.seller:
+            commodity.views += 1
         CommodityViewLog.objects.create(
             ip=request.META['REMOTE_ADDR'],
             commodity=commodity,
