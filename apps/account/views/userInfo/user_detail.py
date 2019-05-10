@@ -25,6 +25,8 @@ class MeView(APIView):
         if user.head_portrait:
             userResult['head'] = 'https://algyunxs.oss-cn-shenzhen.aliyuncs.com/media/' + str(
                 user.head_portrait) + '?x-oss-process=style/head_portrait'
+        else:
+            userResult['head'] = None
 
         if user.user_role == '5':
             userResult['email_active'] = False
