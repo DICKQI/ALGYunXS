@@ -30,6 +30,10 @@ class MeView(APIView):
             userResult['email_active'] = False
         else:
             userResult['email_active'] = True
+        if user.student_id != 0:
+            userResult['es_check'] = True
+        else:
+            userResult['es_check'] = False
         return JsonResponse({
             'status': True,
             'myself': userResult,
