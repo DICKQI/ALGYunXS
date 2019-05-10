@@ -7,7 +7,7 @@ from ALGCommon.dictInfo import model_to_dict
 
 class ListCommodity(APIView):
     EXCLUDE_FIELDS = [
-        'comment', 'create_time', 'last_mod_time', 'status'
+        'comment', 'create_time', 'last_mod_time', 'status', 'last_mod_date'
     ]
 
     def get(self, requests):

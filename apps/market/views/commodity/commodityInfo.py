@@ -11,6 +11,10 @@ import json
 
 class CommodityView(APIView):
 
+    EXCLUDE_FIELDS = [
+        'comment', 'last_mod_date'
+    ]
+
     @check_login
     def get(self, request, cid):
         '''
@@ -46,7 +50,7 @@ class CommodityView(APIView):
             user=user
         )
         commodity.save()
-        cmdResult = model_to_dict(commodity, exclude='comment')
+        cmdResult = model_to_dict(commodity, exclude=self.EXCLUDE_FIELDS)
         return JsonResponse({
             'status': True,
             'editable': editable,  # 属于自己的商品，可以修改、删除，但是不能购买
@@ -92,6 +96,8 @@ class CommodityView(APIView):
             if jsonParams.get('price'):
                 commodity.price = jsonParams.get('price')
             commodity.last_mod_time = now()
+            import datetime
+            commodity.last_mod_date = datetime.datetime.now()
             commodity.save()
             return JsonResponse({
                 'status': True,
@@ -156,37 +162,37 @@ class CommodityView(APIView):
                 'err': '输入错误'
             }, status=403)
         # noinspection PyBroadException
-        # try:
-        seller = getUser(request.session.get('login'))
-        if not studentCheck(seller):
+        try:
+            seller = getUser(request.session.get('login'))
+            if not studentCheck(seller):
+                return JsonResponse({
+                    'status': False,
+                    'err': '你还未进行学生认证，请前往学生认证后再发布商品'
+                })
+            classification = Classification.objects.filter(name=jsonParams.get('classification'))
+            if not classification.exists():
+                return JsonResponse({
+                    'status': False,
+                    'err': '找不到该分类'
+                })
+            classification = classification[0]
+            if jsonParams.get('status') != None:
+                status = jsonParams.get('status')
+            else:
+                status = 's'
+            newCommodity = Commodity.objects.create(
+                seller=seller,
+                detail=jsonParams.get('detail'),
+                classification=classification,
+                price=jsonParams.get('price'),
+                status=status
+            )
+            return JsonResponse({
+                'status': True,
+                'commodity': newCommodity.id
+            })
+        except:
             return JsonResponse({
                 'status': False,
-                'err': '你还未进行学生认证，请前往学生认证后再发布商品'
-            })
-        classification = Classification.objects.filter(name=jsonParams.get('classification'))
-        if not classification.exists():
-            return JsonResponse({
-                'status': False,
-                'err': '找不到该分类'
-            })
-        classification = classification[0]
-        if jsonParams.get('status') != None:
-            status = jsonParams.get('status')
-        else:
-            status = 's'
-        newCommodity = Commodity.objects.create(
-            seller=seller,
-            detail=jsonParams.get('detail'),
-            classification=classification,
-            price=jsonParams.get('price'),
-            status=status
-        )
-        return JsonResponse({
-            'status': True,
-            'commodity': newCommodity.id
-        })
-        # except:
-        #     return JsonResponse({
-        #         'status': False,
-        #         'err': '未知错误'
-        #     }, status=403)
+                'err': '未知错误'
+            }, status=403)
