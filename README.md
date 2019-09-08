@@ -134,3 +134,26 @@ taro端代码链接为:https://github.com/zhcxk1998/ALGYun-Taro
     4.有闲的主要功能，就类似于滴滴顺风车。当需要购买一些外卖无法买到的食物、需要去比较远的地方办事情取东西等等可以托人代办的事情，都可以在有闲上发单，当有同学顺路愿意帮助的时候，可以接单，同时获取一定的报酬
     5.有闲内有与ALG智慧校园主账户关联的副账户，用户可以设置本人常用路线，如宿舍—教学楼，设置空闲的时间，系统会根据设置的信息，自动推荐最优最合适的单子给用户。
     6.当然，如果用户愿意公开自己的设置信息，需要帮忙的同学看到后可以直接私聊询问是否愿意帮忙，并且愿意支付合适的价格。
+    
+# 关于Settings.py中的配置
+### ALG_email_config.json中的数据格式为：
+    "EMAIL_USE_SSL": true,
+    "EMAIL_HOST": "smtp.mail.com",
+    "EMAIL_PORT": 465,
+    "EMAIL_HOST_USER": "your_email@mail.com",
+    "EMAIL_HOST_PASSWORD": "your_email_password",
+    "EMAIL_FROM": "your sign"
+### database_config.json中的数据格式为：
+    "ENGINE": "django.db.backends.mysql",
+    "NAME": "your_database_name",
+    "USER": "your_database_username",
+    "PASSWORD": "your_database_password",
+    "HOST": "localhost",
+    "PORT": 3306
+### ossConfig.json中的数据格式为：
+    "ACCESS_KEY_ID": "your access key id",
+    "ACCESS_KEY_SECRET": "you access key secret",
+    "END_POINT": "oss-cn-shenzhen-internal.aliyuncs.com",
+    "BUCKET_NAME": "your bucket name",
+    "BUCKET_ACL_TYPE": "public-read-write",
+    "DEFAULT_FILE_STORAGE": "aliyun_oss2_storage.backends.AliyunMediaStorage"
