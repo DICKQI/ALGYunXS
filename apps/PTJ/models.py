@@ -23,11 +23,20 @@ class PTJTag(models.Model):
 
 class PTJInfo(models.Model):
     '''兼职信息数据库模型'''
+    STATUS_CHOICES = (
+        ('v', '审核中'),
+        ('p', '通过审核'),
+        ('f', '审核未通过，退回'),
+        ('d', '禁止发布')
+    )
+
     publisher = models.ForeignKey(User_Info, verbose_name='发布人', on_delete=models.CASCADE)
 
     title = models.CharField(verbose_name='标题', max_length=50, default='', blank=False)
 
     content = models.TextField(verbose_name='内容', default='', blank=False)
+
+    status = models.CharField(verbose_name='审核状态', choices=STATUS_CHOICES, default='v', max_length=2)
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 

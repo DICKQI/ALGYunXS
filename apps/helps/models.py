@@ -6,9 +6,7 @@ from apps.account.models import User_Info
 # Create your models here.
 class Category(models.Model):
     '''分类数据库模型'''
-    cid = models.BigIntegerField(verbose_name='分类id', primary_key=True, default=1)
-
-    name = models.CharField(verbose_name='分类名', default='', blank=False, max_length=10)
+    name = models.CharField(verbose_name='分类名', default='', blank=False, max_length=10, unique=True)
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 
@@ -80,7 +78,7 @@ class Article(models.Model):
 
     status = models.CharField(verbose_name='文章状态', choices=STATUS_CHOICES, max_length=2, default='草稿')
 
-    views = models.IntegerField(verbose_name='浏览量', default=0)
+    views = models.PositiveIntegerField(verbose_name='浏览量', default=0)
 
     create_time = models.DateTimeField(verbose_name='创建时间', default=now)
 
@@ -92,10 +90,37 @@ class Article(models.Model):
 
     comment = models.ManyToManyField(AComment, verbose_name='文章评论', blank=True)
 
+    stars = models.PositiveIntegerField(verbose_name='点赞数', blank=False, default=0)
+
+    img = models.ImageField(verbose_name='文章附图', default='', blank=True, upload_to='article')
+
     class Meta:
         verbose_name = '互帮互助文章'
         verbose_name_plural = '文章列表'
         db_table = 'Article'
         ordering = ['-last_mod_time']
+
     def __str__(self):
         return self.title
+
+
+class HelpsStarRecord(models.Model):
+    '''防止给文章重复点赞（点赞记录）'''
+    article = models.ForeignKey(Article, verbose_name='被点赞的文章', on_delete=models.CASCADE)
+
+    star_man = models.ForeignKey(User_Info, verbose_name='点赞人', on_delete=models.CASCADE)
+
+
+class ArticleCollection(models.Model):
+    '''收藏文章数据库模型'''
+    relatedUser = models.PositiveIntegerField(verbose_name='关联用户ID', blank=False, default=None)
+
+    relatedArticle = models.PositiveIntegerField(verbose_name='关联文章ID', blank=False, default=None)
+
+    collectionTime = models.DateTimeField(verbose_name='收藏时间', blank=False, default=now)
+
+    class Meta:
+        verbose_name = '收藏的文章'
+        verbose_name_plural = verbose_name + '列表'
+        db_table = 'ArticleCollection'
+        ordering = ['-collectionTime']

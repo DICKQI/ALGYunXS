@@ -18,13 +18,20 @@ from django.urls import path
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.home import HomeIndex
+
+
 urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('admin/', admin.site.urls),
-    path('', HomeIndex.as_view()),
+    path('super/', include('apps.SuperAdmin.urls', namespace='SuperAdmin')),
+
     path('users/', include('apps.account.urls', namespace='users')),
     path('market/', include('apps.market.urls', namespace='market')),
+    path('helps/', include('apps.helps.urls', namespace='helps')),
+    path('tail/', include('apps.tailwind.urls', namespace='tailwind')),
+    path('ptj/', include('apps.PTJ.urls', namespace='ptj')),
+    path('fq/', include('apps.FandQ.urls', namespace='FandQ')),
+    path('autoAPI/', include('apps.AutoExecution.urls', namespace='AutoExecution')), # 被自动执行的API，前端人员不需要知道
 
 ]
 if settings.DEBUG:
